@@ -68,8 +68,8 @@
     select option { background: var(--panel); color: var(--text); }
 
     /* 3D + HUD */
-    .viewport { position: relative; background: var(--panel-dark); border-bottom: 1px solid var(--line); }
-    canvas.webgl { width: 100%; height: 100%; display: block; }
+    .viewport { position: relative; background: #000; overflow: hidden; }
+    .viewport canvas { display: block; width: 100%; height: 100%; }
     .hud {
       position: absolute; left: 12px; top: 12px; z-index: 5;
       background: rgba(0,0,0,0.6); border: 1px solid var(--line); border-radius: 8px;
@@ -84,8 +84,9 @@
     .bottom { display: grid; grid-template-columns: minmax(260px, 1fr) minmax(0, 1.2fr); gap: 10px; padding: 10px; background: var(--panel); border-top: 1px solid var(--line); }
     .panel { border: 1px solid var(--line); border-radius: 10px; background: var(--panel-dark); display: flex; flex-direction: column; gap: 8px; padding: 10px; min-height: 0; }
     .cinematic .bottom { display: none; }
-    .cinematic .header { opacity: 0; pointer-events: none; transition: opacity 0.4s; }
-    .cinematic .header:hover { opacity: 1; pointer-events: auto; }
+    .cinematic .header { display: none !important; }
+    .cinematic .camera-rail { display: none !important; }
+    .cinematic .title-card { z-index: 20000; }
     #multiCamGrid { display: none; }
     #multiCamGrid.active { display: grid; }
     #multiCamGrid canvas { width: 100%; height: 100%; }
@@ -114,7 +115,7 @@
     .time-current { font-size: 24px; font-weight: 800; color: var(--accent); text-shadow: 0 0 16px rgba(86,255,159,0.5); min-width: 4ch; text-align: right; }
     .timeline-bar { position: relative; height: 10px; background: #0a1f14; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
     .playhead { position: absolute; top: 0; bottom: 0; width: 2px; background: #ff5c7c; box-shadow: 0 0 10px #ff5c7c; }
-    .chat-log { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 4px; }
+    .chat-log { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 8px; display: flex; flex-direction: column; gap: 4px; scroll-behavior: smooth; }
     .msg { border: 1px solid var(--line); background: rgba(0,0,0,0.35); border-radius: 8px; padding: 8px 10px; font-size: 12px; }
     .msg .meta { font-size: 9px; color: var(--text-muted); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 4px; }
     .msg.user { border-left: 3px solid #569fff; }
@@ -1563,6 +1564,7 @@
       el.style.cssText = `
         margin: 6px 0; padding: 8px 12px; border-radius: 4px;
         background: rgba(0,0,0,0.3); font-size: 12px; line-height: 1.5;
+        max-width: 100%; word-wrap: break-word; overflow-wrap: break-word;
       `;
       el.innerHTML = `
         <div class="speaker-name" data-entity-id="${entityId || ''}" style="color: ${colorCss}; font-weight: 700; margin-bottom: 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; text-decoration: underline dotted; text-underline-offset: 3px;" title="Click to test voice">
@@ -1852,25 +1854,35 @@
       
       // Speak with delay for browser compatibility
       setTimeout(() => {
-        speechSynth.speak(utterance);
-      }, 150); // Delay allows cancel to complete
+        try {
+          speechSynth.speak(utterance);
+        } catch (e) {
+          console.warn('TTS error:', e);
+        }
+      }, 200); // Longer delay for voice loading
     }
 
     // Load available voices
+    let voicesLoaded = false;
     function loadVoices() {
       availableVoices = speechSynth.getVoices().filter(v => v.lang.startsWith('en'));
       if (!availableVoices.length) {
         setTimeout(loadVoices, 100); // Retry if not loaded yet
-      } else {
+      } else if (!voicesLoaded) {
+        voicesLoaded = true;
         console.log(`🎤 TTS: ${availableVoices.length} voices available:`);
         availableVoices.forEach((v, i) => {
           console.log(`  ${i}: ${v.name} (${v.lang})`);
         });
+        console.log('💡 TIP: Click speaker names (🎤) in chat to test/change voices!');
       }
     }
     if (speechSynth) {
       loadVoices();
       speechSynth.onvoiceschanged = loadVoices;
+      // Force reload after delay (browser quirk workaround)
+      setTimeout(loadVoices, 500);
+      setTimeout(loadVoices, 1500);
     }
     
     // Assign unique voice to entity
@@ -1885,12 +1897,19 @@
       // No voices available yet
       if (availableVoices.length === 0) return null;
       
+      // Wait for voices if not loaded yet
+      if (!voicesLoaded) {
+        console.log(`⏳ Waiting for voices to load for entity "${entityId}"...`);
+        setTimeout(() => loadVoices(), 100);
+        return null;
+      }
+      
       // Assign new voice (cycle through available voices)
       const voiceIndex = entityVoices.size % availableVoices.length;
       const voice = availableVoices[voiceIndex];
       entityVoices.set(entityId, voice);
       
-      console.log(`🎤 Assigned voice "${voice.name}" to entity "${entityId}"`);
+      console.log(`🎤 Assigned voice #${voiceIndex} "${voice.name}" to entity "${entityId}"`);
       return voice;
     }
     
