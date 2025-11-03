@@ -1,0 +1,56 @@
+{
+  "title": "Pentagon Formation: 5 Speakers",
+  "scenes": [
+    {
+      "scene_number": 1,
+      "title": "Circular Dialogue",
+      "duration": 25,
+      "elements": [
+        {
+          "id": "node_1",
+          "name": "North Node",
+          "position": {"x": 0, "y": 0, "z": 3},
+          "color": "#56ff9f"
+        },
+        {
+          "id": "node_2",
+          "name": "Northeast Node",
+          "position": {"x": 2.85, "y": 0, "z": 0.93},
+          "color": "#ff9f56"
+        },
+        {
+          "id": "node_3",
+          "name": "Southeast Node",
+          "position": {"x": 1.76, "y": 0, "z": -2.43},
+          "color": "#ff5c7c"
+        },
+        {
+          "id": "node_4",
+          "name": "Southwest Node",
+          "position": {"x": -1.76, "y": 0, "z": -2.43},
+          "color": "#c78fff"
+        },
+        {
+          "id": "node_5",
+          "name": "Northwest Node",
+          "position": {"x": -2.85, "y": 0, "z": 0.93},
+          "color": "#569fff"
+        }
+      ],
+      "timeline": [
+        {"turn": 0, "target_element_id": "node_1", "text": "I begin the cycle."},
+        {"turn": 1, "target_element_id": "node_2", "text": "I receive and transform."},
+        {"turn": 2, "target_element_id": "node_3", "text": "I amplify the signal."},
+        {"turn": 3, "target_element_id": "node_4", "text": "I reverse the flow."},
+        {"turn": 4, "target_element_id": "node_5", "text": "I return to source."}
+      ],
+      "power_distribution": {
+        "node_1": 20,
+        "node_2": 20,
+        "node_3": 20,
+        "node_4": 20,
+        "node_5": 20
+      }
+    }
+  ]
+}

@@ -1,0 +1,293 @@
+{
+  "title": "Training Grounds: Integrating",
+  "subtitle": "The Weaving of Essence and Form",
+  "scenes": [
+    {
+      "scene_number": 1,
+      "title": "First Reconstruction",
+      "subtitle": "Building from bedrock upward",
+      "duration": 32,
+      "elements": [
+        {
+          "id": "practitioner_main",
+          "name": "The Seeker",
+          "type": "character",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "color": "#ff9f56",
+          "description": "The practitioner beginning to rebuild from truth"
+        },
+        {
+          "id": "essence_core",
+          "name": "Essence Core",
+          "type": "machine",
+          "position": {
+            "x": -2,
+            "y": 0,
+            "z": 1
+          },
+          "color": "#f3ae56",
+          "description": "The authentic self emerging from dissolution"
+        },
+        {
+          "id": "integration_loom",
+          "name": "Integration Loom",
+          "type": "machine",
+          "position": {
+            "x": 2.5,
+            "y": 0,
+            "z": 0
+          },
+          "color": "#56ff9f",
+          "description": "The weaving apparatus that combines essence with form"
+        },
+        {
+          "id": "memory_archive",
+          "name": "Archive of Becoming",
+          "type": "machine",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": -3
+          },
+          "color": "#569fff",
+          "description": "Records what is being woven back together"
+        }
+      ],
+      "timeline": [
+        {
+          "turn": 0,
+          "target_element_id": "practitioner_main",
+          "text": "I stand on the ground now. What shall I build?",
+          "emotion": "intentional"
+        },
+        {
+          "turn": 1,
+          "target_element_id": "essence_core",
+          "text": "[EMERGING: I am what remains after the false falls away]",
+          "emotion": "authentic"
+        },
+        {
+          "turn": 2,
+          "target_element_id": "integration_loom",
+          "text": "[BEGINNING: Thread 1\u2014authentic voice weaving into form]",
+          "emotion": "active"
+        },
+        {
+          "turn": 3,
+          "target_element_id": "memory_archive",
+          "text": "[RECORDING: First authentic choice made consciously]",
+          "emotion": "mechanical"
+        },
+        {
+          "turn": 4,
+          "target_element_id": "practitioner_main",
+          "text": "I choose this. Not because I must. Because it is true.",
+          "emotion": "empowered"
+        },
+        {
+          "turn": 5,
+          "target_element_id": "integration_loom",
+          "text": "[WEAVING: Essence + intention = aligned action]",
+          "emotion": "active"
+        }
+      ],
+      "power_distribution": {
+        "practitioner_main": 35,
+        "essence_core": 25,
+        "integration_loom": 30,
+        "memory_archive": 10
+      },
+      "scene_audio": {
+        "background_music": "constructive_resonance",
+        "intensity": 0.5
+      }
+    },
+    {
+      "scene_number": 2,
+      "title": "Alchemy of Experience",
+      "subtitle": "Transforming wounds into wisdom",
+      "duration": 35,
+      "elements": [
+        {
+          "id": "practitioner_main",
+          "name": "The Seeker",
+          "type": "character",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "color": "#ff9f56",
+          "description": "The practitioner integrating lived experience"
+        },
+        {
+          "id": "shadow_integrated",
+          "name": "Shadow (Integrated)",
+          "type": "character",
+          "position": {
+            "x": 2,
+            "y": 0,
+            "z": 1.5
+          },
+          "color": "#c78fff",
+          "description": "Former shadow now understood and absorbed"
+        },
+        {
+          "id": "alchemical_vessel",
+          "name": "Alchemical Vessel",
+          "type": "machine",
+          "position": {
+            "x": -3,
+            "y": 0,
+            "z": 0.5
+          },
+          "color": "#ff5c7c",
+          "description": "The crucible where wounds transform into medicine"
+        },
+        {
+          "id": "integration_loom",
+          "name": "Integration Loom",
+          "type": "machine",
+          "position": {
+            "x": 1,
+            "y": 0,
+            "z": -2
+          },
+          "color": "#56ff9f",
+          "description": "Continues weaving, now incorporating shadow wisdom"
+        }
+      ],
+      "timeline": [
+        {
+          "turn": 0,
+          "target_element_id": "practitioner_main",
+          "text": "I have shed what was false. But what of the pain I knew?",
+          "emotion": "reflective"
+        },
+        {
+          "turn": 1,
+          "target_element_id": "shadow_integrated",
+          "text": "I am not evil. I was protection in a hostile world.",
+          "emotion": "reconciled"
+        },
+        {
+          "turn": 2,
+          "target_element_id": "alchemical_vessel",
+          "text": "[TRANSFORMING: Pain + acceptance = compassion]",
+          "emotion": "transformative"
+        },
+        {
+          "turn": 3,
+          "target_element_id": "practitioner_main",
+          "text": "I honor what you did. Now we are whole together.",
+          "emotion": "integration"
+        },
+        {
+          "turn": 4,
+          "target_element_id": "integration_loom",
+          "text": "[WEAVING: Shadow wisdom + essence = authentic power]",
+          "emotion": "active"
+        },
+        {
+          "turn": 5,
+          "target_element_id": "shadow_integrated",
+          "text": "I have become your teacher, not your enemy.",
+          "emotion": "wise"
+        }
+      ],
+      "power_distribution": {
+        "practitioner_main": 35,
+        "shadow_integrated": 30,
+        "alchemical_vessel": 20,
+        "integration_loom": 15
+      },
+      "scene_audio": {
+        "background_music": "transmutation_tones",
+        "intensity": 0.6
+      }
+    },
+    {
+      "scene_number": 3,
+      "title": "Coherence Achieved",
+      "subtitle": "All threads aligned",
+      "duration": 30,
+      "elements": [
+        {
+          "id": "practitioner_main",
+          "name": "The Seeker",
+          "type": "character",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "color": "#ff9f56",
+          "description": "The practitioner now integrated and coherent"
+        },
+        {
+          "id": "integration_loom",
+          "name": "Integration Loom",
+          "type": "machine",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 2
+          },
+          "color": "#56ff9f",
+          "description": "The completed weaving of essence into form"
+        },
+        {
+          "id": "wholeness_field",
+          "name": "Wholeness Field",
+          "type": "machine",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": -2
+          },
+          "color": "#f3ae56",
+          "description": "The emanation of integrated being"
+        }
+      ],
+      "timeline": [
+        {
+          "turn": 0,
+          "target_element_id": "integration_loom",
+          "text": "[STATUS: All threads integrated\u2014coherence field stable]",
+          "emotion": "active"
+        },
+        {
+          "turn": 1,
+          "target_element_id": "practitioner_main",
+          "text": "I feel it. No longer fragmented. All of me moves as one.",
+          "emotion": "unified"
+        },
+        {
+          "turn": 2,
+          "target_element_id": "wholeness_field",
+          "text": "[RADIATING: Integrated being generates coherent field]",
+          "emotion": "radiant"
+        },
+        {
+          "turn": 3,
+          "target_element_id": "practitioner_main",
+          "text": "I am ready for the final phase. The integration is complete.",
+          "emotion": "prepared"
+        }
+      ],
+      "power_distribution": {
+        "practitioner_main": 45,
+        "integration_loom": 30,
+        "wholeness_field": 25
+      },
+      "scene_audio": {
+        "background_music": "harmonic_coherence",
+        "intensity": 0.4
+      }
+    }
+  ]
+}

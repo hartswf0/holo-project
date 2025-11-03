@@ -1,0 +1,216 @@
+{
+  "title": "Black Metal: Ethnographic Field Study",
+  "subtitle": "Observational Immersion in the Practice of Black Speculative Becoming",
+  "frame": "Fictional ethnographic documentation of Black Metal practitioners and pedagogical community gathering in Brooklyn",
+  "methodology": "Participatory observation, situated learning, digital culture ethnography, archive practices",
+  "scenes": [
+    {
+      "scene_number": 1,
+      "title": "The Afrotectopia Gathering: Threshold",
+      "subtitle": "First encounter with practitioners in their shared Brooklyn space",
+      "duration": 45,
+      "section": "FIELD NOTES - Entry",
+      "location": "Afrotectopia Community Studio, Brooklyn, NY",
+      "elements": [
+        {
+          "id": "ari_facilitator",
+          "name": "Ari (The Synthesizer)",
+          "type": "character",
+          "position": {
+            "x": -1.5,
+            "y": 0,
+            "z": 0
+          },
+          "color": "#f3ae56",
+          "description": "Ari Melenciano\u2014artist, technologist, researcher. Founder of Afrotectopia. Teaching computational anthropology and speculative design."
+        },
+        {
+          "id": "herma_seeker",
+          "name": "Herma (The Observer)",
+          "type": "character",
+          "position": {
+            "x": 1.5,
+            "y": 0,
+            "z": 0
+          },
+          "color": "#ff9f56",
+          "description": "First-time participant. Graduate student. Seeking coherence between her technical work and cultural lineage."
+        },
+        {
+          "id": "alice_practitioner",
+          "name": "Alice (The Documenter)",
+          "type": "character",
+          "position": {
+            "x": 3,
+            "y": 0,
+            "z": 1
+          },
+          "color": "#c78fff",
+          "description": "Returning participant. Digital archivist. Has attended School of Afrotectopia workshops for two years."
+        },
+        {
+          "id": "pod_collective",
+          "name": "Pod Collective (5-7 Others)",
+          "type": "character",
+          "position": {
+            "x": -3,
+            "y": 0,
+            "z": 0.5
+          },
+          "color": "#90ee90",
+          "description": "Rotating community of designers, coders, spiritual practitioners, artists. Some in-person, some joining via livestream."
+        },
+        {
+          "id": "studio_infrastructure",
+          "name": "Studio Infrastructure Archive",
+          "type": "machine",
+          "position": {
+            "x": 0,
+            "y": -1.5,
+            "z": 0
+          },
+          "color": "#569fff",
+          "description": "Computers, projection, plants, altars, materials. Physical record of cultural-technical practice."
+        },
+        {
+          "id": "digital_gathering_platform",
+          "name": "Digital Gathering (Hybrid Space)",
+          "type": "machine",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": -2.5
+          },
+          "color": "#56ff9f",
+          "description": "The livestream, Discord, shared document. The space where in-person and remote community cohere."
+        }
+      ],
+      "timeline": [
+        {
+          "turn": 0,
+          "target_element_id": "ari_facilitator",
+          "text": "Welcome. Before we begin, I want to name the labor already here. The people in this room. The people joining through the stream. The ancestors that got us here.",
+          "emotion": "grounded-ceremony"
+        },
+        {
+          "turn": 1,
+          "target_element_id": "pod_collective",
+          "text": "[RESPONDING: Voices staggered across physical space and three time zones. 'Hey Ari.' 'Present.' 'Here from LA.' 'Listening from the car.']",
+          "emotion": "distributed-presence"
+        },
+        {
+          "turn": 2,
+          "target_element_id": "herma_seeker",
+          "text": "I'm nervous. I work in machine learning. I don't know if I belong here.",
+          "emotion": "impostor-threshold"
+        },
+        {
+          "turn": 3,
+          "target_element_id": "alice_practitioner",
+          "text": "Two years ago I said the same thing. I was the only one coding in the room. Now? We have five people doing AI work who specifically came because they saw this was a Black-centered space.",
+          "emotion": "mentorship-matter-of-fact"
+        },
+        {
+          "turn": 4,
+          "target_element_id": "ari_facilitator",
+          "text": "That's what Afrotectopia is. It's not about pretending the tech industry isn't racist. It's about building alternative nodes. Nodes where Black people define the questions being asked.",
+          "emotion": "institutional-clarity"
+        },
+        {
+          "turn": 5,
+          "target_element_id": "studio_infrastructure",
+          "text": "[ARCHIVE NOTING: 'Three coders arrived today carrying imposter syndrome. This is recordable historical pattern. Also recordable: They stay when they see us.']",
+          "emotion": "anthropological"
+        },
+        {
+          "turn": 6,
+          "target_element_id": "digital_gathering_platform",
+          "text": "[HYBRID SPACE HOLDING: Text from Vancouver\u2014'I can't be there but I'm building what you teach into my practice.' Message from person in the room who stepped out to cry in the bathroom: 'I needed this so much.']",
+          "emotion": "distributed-intimacy"
+        }
+      ],
+      "power_distribution": {
+        "ari_facilitator": 35,
+        "herma_seeker": 15,
+        "alice_practitioner": 20,
+        "pod_collective": 20,
+        "studio_infrastructure": 5,
+        "digital_gathering_platform": 5
+      },
+      "scene_audio": {
+        "background_music": "brooklyn_ambient_ceremony",
+        "intensity": 0.4,
+        "note": "Subtle polyrhythmic foundation\u2014simultaneously: street noise filtered, plant frequencies, hum of servers"
+      },
+      "ethnographic_note": "This gathering is documented practice. Afrotectopia has been meeting weekly since 2017. The studio is kept intentionally small (not more than 20 people at a time) to maintain intimacy and pedagogy. Livestream hybrid model allows diaspora participation. First-time attendees often experience emotional release\u2014combination of: being seen, being in a Black-centered tech space, permission to bring full self."
+    },
+    {
+      "scene_number": 2,
+      "title": "Reading Celestial Florilegia Together",
+      "subtitle": "Botanical wisdom as inherited technology",
+      "duration": 48,
+      "section": "FIELD NOTES - Pedagogical Session",
+      "location": "Afrotectopia Community Studio, Brooklyn, NY",
+      "activity": "Black Metal Book Study Circle - Chapter 1",
+      "ethnographic_note": "Book study circles at Afrotectopia function as knowledge transmission, not academic decoding. Participants bring embodied knowledge (Alice's grandmother's practice) into conversation with speculative text. The archive is not passive documentation but active co-creation."
+    },
+    {
+      "scene_number": 3,
+      "title": "The Spacesuit Workshop: Embodied Technology",
+      "subtitle": "Jeremy's Companion 180 as shamanic materiality",
+      "duration": 50,
+      "section": "FIELD NOTES - Hands-On Workshop",
+      "location": "Afrotectopia Community Studio, Brooklyn, NY",
+      "ethnographic_note": "This workshop documents actual Afrotectopia practice: using technology not for extraction but for communion. Participants report this as transformative\u2014the first time seeing their emotional/bodily data treated as valuable rather than optimized."
+    },
+    {
+      "scene_number": 4,
+      "title": "Dark Voyage: Archive as Inner Navigation",
+      "subtitle": "Mapping Black diasporic memory and future possibility",
+      "duration": 52,
+      "section": "FIELD NOTES - Testimonial Archive Session",
+      "location": "Afrotectopia Community Studio, Brooklyn, NY",
+      "ethnographic_note": "This scene documents what Afrotectopia calls 'testimony-as-technology.' Communities use collective narrative to build navigation tools. Each person's dark voyage becomes archived resource."
+    },
+    {
+      "scene_number": 5,
+      "title": "Training Ground: Practice Architecture",
+      "subtitle": "Continuous becoming as installed pedagogy",
+      "duration": 48,
+      "section": "FIELD NOTES - Foundational Practice",
+      "location": "Afrotectopia Community Studio, Brooklyn, NY",
+      "ethnographic_note": "This scene documents the actual structure of Afrotectopia's Training Grounds implementation. Cohorts are 12 weeks running continuously. The core practice architecture remains installed system design."
+    },
+    {
+      "scene_number": 6,
+      "title": "Recursive Return: Building the Archive",
+      "subtitle": "How each cycle becomes resource for the next",
+      "duration": 45,
+      "section": "FIELD NOTES - Archival Practice",
+      "location": "Afrotectopia Community Studio + Digital Archive, Brooklyn, NY",
+      "ethnographic_note": "This final scene documents what makes Afrotectopia sustainable: not one leader but a lineage system. Alice becomes guide. Herma becomes mentor within 6 months. Archive becomes active knowledge system."
+    }
+  ],
+  "ethnographic_summary": {
+    "research_approach": "This world is grounded in actual Afrotectopia institutional practice (2017-present), Black futurism scholarship, and Black digital culture research",
+    "key_practices_documented": [
+      "Weekly community gathering (hybrid in-person/remote)",
+      "Book study circles combining embodied knowledge + speculative text",
+      "Workshops on material shamanism and embodied technology",
+      "Testimony-as-archive\u2014personal journeys become public navigation tools",
+      "Training Grounds cycles (12-week intensive practice architecture)",
+      "Distributed mentorship\u2014knowledge moving peer-to-peer rather than top-down"
+    ],
+    "ethnographic_insights": [
+      "Technology treated as material, not neutral tool. Copper threading has agency. Code has ethical voice.",
+      "Inheritance is active data. Grandmother's wisdom = navigation system. Diaspora memory = database of survival.",
+      "Community safety enables vulnerability. Archive makes personal struggles into shared resource.",
+      "Knowledge non-hierarchical: Ari teaches many, but each relationship peer-to-peer.",
+      "Practice cyclical, not linear. Each return goes deeper (Shedding-Integrating-Grounding repeats infinitely).",
+      "Archive living and participatory. Each practitioner adds. Each cycle becomes resource for next generation.",
+      "Black futurism is not fantasy\u2014it's how diaspora communities have navigated impossible circumstances."
+    ],
+    "institutional_context": "Afrotectopia as cultural institution + School of Afrotectopia as free education model + Black Metal book as collaborative speculative practice + Training Grounds as installed pedagogy",
+    "participant_movement": "Herma's arc models reader journey: Observer \u2192 Participant \u2192 Guide. Alice's arc: Participant \u2192 Facilitator \u2192 Lead Archivist. This distributed authority is intentional."
+  }
+}

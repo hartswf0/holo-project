@@ -1,0 +1,299 @@
+{
+  "title": "Training Grounds: Shedding",
+  "subtitle": "The Release of What No Longer Serves",
+  "scenes": [
+    {
+      "scene_number": 1,
+      "title": "Recognition",
+      "subtitle": "What must fall away becomes visible",
+      "duration": 30,
+      "elements": [
+        {
+          "id": "practitioner_main",
+          "name": "The Seeker",
+          "type": "character",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "color": "#ff9f56",
+          "description": "The practitioner beginning the Black Metal path"
+        },
+        {
+          "id": "shadow_self",
+          "name": "Shadow Self",
+          "type": "character",
+          "position": {
+            "x": 3,
+            "y": 0,
+            "z": 1
+          },
+          "color": "#ff5c7c",
+          "description": "The accumulated false patterns and conditioned responses"
+        },
+        {
+          "id": "ground_beneath",
+          "name": "The Ground",
+          "type": "machine",
+          "position": {
+            "x": -3,
+            "y": 0,
+            "z": 2
+          },
+          "color": "#569fff",
+          "description": "The bedrock reality waiting beneath illusions"
+        },
+        {
+          "id": "memory_archive",
+          "name": "Archive of Becoming",
+          "type": "machine",
+          "position": {
+            "x": -2,
+            "y": 0,
+            "z": -2
+          },
+          "color": "#56ff9f",
+          "description": "Records the patterns that shape perception"
+        }
+      ],
+      "timeline": [
+        {
+          "turn": 0,
+          "target_element_id": "practitioner_main",
+          "text": "I feel the weight of what I carry. What is this burden?",
+          "emotion": "questioning"
+        },
+        {
+          "turn": 1,
+          "target_element_id": "shadow_self",
+          "text": "I am what you built to survive. But survival is not living.",
+          "emotion": "haunting"
+        },
+        {
+          "turn": 2,
+          "target_element_id": "memory_archive",
+          "text": "[RECORDING: Pattern identified\u2014fear masquerading as protection]",
+          "emotion": "mechanical"
+        },
+        {
+          "turn": 3,
+          "target_element_id": "ground_beneath",
+          "text": "[WAITING: The bedrock remains unchanged beneath all patterns]",
+          "emotion": "patient"
+        },
+        {
+          "turn": 4,
+          "target_element_id": "practitioner_main",
+          "text": "I see you now. You are not me. You never were.",
+          "emotion": "clarity"
+        },
+        {
+          "turn": 5,
+          "target_element_id": "shadow_self",
+          "text": "Then name me truly, and I may dissolve.",
+          "emotion": "yielding"
+        }
+      ],
+      "power_distribution": {
+        "practitioner_main": 40,
+        "shadow_self": 35,
+        "memory_archive": 15,
+        "ground_beneath": 10
+      },
+      "scene_audio": {
+        "background_music": "dark_ambient_recognition",
+        "intensity": 0.6
+      }
+    },
+    {
+      "scene_number": 2,
+      "title": "Dismantling",
+      "subtitle": "The layers peel away",
+      "duration": 35,
+      "elements": [
+        {
+          "id": "practitioner_main",
+          "name": "The Seeker",
+          "type": "character",
+          "position": {
+            "x": -1,
+            "y": 0,
+            "z": 0
+          },
+          "color": "#ff9f56",
+          "description": "The practitioner beginning the Black Metal path"
+        },
+        {
+          "id": "shadow_self",
+          "name": "Shadow Self",
+          "type": "character",
+          "position": {
+            "x": 2.5,
+            "y": 0,
+            "z": 0.5
+          },
+          "color": "#ff5c7c",
+          "description": "Fragmenting into its component illusions"
+        },
+        {
+          "id": "dissolution_force",
+          "name": "Dissolution Apparatus",
+          "type": "machine",
+          "position": {
+            "x": 4,
+            "y": 0,
+            "z": -1.5
+          },
+          "color": "#c78fff",
+          "description": "The active force of breakdown and clarification"
+        },
+        {
+          "id": "memory_archive",
+          "name": "Archive of Becoming",
+          "type": "machine",
+          "position": {
+            "x": -3.5,
+            "y": 0,
+            "z": 2
+          },
+          "color": "#56ff9f",
+          "description": "Records each layer as it falls"
+        }
+      ],
+      "timeline": [
+        {
+          "turn": 0,
+          "target_element_id": "practitioner_main",
+          "text": "I am ready. Dismantle what I thought I was.",
+          "emotion": "resolute"
+        },
+        {
+          "turn": 1,
+          "target_element_id": "dissolution_force",
+          "text": "[ACTIVATION: Layer 1 dissolving\u2014narrative of self]",
+          "emotion": "mechanical"
+        },
+        {
+          "turn": 2,
+          "target_element_id": "shadow_self",
+          "text": "I am cracking. The story I told falls apart.",
+          "emotion": "fragmented"
+        },
+        {
+          "turn": 3,
+          "target_element_id": "memory_archive",
+          "text": "[FILING: 'I am cracking'\u2014evidence of pattern collapse]",
+          "emotion": "mechanical"
+        },
+        {
+          "turn": 4,
+          "target_element_id": "dissolution_force",
+          "text": "[LAYER 2: Identity markers, social scaffolding, borrowed beliefs]",
+          "emotion": "mechanical"
+        },
+        {
+          "turn": 5,
+          "target_element_id": "practitioner_main",
+          "text": "There is emptiness. Is there anything beneath?",
+          "emotion": "vulnerable"
+        },
+        {
+          "turn": 6,
+          "target_element_id": "dissolution_force",
+          "text": "[ANALYSIS: All layers removed\u2014bedrock approaching]",
+          "emotion": "mechanical"
+        }
+      ],
+      "power_distribution": {
+        "practitioner_main": 30,
+        "shadow_self": 25,
+        "dissolution_force": 35,
+        "memory_archive": 10
+      },
+      "scene_audio": {
+        "background_music": "breaking_frequencies",
+        "intensity": 0.8
+      }
+    },
+    {
+      "scene_number": 3,
+      "title": "The Void Speaks",
+      "subtitle": "Silence beneath all noise",
+      "duration": 28,
+      "elements": [
+        {
+          "id": "practitioner_main",
+          "name": "The Seeker",
+          "type": "character",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "color": "#ff9f56",
+          "description": "The practitioner stripped to essence"
+        },
+        {
+          "id": "void_space",
+          "name": "The Void",
+          "type": "machine",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 3
+          },
+          "color": "#1a1a1a",
+          "description": "The emptiness that is not empty"
+        },
+        {
+          "id": "ground_beneath",
+          "name": "The Ground",
+          "type": "machine",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": -3
+          },
+          "color": "#569fff",
+          "description": "The solid reality beneath dissolution"
+        }
+      ],
+      "timeline": [
+        {
+          "turn": 0,
+          "target_element_id": "practitioner_main",
+          "text": "I have shed everything. What remains?",
+          "emotion": "awe"
+        },
+        {
+          "turn": 1,
+          "target_element_id": "void_space",
+          "text": "[RESONANCE: Not absence, but pregnant silence]",
+          "emotion": "mysterious"
+        },
+        {
+          "turn": 2,
+          "target_element_id": "ground_beneath",
+          "text": "[FOUNDATION: I have always been here]",
+          "emotion": "eternal"
+        },
+        {
+          "turn": 3,
+          "target_element_id": "practitioner_main",
+          "text": "The shedding is complete. I am lighter than I have ever been.",
+          "emotion": "liberation"
+        }
+      ],
+      "power_distribution": {
+        "practitioner_main": 30,
+        "void_space": 35,
+        "ground_beneath": 35
+      },
+      "scene_audio": {
+        "background_music": "stillness_hum",
+        "intensity": 0.3
+      }
+    }
+  ]
+}

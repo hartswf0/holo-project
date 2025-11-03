@@ -1,0 +1,305 @@
+{
+  "title": "Training Grounds: Grounding",
+  "subtitle": "Embodying Truth in the World",
+  "scenes": [
+    {
+      "scene_number": 1,
+      "title": "The Descent",
+      "subtitle": "From essence into flesh and matter",
+      "duration": 33,
+      "elements": [
+        {
+          "id": "practitioner_main",
+          "name": "The Seeker",
+          "type": "character",
+          "position": {
+            "x": 0,
+            "y": 1.5,
+            "z": 0
+          },
+          "color": "#ff9f56",
+          "description": "The integrated practitioner preparing to embody truth"
+        },
+        {
+          "id": "manifest_ground",
+          "name": "Manifest Ground",
+          "type": "machine",
+          "position": {
+            "x": 0,
+            "y": -1.5,
+            "z": 0
+          },
+          "color": "#569fff",
+          "description": "The physical world awaiting embodied presence"
+        },
+        {
+          "id": "grounding_anchor",
+          "name": "Grounding Anchor",
+          "type": "machine",
+          "position": {
+            "x": -3,
+            "y": 0,
+            "z": 1
+          },
+          "color": "#56ff9f",
+          "description": "The mechanism that roots essence into matter"
+        },
+        {
+          "id": "memory_archive",
+          "name": "Archive of Becoming",
+          "type": "machine",
+          "position": {
+            "x": 3,
+            "y": 0,
+            "z": 1
+          },
+          "color": "#c78fff",
+          "description": "Records the anchoring into physical reality"
+        }
+      ],
+      "timeline": [
+        {
+          "turn": 0,
+          "target_element_id": "practitioner_main",
+          "text": "I stand between worlds. Integrated but not yet rooted.",
+          "emotion": "poised"
+        },
+        {
+          "turn": 1,
+          "target_element_id": "manifest_ground",
+          "text": "[WAITING: The world needs embodied truth, not abstract knowing]",
+          "emotion": "patient"
+        },
+        {
+          "turn": 2,
+          "target_element_id": "grounding_anchor",
+          "text": "[ACTIVATION: Descending into body, location, relationship]",
+          "emotion": "active"
+        },
+        {
+          "turn": 3,
+          "target_element_id": "practitioner_main",
+          "text": "I feel it. The integration moving into my bones, my choices, my relationships.",
+          "emotion": "embodied"
+        },
+        {
+          "turn": 4,
+          "target_element_id": "memory_archive",
+          "text": "[RECORDING: Truth manifest in specific action, here, now]",
+          "emotion": "mechanical"
+        },
+        {
+          "turn": 5,
+          "target_element_id": "grounding_anchor",
+          "text": "[GROUNDING COMPLETE: Essence rooted in flesh and circumstance]",
+          "emotion": "active"
+        }
+      ],
+      "power_distribution": {
+        "practitioner_main": 40,
+        "manifest_ground": 25,
+        "grounding_anchor": 25,
+        "memory_archive": 10
+      },
+      "scene_audio": {
+        "background_music": "earth_resonance",
+        "intensity": 0.5
+      }
+    },
+    {
+      "scene_number": 2,
+      "title": "Living the Path",
+      "subtitle": "Where knowledge becomes action",
+      "duration": 38,
+      "elements": [
+        {
+          "id": "practitioner_main",
+          "name": "The Seeker",
+          "type": "character",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "color": "#ff9f56",
+          "description": "The grounded practitioner in the world"
+        },
+        {
+          "id": "world_resistance",
+          "name": "World Resistance",
+          "type": "character",
+          "position": {
+            "x": 3,
+            "y": 0,
+            "z": 0
+          },
+          "color": "#ff5c7c",
+          "description": "The friction of living truth in an untruth world"
+        },
+        {
+          "id": "decision_apparatus",
+          "name": "Decision Apparatus",
+          "type": "machine",
+          "position": {
+            "x": -2.5,
+            "y": 0,
+            "z": 1.5
+          },
+          "color": "#f3ae56",
+          "description": "The faculty that translates knowing into choosing"
+        },
+        {
+          "id": "consequence_tracker",
+          "name": "Consequence Tracker",
+          "type": "machine",
+          "position": {
+            "x": 2.5,
+            "y": 0,
+            "z": -1.5
+          },
+          "color": "#56ff9f",
+          "description": "Records the ripples of grounded action"
+        }
+      ],
+      "timeline": [
+        {
+          "turn": 0,
+          "target_element_id": "practitioner_main",
+          "text": "Now comes the test. Living what I know to be true.",
+          "emotion": "resolute"
+        },
+        {
+          "turn": 1,
+          "target_element_id": "world_resistance",
+          "text": "The world does not reward your truth. It rewards compliance.",
+          "emotion": "challenging"
+        },
+        {
+          "turn": 2,
+          "target_element_id": "decision_apparatus",
+          "text": "[CHOICE POINT: Integrity or ease? Authenticity or acceptance?]",
+          "emotion": "active"
+        },
+        {
+          "turn": 3,
+          "target_element_id": "practitioner_main",
+          "text": "I choose integrity. Even if the cost is solitude.",
+          "emotion": "committed"
+        },
+        {
+          "turn": 4,
+          "target_element_id": "world_resistance",
+          "text": "Then you will walk against the current. Are you prepared?",
+          "emotion": "testing"
+        },
+        {
+          "turn": 5,
+          "target_element_id": "consequence_tracker",
+          "text": "[RIPPLE: Grounded truth generates unforeseen consequences]",
+          "emotion": "mechanical"
+        },
+        {
+          "turn": 6,
+          "target_element_id": "practitioner_main",
+          "text": "I accept the consequences. This is the price of being real.",
+          "emotion": "mature"
+        }
+      ],
+      "power_distribution": {
+        "practitioner_main": 40,
+        "world_resistance": 30,
+        "decision_apparatus": 18,
+        "consequence_tracker": 12
+      },
+      "scene_audio": {
+        "background_music": "friction_harmony",
+        "intensity": 0.7
+      }
+    },
+    {
+      "scene_number": 3,
+      "title": "Return to Ground",
+      "subtitle": "Rooted and continuous",
+      "duration": 30,
+      "elements": [
+        {
+          "id": "practitioner_main",
+          "name": "The Seeker",
+          "type": "character",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "color": "#ff9f56",
+          "description": "The practitioner now truly grounded"
+        },
+        {
+          "id": "ground_stable",
+          "name": "Stable Ground",
+          "type": "machine",
+          "position": {
+            "x": 0,
+            "y": -2,
+            "z": 0
+          },
+          "color": "#569fff",
+          "description": "The earth itself, now recognized as home"
+        },
+        {
+          "id": "cyclical_return",
+          "name": "Cyclical Return",
+          "type": "machine",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 2.5
+          },
+          "color": "#56ff9f",
+          "description": "The spiral that continues\u2014deeper shedding, deeper integration, deeper grounding"
+        }
+      ],
+      "timeline": [
+        {
+          "turn": 0,
+          "target_element_id": "practitioner_main",
+          "text": "I have walked the path. Shed, integrated, grounded.",
+          "emotion": "reflective"
+        },
+        {
+          "turn": 1,
+          "target_element_id": "ground_stable",
+          "text": "[FOUNDATION: I am no longer separate from you]",
+          "emotion": "welcoming"
+        },
+        {
+          "turn": 2,
+          "target_element_id": "cyclical_return",
+          "text": "[SPIRAL: This is not an ending\u2014but a return to the beginning, deeper]",
+          "emotion": "mysterious"
+        },
+        {
+          "turn": 3,
+          "target_element_id": "practitioner_main",
+          "text": "I see. The cycle continues. There is always more to shed, integrate, ground.",
+          "emotion": "acceptance"
+        },
+        {
+          "turn": 4,
+          "target_element_id": "cyclical_return",
+          "text": "[INFINITE: Each layer sheds into deeper knowing]",
+          "emotion": "eternal"
+        }
+      ],
+      "power_distribution": {
+        "practitioner_main": 45,
+        "ground_stable": 30,
+        "cyclical_return": 25
+      },
+      "scene_audio": {
+        "background_music": "eternal_ground",
+        "intensity": 0.3
+      }
+    }
+  ]
+}

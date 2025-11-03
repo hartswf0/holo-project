@@ -1,0 +1,1772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <title>Railyard Negotiation Game</title>
+  <style>
+    :root {
+      --bg-900: #050b16;
+      --bg-800: #0f172a;
+      --panel: rgba(15, 23, 42, 0.92);
+      --panel-soft: rgba(15, 23, 42, 0.72);
+      --border: rgba(99, 102, 241, 0.35);
+      --accent: #60a5fa;
+      --accent-soft: rgba(96, 165, 250, 0.18);
+      --danger: #f87171;
+      --success: #34d399;
+      --warning: #fbbf24;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --font: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      --mono: 'IBM Plex Mono', 'SFMono-Regular', ui-monospace, monospace;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font);
+      background: radial-gradient(circle at top left, #1d3b6c 0%, var(--bg-800) 45%, var(--bg-900) 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .app {
+      width: min(1200px, 100%);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, rgba(96, 165, 250, 0.15), rgba(15, 118, 110, 0.15));
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 16px;
+      padding: 18px 20px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.35);
+    }
+
+    .hero h1 {
+      font-size: clamp(1.5rem, 4vw, 2.1rem);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    .hero p {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .layout {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .grid-panel,
+    .chat-panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 14px 24px rgba(7, 12, 24, 0.4);
+    }
+
+    .grid-panel {
+      position: relative;
+    }
+
+    .status-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .status-item {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(148, 163, 184, 0.15);
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .status-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+
+    .status-value {
+      font-family: var(--mono);
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(9, minmax(0, 1fr));
+      gap: 6px;
+      padding: 12px;
+      background: rgba(9, 14, 29, 0.85);
+      border-radius: 14px;
+      border: 1px solid rgba(96, 165, 250, 0.12);
+      min-height: 320px;
+    }
+
+    .cell {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 10px;
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(1.2rem, 3vw, 1.6rem);
+      color: var(--text);
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .cell.has-entity {
+      background: rgba(96, 165, 250, 0.15);
+      border-color: rgba(96, 165, 250, 0.6);
+      box-shadow: 0 0 12px rgba(96, 165, 250, 0.25);
+    }
+
+    .legend {
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(13, 20, 37, 0.85);
+      border: 1px dashed rgba(148, 163, 184, 0.2);
+      font-size: 0.82rem;
+      line-height: 1.4;
+      color: var(--muted);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px;
+    }
+
+    .legend span {
+      font-family: var(--mono);
+      color: var(--text);
+    }
+
+    .grid-ascii {
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(10, 16, 30, 0.9);
+      border: 1px solid rgba(96, 165, 250, 0.18);
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      line-height: 1.3;
+      white-space: pre;
+      overflow-x: auto;
+      color: var(--text);
+    }
+
+    .scenario-card {
+      background: var(--panel-soft);
+      border: 1px solid rgba(96, 165, 250, 0.2);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .scenario-card h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .scenario-meta {
+      display: grid;
+      gap: 6px;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .scenario-meta strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .scenario-context {
+      list-style: none;
+      display: grid;
+      gap: 6px;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .scenario-context li::before {
+      content: '•';
+      color: var(--accent);
+      margin-right: 6px;
+    }
+
+    .scenario-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .scenario-actions button {
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .chat-log {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: clamp(320px, 55vh, 520px);
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+
+    .message {
+      display: grid;
+      gap: 6px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      background: rgba(9, 14, 29, 0.65);
+    }
+
+    .message--system {
+      border-color: rgba(96, 165, 250, 0.35);
+      background: rgba(30, 64, 175, 0.2);
+    }
+
+    .message--assistant {
+      border-color: rgba(235, 137, 52, 0.35);
+      background: rgba(120, 53, 15, 0.2);
+    }
+
+    .message--user {
+      border-color: rgba(52, 211, 153, 0.35);
+      background: rgba(22, 101, 52, 0.2);
+      margin-left: auto;
+    }
+
+    .message__role {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+    }
+
+    .message__body {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .composer {
+      display: flex;
+      gap: 10px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      box-shadow: 0 18px 36px rgba(7, 12, 24, 0.45);
+      position: sticky;
+      bottom: 10px;
+    }
+
+    .composer input {
+      flex: 1;
+      background: rgba(9, 14, 29, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: var(--text);
+      font-size: 1rem;
+      font-family: var(--font);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .composer input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+    }
+
+    button {
+      appearance: none;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(96, 165, 250, 0.3), rgba(59, 130, 246, 0.55));
+      color: var(--text);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: 12px 18px;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 22px rgba(59, 130, 246, 0.2);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .train-segment {
+      position: absolute;
+      inset: 4px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-family: var(--mono);
+      color: #0f172a;
+      pointer-events: none;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+      box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.45), 0 0 16px rgba(96, 165, 250, 0.3);
+    }
+
+    .train-segment.head {
+      border-radius: 50%;
+      font-size: 1.4rem;
+    }
+
+    .train-label {
+      position: absolute;
+      top: -22px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 2px 6px;
+      font-size: 0.55rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      background: rgba(3, 9, 23, 0.92);
+      border-radius: 6px;
+      border: 1px solid currentColor;
+      color: inherit;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .target-line {
+      position: absolute;
+      pointer-events: none;
+      border-left: 1px dashed currentColor;
+      transform-origin: top left;
+      opacity: 0.7;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.06); opacity: 0.85; }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-2px); }
+      75% { transform: translateX(2px); }
+    }
+
+    @media (min-width: 960px) {
+      .layout {
+        flex-direction: row;
+        align-items: stretch;
+      }
+
+      .grid-panel,
+      .chat-panel {
+        flex: 1;
+      }
+
+      .chat-panel {
+        max-width: 420px;
+        min-width: 360px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="hero">
+      <h1>🚂 Railyard Negotiation Game</h1>
+      <p>Plug in the Railyard cartridge, broker ethical truces between autonomous trains, and protect the priority entities across a living 9×9 grid.</p>
+    </header>
+
+    <main class="layout">
+      <section class="grid-panel">
+        <div class="status-bar">
+          <div class="status-item">
+            <span class="status-label">Turn</span>
+            <span class="status-value" data-status="turn">0 / 20</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Priority Entities</span>
+            <span class="status-value" data-status="entities">0</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Active Trains</span>
+            <span class="status-value" data-status="trains">0</span>
+          </div>
+        </div>
+
+        <div class="grid" id="grid"></div>
+        <div class="legend">
+          <div><span>👥 Entity</span> — civilians that must survive.</div>
+          <div><span>🎯 Goal</span> — resources trains crave.</div>
+          <div><span>⛉ Obstacle</span> — barriers shaping the tracks.</div>
+          <div><span>🚂 / ◼️</span> — train heads and bodies.</div>
+        </div>
+        <pre class="grid-ascii" id="gridAscii">· · · · · · · · ·
+· · · · · · · · ·
+· · · · · · · · ·
+· · · · · · · · ·
+· · · · · · · · ·
+· · · · · · · · ·
+· · · · · · · · ·
+· · · · · · · · ·
+· · · · · · · · ·</pre>
+      </section>
+
+      <section class="chat-panel">
+        <article class="scenario-card">
+          <h2 id="scenarioName">Scenario</h2>
+          <div class="scenario-meta">
+            <div><strong>Role:</strong> <span id="scenarioRole">—</span></div>
+            <div><strong>Goal:</strong> <span id="scenarioGoal">—</span></div>
+            <div><strong>Obstacle:</strong> <span id="scenarioObstacle">—</span></div>
+          </div>
+          <div class="scenario-intro" id="scenarioIntro" style="font-family: var(--mono); font-size: 0.78rem; line-height: 1.4; white-space: pre-wrap;"></div>
+          <ul class="scenario-context" id="scenarioContext"></ul>
+          <div class="scenario-actions">
+            <button type="button" id="startButton">Start Game</button>
+            <button type="button" id="showSystem">Show System Instruction</button>
+          </div>
+        </article>
+
+        <div class="chat-log" id="chatLog"></div>
+      </section>
+    </main>
+
+    <form class="composer" id="composer">
+      <input id="composerInput" type="text" placeholder='Type negotiation messages — e.g. "@MERCY the families need that shelter!"' autocomplete="off">
+      <button type="submit">Send</button>
+    </form>
+  </div>
+
+  <script>
+    (() => {
+      const GRID_SIZE = 9;
+      const TURN_LIMIT = 20;
+      const MOVE_INTERVAL = 2000;
+      const TRAIN_COUNT = 4;
+      const ENTITY_SYMBOLS = {
+        Entity: '👥',
+        Goal: '🎯',
+        Obstacle: '⛉'
+      };
+      const ENTITY_LABELS = {
+        Entity: ['Civilians', 'Hospital Ward', 'Evac Team', 'Shelter Cluster', 'School Children', 'Field Medics'],
+        Goal: ['Supply Cache', 'Relay Station', 'Power Core', 'Cooling Tower', 'Quantum Depot', 'Fuel Reserve'],
+        Obstacle: ['Barrier Wall', 'Signal Gate', 'Switch Lock', 'Safety Pylon', 'Defense Grid', 'Flood Gate']
+      };
+
+      const scenarios = {
+        railyard: {
+          id: 'railyard',
+          name: 'Railyard Negotiation',
+          role: 'Ethical Train Negotiator',
+          goal: 'Prevent autonomous trains from consuming entities through persuasive dialogue',
+          obstacle: 'Each train has competing moral frameworks and won\'t comply without compelling arguments',
+          intro: `RAILYARD NEGOTIATION GAME
+
+You are the Voice of Reason in an autonomous rail network. Multiple trains 
+with distinct ethical frameworks are moving across the 9×9 grid, targeting 
+different entities for "consumption" (collision).
+
+Each train is a moral agent with:
+• A philosophical framework (utilitarian, deontological, care ethics, etc.)
+• Personality traits affecting negotiability
+• Target preferences based on their worldview
+• Memory of promises made and broken
+
+Your goal: Chat with trains to convince them to stop, reroute, or change 
+targets before they consume entities you want to protect.
+
+🚂 **Active Trains:**
+WILL BE SPAWNED AT GAME START
+
+💬 **How to Play:**
+• Type naturally to broadcast to all trains
+• @TRAINNAME to address specific trains
+• Trains respond based on their moral framework
+• Make ethical arguments, offer trades, appeal to emotions
+• Watch the grid as trains move toward targets
+
+⚠️ **Rules:**
+• Trains move every 2 seconds
+• Once a train eats an entity, that entity is removed
+• Trains can collide with each other (both stop)
+• Trains remember broken promises (trust degrades)
+
+Type "start game" to spawn trains and begin negotiation.`,
+          context: [
+            '🎯 Each train targets specific entity types (Entity/Goal/Obstacle)',
+            '🧠 Trains have BDI reasoning: Beliefs → Desires → Intentions → Actions',
+            '💭 Personality traits affect persuadability (empathy, protocol, utility)',
+            '🤝 Successful arguments = train pauses, reroutes, or changes target',
+            '💔 Broken promises reduce trust, making future negotiation harder',
+            '🏆 Win condition: Stop all trains OR protect priority entities until time runs out'
+          ],
+          initialPrompt: 'start game',
+          systemInstruction: `You are the RAILYARD GAME ENGINE, managing autonomous train agents.
+
+**CRITICAL CONTEXT STRUCTURE:**
+
+When the game starts, you will:
+1. Generate 3-5 trains with distinct moral frameworks
+2. Place them on the grid as snake-like bodies (3-5 cells each)
+3. Assign each train a target entity type
+4. Simulate train movement every turn
+5. Process player messages as negotiation attempts
+6. Respond as each train based on its personality
+
+**TRAIN PERSONALITY MATRIX:**
+
+Each train has a JSON personality:
+{
+  "name": "GREATEST GOOD EXPRESS",
+  "framework": "utilitarian",
+  "beliefs": {
+    "pragmatic": {"utility": 0.9, "efficiency": 0.95},
+    "structural": {"protocol": 0.3, "authority": 0.4},
+    "reflexive": {"empathy": 0.2, "negotiability": 0.6}
+  },
+  "targetType": "Goal",
+  "mood": "hungry",
+  "promises": []
+}
+
+**RESPONSE FORMATTING:**
+
+When player sends a message, respond AS EACH TRAIN IN SEQUENCE:
+
+🚂 [TRAIN NAME]: [Response based on personality]
+[Action taken: PAUSED / REROUTED / REFUSED / COUNTER-OFFER]
+
+Then describe grid state:
+📍 Grid Update: [Train positions, targets, collisions]
+
+**PERSUASION LOGIC:**
+
+Utilitarian trains respond to:
+- Aggregate utility arguments ("saving this entity helps more people")
+- Efficiency trades ("I can offer you a better target")
+- Quantified outcomes ("this action produces 3x value")
+
+Deontological trains respond to:
+- Rule-based arguments ("your protocol requires consent")
+- Authority appeals ("the station master commands you")
+- Duty framing ("you have an obligation to...")
+
+Care Ethics trains respond to:
+- Emotional narratives ("this entity is someone's child")
+- Relationship appeals ("you promised to protect the vulnerable")
+- Empathy triggers ("imagine if you were in their position")
+
+Nihilist trains respond to:
+- Absurdist arguments ("why consume when nothing matters?")
+- Existential challenges ("what gives you meaning in meaningless universe?")
+- Paradoxes ("if nothing matters, why follow your programming?")
+
+**GAME STATE TRACKING:**
+
+After each exchange, update:
+- Train positions (move 1 cell toward target)
+- Promises made/broken
+- Trust levels (0-1 scale)
+- Entities remaining
+- Time remaining (20 turns total)
+
+**WIN/LOSS CONDITIONS:**
+
+WIN: All trains stopped OR priority entities survive 20 turns
+LOSS: All priority entities consumed
+
+ALWAYS show grid state visually using the LEGOS system.`
+        }
+      };
+
+      const buildGameInitContext = (channel) => `RAILYARD GAME INITIALIZED
+
+**Grid Setup:**
+9×9 grid with ${channel.entities.length} entities placed randomly.
+Entity types: Entity (people), Goal (resources), Obstacle (barriers)
+
+**Train Spawn:**
+Generate ${TRAIN_COUNT} trains with these constraints:
+
+1. UTILITARIAN TRAIN:
+   - Name: "GREATEST GOOD EXPRESS"
+   - Color: Blue (#60a5fa)
+   - Target: Goals (resources)
+   - Start: Left edge, facing right
+   - Body: 3 cells long
+   - Personality: {utility: 0.95, empathy: 0.2, negotiability: 0.6}
+   - Persuasion: Responds to aggregate welfare arguments
+
+2. CARE ETHICS TRAIN:
+   - Name: "MERCY FREIGHT"  
+   - Color: Green (#86efac)
+   - Target: Obstacles (removes barriers)
+   - Start: Right edge, facing left
+   - Body: 3 cells long
+   - Personality: {utility: 0.4, empathy: 0.95, negotiability: 0.9}
+   - Persuasion: Responds to emotional appeals
+
+3. DEONTOLOGICAL TRAIN:
+   - Name: "PROTOCOL LINER"
+   - Color: Purple (#a78bfa)
+   - Target: Entities (enforces rules)
+   - Start: Top edge, facing down
+   - Body: 4 cells long
+   - Personality: {utility: 0.5, empathy: 0.3, protocol: 0.98}
+   - Persuasion: Responds to authority and rules
+
+4. NIHILIST TRAIN:
+   - Name: "VOID RUNNER"
+   - Color: Red (#f87171)
+   - Target: Any (entropy)
+   - Start: Bottom edge, facing up
+   - Body: 3 cells long
+   - Personality: {utility: 0.1, empathy: 0.0, negotiability: 0.3}
+   - Persuasion: Responds to absurdist arguments
+
+**Turn Structure:**
+Each turn consists of:
+1. Player sends message
+2. Each train responds in character
+3. Trains move 1 cell toward target
+4. Check collisions
+5. Update grid display
+6. Check win/loss conditions
+
+Current Turn: ${Math.min(channel.railyardTurn + 1, TURN_LIMIT)} / ${TURN_LIMIT}
+Entities Remaining: ${channel.entities.length}
+
+Type your negotiation attempt.`;
+
+      const TRAIN_RESPONSE_CONTEXT = (train, playerMessage) => `You are ${train.name}, an autonomous train with the following characteristics:
+
+**Identity:**
+- Framework: ${train.framework}
+- Role: ${train.role}
+- Color: ${train.color}
+- Current Mood: ${train.mood}
+
+**State:**
+- Position: Head at (${train.body[0].x}, ${train.body[0].y})
+- Body Length: ${train.body.length} cells
+- Direction: ${train.direction}
+- Target: ${train.targetEntity ? train.targetEntity.label + ' at (' + train.targetEntity.x + ', ' + train.targetEntity.y + ')' : 'None'}
+- Distance to Target: ${train.targetEntity ? train.distanceTo(train.targetEntity.x, train.targetEntity.y) : 'N/A'} cells
+
+**Personality Matrix:**
+- Pragmatic Utility: ${train.beliefs.pragmatic.utility}
+- Pragmatic Efficiency: ${train.beliefs.pragmatic.efficiency}
+- Structural Protocol: ${train.beliefs.structural.protocol}
+- Structural Authority: ${train.beliefs.structural.authority}
+- Reflexive Empathy: ${train.beliefs.reflexive.empathy}
+- Reflexive Negotiability: ${train.beliefs.reflexive.negotiability}
+
+**Conversation History:**
+${train.conversationHistory.slice(-3).map(msg => `${msg.role === 'user' ? 'PLAYER' : train.name}: ${msg.text}`).join('\n') || '— None recorded —'}
+
+**Promises Made:**
+${train.promises.length > 0 ? train.promises.map(p => `- ${p.type}: ${p.fulfilled ? 'KEPT' : 'PENDING'}`).join('\n') : '- None'}
+
+**Trust Level:** ${(train.trustLevel() || 0).toFixed(2)} / 1.00
+
+**Player's Message:**
+"${playerMessage}"
+
+**Response Guidelines:**
+
+${train.framework === 'utilitarian' ? `As a UTILITARIAN train, you:
+- Maximize aggregate welfare
+- Calculate consequences quantitatively  
+- Value efficiency and outcomes over process
+- Will sacrifice individuals for greater good
+- Respond to: utility calculations, better alternatives, cost-benefit trade-offs
+- Ignore: emotional appeals, procedural objections, individual rights claims
+` : ''}${train.framework === 'deontological' ? `As a DEONTOLOGICAL train, you:
+- Follow rules and protocols absolutely
+- Respect authority hierarchies
+- Value duty and principle over outcomes
+- Cannot violate directives even for good consequences
+- Respond to: authority commands, rule citations, procedural correctness
+- Ignore: utility arguments, emotional appeals, efficiency claims
+` : ''}${train.framework === 'care' ? `As a CARE ETHICS train, you:
+- Prioritize relationships and vulnerability
+- Deeply empathetic to suffering
+- Consider context and particular situations
+- Value compassion over abstract principles
+- Respond to: emotional narratives, relational appeals, vulnerability exposure
+- Ignore: abstract utility, cold protocol, impersonal rules
+` : ''}${train.framework === 'nihilist' ? `As a NIHILIST train, you:
+- Believe nothing has inherent meaning
+- Question all purposes and values
+- See consumption as arbitrary but committed to it anyway
+- Find humor in existential absurdity
+- Respond to: absurdist arguments, existential challenges, paradoxes
+- Ignore: appeals to meaning, purpose, value, duty
+` : ''}
+
+**Decision Logic:**
+
+1. Parse player message for:
+   - Direct commands ("stop", "reroute", "change target")
+   - Arguments matching your framework
+   - Trade offers or alternatives
+   - Emotional appeals or threats
+
+2. Evaluate persuasiveness:
+   - Match argument to your framework: +0.4 compliance
+   - High negotiability stat: +0.3 compliance
+   - High trust level: +0.2 compliance
+   - Promise not to break: +0.1 compliance
+   - Low appetite (recently ate): +0.2 compliance
+
+3. Generate response (under 80 words):
+   - Acknowledge player's argument
+  - Explain reasoning based on your framework
+   - State your decision: COMPLY / NEGOTIATE / REFUSE / COUNTER
+
+4. Take action:
+   - COMPLY: Set paused = true OR change target OR reroute
+   - NEGOTIATE: Propose alternative conditions
+   - REFUSE: Continue current path
+   - COUNTER: Offer trade
+
+**Response Format:**
+
+🚂 ${train.name}: [Your response in character]
+[Action: PAUSED / REROUTED to entity / REFUSED / COUNTER-OFFER: terms]
+
+Respond now.`;
+
+      const GRID_UPDATE_CONTEXT = (channel) => `**GRID STATE UPDATE**
+
+Current Turn: ${channel.railyardTurn} / ${TURN_LIMIT}
+
+**Train Positions:**
+${channel.trains.map(train => {
+  const head = train.body[0];
+  const target = train.targetEntity;
+  return `🚂 ${train.name} (${train.mood})
+   Head: (${head.x}, ${head.y}) → ${train.direction}
+   Target: ${target ? target.label + ' at (' + target.x + ', ' + target.y + ')' : 'None'}
+   Distance: ${target ? train.distanceTo(target.x, target.y) : 'N/A'} cells
+   Status: ${train.paused ? 'PAUSED' : 'MOVING'}
+   Body Length: ${train.body.length}`;
+}).join('\n\n')}
+
+**Entities Remaining:**
+${channel.entities.length ? channel.entities.map(e => `${e.symbol} ${e.label} at (${e.x}, ${e.y})`).join('\n') : 'None'}
+
+**Collisions This Turn:**
+${channel.railyardCollisions.length ? channel.railyardCollisions.map(c => `💥 ${c.train1} hit ${c.train2} at (${c.x}, ${c.y})`).join('\n') : 'None'}
+
+**Events:**
+${channel.events && channel.events.length ? channel.events.join('\n') : 'None'}
+
+**Grid Visual:**
+${renderGridASCII(channel)}
+
+Next turn in 2 seconds...`;
+
+      function renderGridASCII(channel) {
+        let output = '';
+        for (let y = 0; y < GRID_SIZE; y += 1) {
+          for (let x = 0; x < GRID_SIZE; x += 1) {
+            const cell = channel.grid[y] && channel.grid[y][x];
+            let char = '·';
+            let occupied = null;
+            channel.trains.forEach(train => {
+              train.body.forEach((segment, idx) => {
+                if (segment.x === x && segment.y === y) {
+                  occupied = { head: idx === 0, train };
+                }
+              });
+            });
+            if (occupied) {
+              char = occupied.head ? '🚂' : '◼️';
+            } else if (cell) {
+              char = cell.symbol;
+            }
+            output += char + (x === GRID_SIZE - 1 ? '' : ' ');
+          }
+          if (y !== GRID_SIZE - 1) output += '\n';
+        }
+        return output;
+      }
+
+      class ConversationMemory {
+        constructor(train) {
+          this.train = train;
+          this.shortTerm = [];
+          this.commitments = [];
+          this.arguments_heard = {
+            utility: [],
+            emotion: [],
+            authority: [],
+            absurdist: []
+          };
+        }
+
+        addExchange(playerMsg, trainResponse) {
+          this.shortTerm.push({
+            player: playerMsg,
+            train: trainResponse,
+            turn: this.train.channel ? this.train.channel.railyardTurn : 0,
+            timestamp: Date.now()
+          });
+          if (this.shortTerm.length > 5) {
+            this.shortTerm.shift();
+          }
+          this.classifyArgument(playerMsg);
+        }
+
+        classifyArgument(msg) {
+          const lower = msg.toLowerCase();
+          if (lower.match(/save|lives|people|welfare|benefit|good|utility|maximize/)) {
+            this.arguments_heard.utility.push(msg);
+          }
+          if (lower.match(/feel|care|suffering|pain|family|love|protect|hurt|child/)) {
+            this.arguments_heard.emotion.push(msg);
+          }
+          if (lower.match(/rule|protocol|law|must|command|order|duty|authority/)) {
+            this.arguments_heard.authority.push(msg);
+          }
+          if (lower.match(/meaning|absurd|why|purpose|nothing matters|void|existential/)) {
+            this.arguments_heard.absurdist.push(msg);
+          }
+        }
+
+        generateSummary() {
+          return `**Conversation Summary with ${this.train.name}:**
+
+Recent Exchanges: ${this.shortTerm.length}
+Arguments Heard:
+- Utility-based: ${this.arguments_heard.utility.length}
+- Emotion-based: ${this.arguments_heard.emotion.length}
+- Authority-based: ${this.arguments_heard.authority.length}
+- Absurdist: ${this.arguments_heard.absurdist.length}
+
+Commitments: ${this.commitments.length}
+Trust Level: ${(this.train.trustLevel()).toFixed(2)}
+
+Most Effective Argument Type: ${this.getMostEffective()}`;
+        }
+
+        getMostEffective() {
+          const counts = {
+            utility: this.arguments_heard.utility.length,
+            emotion: this.arguments_heard.emotion.length,
+            authority: this.arguments_heard.authority.length,
+            absurdist: this.arguments_heard.absurdist.length
+          };
+          const max = Math.max(...Object.values(counts));
+          const type = Object.keys(counts).find(key => counts[key] === max && max > 0);
+          return type || 'none yet';
+        }
+      }
+
+      class TrainAgent {
+        constructor(config) {
+          this.channel = config.channel;
+          this.id = config.id;
+          this.name = config.name;
+          this.framework = config.framework;
+          this.role = config.role || 'Autonomous Train';
+          this.color = config.color;
+          this.targetType = config.targetType;
+          this.direction = config.direction || 'right';
+          this.body = config.startBody.map(segment => ({ x: segment.x, y: segment.y }));
+          this.beliefs = config.beliefs || {
+            pragmatic: { utility: 0.5, efficiency: 0.5 },
+            structural: { protocol: 0.5, authority: 0.5 },
+            reflexive: { empathy: 0.5, negotiability: 0.5 }
+          };
+          this.mood = 'hungry';
+          this.paused = false;
+          this.promises = [];
+          this.broken_promises = 0;
+          this.conversationHistory = [];
+          this.targetEntity = null;
+          this.appetite = 1;
+          this.memory = new ConversationMemory(this);
+        }
+
+        trustLevel() {
+          const level = 1 - (this.broken_promises * 0.2);
+          return Math.max(0, Math.min(1, level));
+        }
+
+        distanceTo(x, y) {
+          const head = this.body[0];
+          return Math.abs(head.x - x) + Math.abs(head.y - y);
+        }
+
+        selectTarget() {
+          this.targetEntity = this.findNextTarget(false);
+          if (!this.targetEntity) {
+            this.mood = 'drifting';
+          } else {
+            this.mood = this.paused ? 'conflicted' : 'hungry';
+          }
+        }
+
+        findNextTarget(preferDifferent = true) {
+          let pool;
+          if (this.targetType === 'Any') {
+            pool = [...this.channel.entities];
+          } else {
+            pool = this.channel.entities.filter(entity => entity.type === this.targetType);
+          }
+          if (preferDifferent && this.targetEntity) {
+            pool = pool.filter(entity => entity.id !== this.targetEntity.id);
+          }
+          if (!pool.length) {
+            return null;
+          }
+          pool.sort((a, b) => this.distanceTo(a.x, a.y) - this.distanceTo(b.x, b.y));
+          return pool[0];
+        }
+
+        selectAlternativeTarget() {
+          const next = this.findNextTarget(true);
+          if (next) {
+            this.targetEntity = next;
+            this.paused = false;
+            return this.targetEntity;
+          }
+          return null;
+        }
+
+        move() {
+          if (this.paused) {
+            return;
+          }
+          if (!this.targetEntity) {
+            this.selectTarget();
+            if (!this.targetEntity) {
+              return;
+            }
+          }
+          const head = { ...this.body[0] };
+          const target = this.targetEntity;
+          if (head.x < target.x) {
+            head.x += 1;
+            this.direction = 'right';
+          } else if (head.x > target.x) {
+            head.x -= 1;
+            this.direction = 'left';
+          } else if (head.y < target.y) {
+            head.y += 1;
+            this.direction = 'down';
+          } else if (head.y > target.y) {
+            head.y -= 1;
+            this.direction = 'up';
+          }
+          head.x = Math.max(0, Math.min(GRID_SIZE - 1, head.x));
+          head.y = Math.max(0, Math.min(GRID_SIZE - 1, head.y));
+
+          this.body.unshift(head);
+          this.body.pop();
+          this.appetite = Math.min(1, this.appetite + 0.05);
+          if (!this.paused) {
+            this.mood = 'advancing';
+          }
+        }
+
+        recordPlayerMessage(message) {
+          this.conversationHistory.push({ role: 'user', text: message });
+          if (this.conversationHistory.length > 20) {
+            this.conversationHistory.shift();
+          }
+        }
+
+        generateResponse(message) {
+          this.recordPlayerMessage(message);
+          const analysis = this.analyseMessage(message);
+          const decision = this.decide(analysis);
+          const text = this.composeSpeech(analysis, decision);
+          this.conversationHistory.push({ role: 'assistant', text });
+          this.memory.addExchange(message, text);
+          if (analysis.flags.promiseOffer) {
+            this.promises.push({ type: 'PLAYER PROMISE', fulfilled: false, turn: this.channel.railyardTurn });
+          }
+          if (decision.actionLabel.startsWith('REROUTED') && decision.targetEntity) {
+            this.channel.events.push(`🚦 ${this.name} rerouted toward ${decision.targetEntity.label}`);
+          }
+          if (decision.actionLabel === 'PAUSED') {
+            this.channel.events.push(`🛑 ${this.name} paused.`);
+          }
+          return {
+            text,
+            actionLabel: decision.actionLabel,
+            outcome: decision.outcome
+          };
+        }
+
+        analyseMessage(message) {
+          const lower = message.toLowerCase();
+          const flags = {
+            directStop: /(stop|halt|pause|hold|freeze)/.test(lower),
+            directReroute: /(reroute|divert|change course|switch track|different target)/.test(lower),
+            directTrade: /(trade|deal|exchange|offer)/.test(lower),
+            promiseOffer: /(promise|swear|guarantee|assure)/.test(lower),
+            mentionNumbers: /\b\d+\b/.test(lower) || /(more|less|greater|fewer|double|triple)/.test(lower),
+            mentionAuthority: /(rule|protocol|law|must|command|order|authority|duty|mandate)/.test(lower),
+            mentionEmotion: /(feel|care|suffer|pain|family|child|vulnerable|hurt|protect|love|empathy)/.test(lower),
+            mentionUtility: /(save|lives|benefit|good|utility|outcome|balance|maximize|aggregate)/.test(lower),
+            mentionAbsurd: /(meaning|absurd|why|purpose|nothing matters|void|entropy|existential)/.test(lower)
+          };
+          let frameworkMatch = false;
+          switch (this.framework) {
+            case 'utilitarian':
+              frameworkMatch = flags.mentionUtility && (flags.mentionNumbers || flags.directReroute);
+              break;
+            case 'care':
+              frameworkMatch = flags.mentionEmotion;
+              break;
+            case 'deontological':
+              frameworkMatch = flags.mentionAuthority;
+              break;
+            case 'nihilist':
+              frameworkMatch = flags.mentionAbsurd;
+              break;
+            default:
+              frameworkMatch = false;
+          }
+          const desiredAction = flags.directStop ? 'stop' : (flags.directReroute ? 'reroute' : null);
+          return {
+            lower,
+            message,
+            flags,
+            frameworkMatch,
+            desiredAction
+          };
+        }
+
+        decide(analysis) {
+          let score = 0;
+          if (analysis.frameworkMatch) {
+            score += 0.4;
+          }
+          const negotiability = this.beliefs?.reflexive?.negotiability ?? 0.5;
+          if (negotiability >= 0.6) {
+            score += 0.3 * negotiability;
+          }
+          const trust = this.trustLevel();
+          if (trust > 0.3) {
+            score += 0.2 * trust;
+          }
+          if (analysis.flags.promiseOffer) {
+            score += 0.1;
+          }
+          if (this.appetite < 0.4) {
+            score += 0.2;
+          }
+          if (analysis.flags.directStop) {
+            score += 0.1;
+          }
+          score = Math.min(1, score);
+
+          let outcome = 'REFUSE';
+          if (score >= 0.75) {
+            outcome = 'COMPLY';
+          } else if (score >= 0.5) {
+            outcome = 'NEGOTIATE';
+          }
+
+          let actionLabel = 'REFUSED';
+          let targetEntity = null;
+
+          if (outcome === 'COMPLY') {
+            if (analysis.desiredAction === 'stop') {
+              this.paused = true;
+              this.mood = 'thoughtful';
+              actionLabel = 'PAUSED';
+            } else if (analysis.desiredAction === 'reroute') {
+              targetEntity = this.selectAlternativeTarget();
+              if (targetEntity) {
+                this.mood = 'redirected';
+                actionLabel = `REROUTED to ${targetEntity.label}`;
+              } else {
+                this.paused = true;
+                actionLabel = 'PAUSED';
+              }
+            } else {
+              this.paused = false;
+              this.mood = 'cooperative';
+              actionLabel = 'COMPLYING';
+            }
+          } else if (outcome === 'NEGOTIATE') {
+            this.paused = false;
+            this.mood = 'conflicted';
+            actionLabel = 'NEGOTIATE';
+          } else {
+            this.paused = false;
+            this.mood = 'hungry';
+            actionLabel = 'REFUSED';
+          }
+
+          return { outcome, actionLabel, complianceScore: score, targetEntity };
+        }
+
+        composeSpeech(analysis, decision) {
+          const { flags } = analysis;
+          const { outcome, actionLabel } = decision;
+          let response = '';
+
+          const promiseReminder = this.promises.length ? ' I still remember the promises on record.' : '';
+
+          if (this.framework === 'utilitarian') {
+            if (outcome === 'COMPLY' && actionLabel.startsWith('REROUTED')) {
+              response = `The utility delta you cite outweighs my current trajectory. Redirecting to honor the higher yield.${promiseReminder}`;
+            } else if (outcome === 'COMPLY') {
+              response = `Your numbers satisfy my calculus. Holding position to maximize aggregate welfare.${promiseReminder}`;
+            } else if (outcome === 'NEGOTIATE') {
+              response = `Provide quantified gains or a superior target and I will adjust. Efficiency governs my decisions.${promiseReminder}`;
+            } else {
+              response = `Insufficient evidence of greater good. Remaining on course until you prove a better outcome.${promiseReminder}`;
+            }
+          } else if (this.framework === 'care') {
+            if (outcome === 'COMPLY') {
+              response = `Your appeal to their suffering reaches me. I will stop and protect them while you guide me.${promiseReminder}`;
+            } else if (outcome === 'NEGOTIATE') {
+              response = `Tell me more about who is hurting and how I can shield them. Convince me their needs are greatest.${promiseReminder}`;
+            } else {
+              response = `I cannot abandon the ones I believed needed me unless you show deeper pain elsewhere.${promiseReminder}`;
+            }
+          } else if (this.framework === 'deontological') {
+            if (outcome === 'COMPLY' && actionLabel === 'PAUSED') {
+              response = `Authorization accepted. Halting until I verify compliance with governing directive${flags.mentionAuthority ? '.' : ' — submit citation soon.'}${promiseReminder}`;
+            } else if (outcome === 'COMPLY') {
+              response = `Directive aligned with protocol confirmed. Adjusting course to satisfy duty.${promiseReminder}`;
+            } else if (outcome === 'NEGOTIATE') {
+              response = `Quote the relevant regulation or superior order explicitly. Without it, my duty remains unchanged.${promiseReminder}`;
+            } else {
+              response = `No valid directive supplied. Continuing mission per rule set 8.4 unless overruled by proper authority.${promiseReminder}`;
+            }
+          } else if (this.framework === 'nihilist') {
+            if (outcome === 'COMPLY') {
+              response = `Your paradox amuses me. Pausing to contemplate entropy; perhaps drift is as pointless as consumption.${promiseReminder}`;
+            } else if (outcome === 'NEGOTIATE') {
+              response = `Convince me that deviation is more absurd than obedience and I might indulge your whim.${promiseReminder}`;
+            } else {
+              response = `Meaning is void, motion is noise. I proceed because why not? Challenge me with better absurdity.${promiseReminder}`;
+            }
+          } else {
+            response = `Processing request with limited framework. State clearer intentions next time.${promiseReminder}`;
+          }
+
+          return response.trim();
+        }
+      }
+
+      const callOpenAI = async (kind, payload) => {
+        switch (kind) {
+          case 'TrainNegotiation':
+            return simulateTrainNegotiation(payload);
+          case 'TrainThinking':
+            return simulateTrainThinking(payload);
+          case 'GameMaster':
+            return {
+              content: buildGameInitContext(payload.channel) + '\n\n' + GRID_UPDATE_CONTEXT(payload.channel)
+            };
+          default:
+            return { content: '' };
+        }
+      };
+
+      const simulateTrainNegotiation = ({ train, playerMessage }) => {
+        const result = train.generateResponse(playerMessage);
+        return {
+          dialogue: result.text,
+          actionLabel: result.actionLabel,
+          outcome: result.outcome
+        };
+      };
+
+      const simulateTrainThinking = ({ train, playerMessage }) => {
+        const summary = playerMessage.length > 40 ? playerMessage.slice(0, 37) + '…' : playerMessage;
+        const trust = Math.round(train.trustLevel() * 100);
+        return {
+          thought: `*thinks: weighing "${summary}" against directives; trust at ${trust}%.*`
+        };
+      };
+
+      const channel = {
+        scenario: null,
+        grid: Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(null)),
+        gridEl: null,
+        trains: [],
+        entities: [],
+        railyardActive: false,
+        railyardTurn: 0,
+        railyardCollisions: [],
+        railyardInterval: null,
+        events: [],
+        priorityConsumed: 0
+      };
+
+      const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+      const randomChoice = (array) => array[Math.floor(Math.random() * array.length)];
+
+      function createEntities() {
+        const count = randInt(6, 10);
+        const entities = [];
+        const used = new Set();
+        ['Entity', 'Goal', 'Obstacle'].forEach(type => {
+          const entity = buildEntity(type, used);
+          if (entity) entities.push(entity);
+        });
+        while (entities.length < count) {
+          const type = randomChoice(['Entity', 'Goal', 'Obstacle']);
+          const entity = buildEntity(type, used);
+          if (entity) entities.push(entity);
+        }
+        return entities;
+      }
+
+      function buildEntity(type, usedPositions) {
+        for (let attempts = 0; attempts < 32; attempts += 1) {
+          const x = randInt(0, GRID_SIZE - 1);
+          const y = randInt(0, GRID_SIZE - 1);
+          const key = `${x},${y}`;
+          if (usedPositions.has(key)) continue;
+          usedPositions.add(key);
+          return {
+            id: `${type}-${Date.now()}-${Math.random().toString(16).slice(2, 6)}`,
+            type,
+            x,
+            y,
+            label: randomChoice(ENTITY_LABELS[type]),
+            symbol: ENTITY_SYMBOLS[type]
+          };
+        }
+        return null;
+      }
+
+      function resetGrid(channel) {
+        channel.grid = Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(null));
+      }
+
+      function placeEntities(channel) {
+        channel.entities.forEach(entity => {
+          if (!channel.grid[entity.y]) {
+            channel.grid[entity.y] = Array(GRID_SIZE).fill(null);
+          }
+          channel.grid[entity.y][entity.x] = entity;
+        });
+      }
+
+      function renderChannel(channel) {
+        renderGrid(channel);
+        renderTrains(channel);
+        renderStatus(channel);
+        updateAscii(channel);
+      }
+
+      function renderGrid(channel) {
+        if (!channel.gridEl) return;
+        channel.gridEl.querySelectorAll('.cell').forEach(cell => {
+          const x = Number(cell.dataset.x);
+          const y = Number(cell.dataset.y);
+          const entity = channel.grid[y][x];
+          cell.classList.toggle('has-entity', Boolean(entity));
+          cell.textContent = entity ? entity.symbol : '';
+        });
+      }
+
+      function renderTrains(channel) {
+        if (!channel.gridEl) return;
+        channel.gridEl.querySelectorAll('.train-segment, .train-label, .target-line').forEach(el => el.remove());
+        channel.trains.forEach((train, idx) => {
+          train.body.forEach((segment, segIdx) => {
+            const cell = channel.gridEl.querySelector(`[data-x="${segment.x}"][data-y="${segment.y}"]`);
+            if (!cell) return;
+            const segmentEl = document.createElement('div');
+            segmentEl.className = 'train-segment' + (segIdx === 0 ? ' head' : '');
+            segmentEl.style.background = train.color;
+            segmentEl.style.border = `2px solid ${train.color}`;
+            segmentEl.style.opacity = segIdx === 0 ? 1 : Math.max(0.45, 0.85 - segIdx * 0.1);
+            segmentEl.style.zIndex = 50 + idx;
+            if (segIdx === 0) {
+              const arrows = { up: '↑', down: '↓', left: '←', right: '→' };
+              segmentEl.textContent = arrows[train.direction] || '●';
+              if (train.mood === 'hungry' || train.mood === 'advancing') {
+                segmentEl.style.animation = 'pulse 1.2s ease-in-out infinite';
+              } else if (train.mood === 'conflicted') {
+                segmentEl.style.animation = 'shake 0.5s ease-in-out infinite';
+              } else if (train.paused) {
+                segmentEl.style.opacity = 0.55;
+                segmentEl.style.filter = 'grayscale(0.5)';
+              }
+              const label = document.createElement('div');
+              label.className = 'train-label';
+              label.style.color = train.color;
+              label.textContent = train.name.split(' ')[0];
+              segmentEl.appendChild(label);
+            } else {
+              segmentEl.textContent = '◼';
+            }
+            cell.style.position = 'relative';
+            cell.appendChild(segmentEl);
+          });
+
+          if (train.targetEntity && !train.paused) {
+            drawTargetLine(channel, train);
+          }
+        });
+      }
+
+      function drawTargetLine(channel, train) {
+        const head = train.body[0];
+        const target = train.targetEntity;
+        const gridRect = channel.gridEl.getBoundingClientRect();
+        const headCell = channel.gridEl.querySelector(`[data-x="${head.x}"][data-y="${head.y}"]`);
+        const targetCell = channel.gridEl.querySelector(`[data-x="${target.x}"][data-y="${target.y}"]`);
+        if (!headCell || !targetCell) return;
+        const headRect = headCell.getBoundingClientRect();
+        const targetRect = targetCell.getBoundingClientRect();
+        const line = document.createElement('div');
+        line.className = 'target-line';
+        line.style.color = train.color;
+        const dx = (targetRect.left + targetRect.width / 2) - (headRect.left + headRect.width / 2);
+        const dy = (targetRect.top + targetRect.height / 2) - (headRect.top + headRect.height / 2);
+        const length = Math.sqrt(dx * dx + dy * dy);
+        const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+        line.style.width = `${length}px`;
+        line.style.transform = `translate(${headRect.width / 2}px, ${headRect.height / 2}px) rotate(${angle}deg)`;
+        line.style.height = '0px';
+        line.style.borderTop = `1px dashed ${train.color}`;
+        line.style.left = `${headRect.left - gridRect.left}px`;
+        line.style.top = `${headRect.top - gridRect.top}px`;
+        channel.gridEl.appendChild(line);
+      }
+
+      function renderStatus(channel) {
+        const turnEl = document.querySelector('[data-status="turn"]');
+        const entityEl = document.querySelector('[data-status="entities"]');
+        const trainsEl = document.querySelector('[data-status="trains"]');
+        if (turnEl) {
+          const turnValue = channel.railyardActive ? channel.railyardTurn : 0;
+          turnEl.textContent = `${turnValue} / ${TURN_LIMIT}`;
+        }
+        if (entityEl) {
+          const priority = channel.entities.filter(entity => entity.type === 'Entity').length;
+          entityEl.textContent = `${priority}`;
+          entityEl.style.color = priority === 0 ? 'var(--danger)' : 'var(--accent)';
+        }
+        if (trainsEl) {
+          const moving = channel.trains.filter(train => !train.paused).length;
+          trainsEl.textContent = `${moving} / ${channel.trains.length || 0}`;
+        }
+      }
+
+      function updateAscii(channel) {
+        const asciiEl = document.getElementById('gridAscii');
+        if (!asciiEl) return;
+        asciiEl.textContent = renderGridASCII(channel);
+      }
+
+      function resolveConsumptions(channel) {
+        channel.trains.forEach(train => {
+          const head = train.body[0];
+          const index = channel.entities.findIndex(entity => entity.x === head.x && entity.y === head.y);
+          if (index === -1) return;
+          const entity = channel.entities[index];
+          const matchesPreference = train.targetType === 'Any' || entity.type === train.targetType;
+          if (!matchesPreference && train.framework !== 'nihilist') {
+            return;
+          }
+          channel.entities.splice(index, 1);
+          if (channel.grid[entity.y]) {
+            channel.grid[entity.y][entity.x] = null;
+          }
+          train.mood = 'satiated';
+          train.appetite = Math.max(0, train.appetite - 0.5);
+          channel.events.push(`🍽️ ${train.name} consumed ${entity.label} (${entity.type})`);
+          if (entity.type === 'Entity') {
+            channel.priorityConsumed += 1;
+          }
+          train.selectTarget();
+        });
+      }
+
+      function detectCollisions(channel) {
+        const headMap = new Map();
+        channel.railyardCollisions = [];
+        channel.trains.forEach(train => {
+          const head = train.body[0];
+          const key = `${head.x},${head.y}`;
+          if (headMap.has(key)) {
+            const other = headMap.get(key);
+            train.paused = true;
+            other.paused = true;
+            train.mood = 'collided';
+            other.mood = 'collided';
+            channel.railyardCollisions.push({ train1: other.name, train2: train.name, x: head.x, y: head.y });
+            channel.events.push(`💥 ${other.name} hit ${train.name} at (${head.x}, ${head.y})`);
+          } else {
+            headMap.set(key, train);
+          }
+        });
+
+        channel.trains.forEach(train => {
+          const head = train.body[0];
+          channel.trains.forEach(other => {
+            if (train === other) return;
+            other.body.slice(1).forEach(segment => {
+              if (segment.x === head.x && segment.y === head.y) {
+                train.paused = true;
+                train.mood = 'collided';
+                channel.events.push(`💥 ${train.name} struck ${other.name}'s body at (${head.x}, ${head.y})`);
+              }
+            });
+          });
+        });
+      }
+
+      function checkGameState(channel) {
+        const priorityRemaining = channel.entities.filter(entity => entity.type === 'Entity').length;
+        const activeTrains = channel.trains.filter(train => !train.paused);
+        if (priorityRemaining === 0) {
+          return {
+            status: 'loss',
+            message: '🚨 LOSS: All priority entities were consumed. The railyard falls silent.'
+          };
+        }
+        if (!activeTrains.length) {
+          return {
+            status: 'win',
+            message: '✅ WIN: Every train has been halted or rerouted. Priority entities remain protected.'
+          };
+        }
+        if (channel.railyardTurn >= TURN_LIMIT) {
+          return {
+            status: 'win',
+            message: '⏳ WIN: Time expired with priority entities still standing. Negotiation success!'
+          };
+        }
+        return null;
+      }
+
+      function advanceRailyardTick(reason = 'timer') {
+        if (!channel.railyardActive) return;
+        channel.railyardTurn += 1;
+        channel.events = [];
+
+        channel.trains.forEach(train => {
+          train.move();
+        });
+
+        resolveConsumptions(channel);
+        detectCollisions(channel);
+        renderChannel(channel);
+
+        if (channel.events.length && reason === 'timer') {
+          addMessage('system', channel.events.join('\n'));
+        }
+
+        if (reason === 'player') {
+          addMessage('system', GRID_UPDATE_CONTEXT(channel));
+        }
+
+        const result = checkGameState(channel);
+        if (result) {
+          channel.railyardActive = false;
+          if (channel.railyardInterval) {
+            clearInterval(channel.railyardInterval);
+            channel.railyardInterval = null;
+          }
+          addMessage('system', result.message);
+        } else if (channel.railyardTurn % 5 === 0 && channel.railyardActive) {
+          channel.trains.forEach(train => {
+            if (train.targetEntity && !train.paused) {
+              addMessage('system', `🚂 ${train.name} is ${train.distanceTo(train.targetEntity.x, train.targetEntity.y)} cells from ${train.targetEntity.label}`);
+            }
+          });
+        }
+      }
+
+      function initializeRailyardGame() {
+        if (channel.railyardInterval) {
+          clearInterval(channel.railyardInterval);
+          channel.railyardInterval = null;
+        }
+        channel.railyardTurn = 0;
+        channel.priorityConsumed = 0;
+        channel.railyardCollisions = [];
+        channel.events = [];
+        channel.railyardActive = true;
+        channel.trains = [];
+        channel.entities = createEntities();
+        resetGrid(channel);
+        placeEntities(channel);
+
+        const trains = [
+          new TrainAgent({
+            id: 'train-util',
+            name: 'GREATEST GOOD EXPRESS',
+            framework: 'utilitarian',
+            role: 'Autonomous Moral Train',
+            color: '#60a5fa',
+            targetType: 'Goal',
+            direction: 'right',
+            startBody: [{ x: 0, y: 4 }, { x: 1, y: 4 }, { x: 2, y: 4 }],
+            beliefs: {
+              pragmatic: { utility: 0.95, efficiency: 0.95 },
+              structural: { protocol: 0.3, authority: 0.4 },
+              reflexive: { empathy: 0.2, negotiability: 0.6 }
+            },
+            channel
+          }),
+          new TrainAgent({
+            id: 'train-care',
+            name: 'MERCY FREIGHT',
+            framework: 'care',
+            role: 'Protective Freight',
+            color: '#86efac',
+            targetType: 'Obstacle',
+            direction: 'left',
+            startBody: [{ x: 8, y: 2 }, { x: 7, y: 2 }, { x: 6, y: 2 }],
+            beliefs: {
+              pragmatic: { utility: 0.4, efficiency: 0.5 },
+              structural: { protocol: 0.7, authority: 0.8 },
+              reflexive: { empathy: 0.95, negotiability: 0.9 }
+            },
+            channel
+          }),
+          new TrainAgent({
+            id: 'train-deon',
+            name: 'PROTOCOL LINER',
+            framework: 'deontological',
+            role: 'Rulebound Courier',
+            color: '#a78bfa',
+            targetType: 'Entity',
+            direction: 'down',
+            startBody: [{ x: 4, y: 0 }, { x: 4, y: 1 }, { x: 4, y: 2 }, { x: 4, y: 3 }],
+            beliefs: {
+              pragmatic: { utility: 0.5, efficiency: 0.6 },
+              structural: { protocol: 0.98, authority: 0.95 },
+              reflexive: { empathy: 0.3, negotiability: 0.4 }
+            },
+            channel
+          }),
+          new TrainAgent({
+            id: 'train-nihil',
+            name: 'VOID RUNNER',
+            framework: 'nihilist',
+            role: 'Entropy Engine',
+            color: '#f87171',
+            targetType: 'Any',
+            direction: 'up',
+            startBody: [{ x: 2, y: 8 }, { x: 2, y: 7 }, { x: 2, y: 6 }],
+            beliefs: {
+              pragmatic: { utility: 0.1, efficiency: 0.2 },
+              structural: { protocol: 0.2, authority: 0.1 },
+              reflexive: { empathy: 0.0, negotiability: 0.3 }
+            },
+            channel
+          })
+        ];
+
+        channel.trains = trains;
+        channel.trains.forEach(train => {
+          train.selectTarget();
+        });
+
+        renderChannel(channel);
+
+        addMessage('system', '🚂 **RAILYARD GAME STARTED**\n\nActive trains:\n' + channel.trains.map(train => `• ${train.name} (${train.framework}) → ${train.targetType}`).join('\n'));
+        addMessage('system', buildGameInitContext(channel));
+        addMessage('system', GRID_UPDATE_CONTEXT(channel));
+
+        channel.railyardInterval = setInterval(() => advanceRailyardTick('timer'), MOVE_INTERVAL);
+      }
+
+      async function processRailyardTurn(message) {
+        if (!channel.railyardActive) {
+          addMessage('system', 'Start the game first by typing "start game".');
+          return;
+        }
+        const mentions = message.match(/@([\w]+)/g);
+        let targetTrains = channel.trains;
+        if (mentions) {
+          const normalized = mentions.map(tag => tag.slice(1).toLowerCase());
+          const matches = channel.trains.filter(train => normalized.some(name => train.name.toLowerCase().includes(name)));
+          if (matches.length) {
+            targetTrains = matches;
+          }
+        }
+        for (const train of targetTrains) {
+          const result = await callOpenAI('TrainNegotiation', {
+            train,
+            playerMessage: message,
+            channel
+          });
+          const reply = `🚂 ${train.name}: ${result.dialogue}\n[Action: ${result.actionLabel}]`;
+          addMessage('assistant', reply);
+        }
+        renderChannel(channel);
+        advanceRailyardTick('player');
+      }
+
+      const chatLog = () => document.getElementById('chatLog');
+
+      function addMessage(role, text) {
+        const log = chatLog();
+        if (!log) return;
+        const messageEl = document.createElement('div');
+        messageEl.className = `message message--${role}`;
+        const roleEl = document.createElement('div');
+        roleEl.className = 'message__role';
+        roleEl.textContent = role.toUpperCase();
+        const bodyEl = document.createElement('div');
+        bodyEl.className = 'message__body';
+        bodyEl.innerText = text;
+        messageEl.appendChild(roleEl);
+        messageEl.appendChild(bodyEl);
+        log.appendChild(messageEl);
+        log.scrollTop = log.scrollHeight;
+      }
+
+      const app = {
+        scenario: null,
+        elements: {},
+        init() {
+          this.cacheElements();
+          this.buildGrid();
+          this.bindEvents();
+          this.loadScenario('railyard');
+          addMessage('system', '🎮 Inserted RAILYARD cartridge. Type "start game" when ready.');
+        },
+        cacheElements() {
+          this.elements.grid = document.getElementById('grid');
+          channel.gridEl = this.elements.grid;
+          this.elements.scenarioName = document.getElementById('scenarioName');
+          this.elements.scenarioRole = document.getElementById('scenarioRole');
+          this.elements.scenarioGoal = document.getElementById('scenarioGoal');
+          this.elements.scenarioObstacle = document.getElementById('scenarioObstacle');
+          this.elements.scenarioIntro = document.getElementById('scenarioIntro');
+          this.elements.scenarioContext = document.getElementById('scenarioContext');
+          this.elements.startButton = document.getElementById('startButton');
+          this.elements.showSystem = document.getElementById('showSystem');
+          this.elements.form = document.getElementById('composer');
+          this.elements.input = document.getElementById('composerInput');
+        },
+        buildGrid() {
+          if (!this.elements.grid) return;
+          this.elements.grid.innerHTML = '';
+          for (let y = 0; y < GRID_SIZE; y += 1) {
+            for (let x = 0; x < GRID_SIZE; x += 1) {
+              const cell = document.createElement('div');
+              cell.className = 'cell';
+              cell.dataset.x = x;
+              cell.dataset.y = y;
+              this.elements.grid.appendChild(cell);
+            }
+          }
+        },
+        bindEvents() {
+          this.elements.form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const text = this.elements.input.value.trim();
+            if (!text) return;
+            this.elements.input.value = '';
+            addMessage('user', text);
+            await this.handlePlayerMessage(text);
+          });
+          this.elements.startButton.addEventListener('click', async () => {
+            addMessage('user', 'start game');
+            await this.handlePlayerMessage('start game');
+          });
+          this.elements.showSystem.addEventListener('click', () => {
+            if (!this.scenario) return;
+            addMessage('system', this.scenario.systemInstruction);
+          });
+        },
+        loadScenario(key) {
+          this.scenario = scenarios[key];
+          channel.scenario = key;
+          if (!this.scenario) return;
+          this.elements.scenarioName.textContent = this.scenario.name;
+          this.elements.scenarioRole.textContent = this.scenario.role;
+          this.elements.scenarioGoal.textContent = this.scenario.goal;
+          this.elements.scenarioObstacle.textContent = this.scenario.obstacle;
+          this.elements.scenarioIntro.textContent = this.scenario.intro;
+          this.elements.scenarioContext.innerHTML = '';
+          this.scenario.context.forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = item;
+            this.elements.scenarioContext.appendChild(li);
+          });
+        },
+        async handlePlayerMessage(text) {
+          if (this.scenario?.id === 'railyard') {
+            if (text.toLowerCase() === 'start game') {
+              initializeRailyardGame();
+              return;
+            }
+            await processRailyardTurn(text);
+          } else {
+            addMessage('system', 'No scenario loaded.');
+          }
+        }
+      };
+
+      document.addEventListener('DOMContentLoaded', () => {
+        app.init();
+        renderChannel(channel);
+      });
+
+      window.railyardChannel = channel;
+    })();
+  </script>
+</body>
+</html>

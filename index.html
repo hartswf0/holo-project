@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DIRTY DISC · The Archive</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --bg: #0a0f0a;
+      --text: #c8e6c9;
+      --accent: #5ea275;
+      --glow: #56ff9f;
+      --border: #1b3a2a;
+      --card-bg: rgba(10, 20, 15, 0.85);
+      --card-hover: rgba(20, 40, 25, 0.95);
+    }
+    
+    body {
+      font-family: 'Courier New', monospace;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+    
+    /* Living Background - Cellular Automata */
+    #lifeCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      opacity: 0.15;
+    }
+    
+    /* Content Layer */
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 60px;
+      padding: 40px 20px;
+      border-bottom: 2px solid var(--border);
+      background: rgba(10, 20, 15, 0.7);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+    }
+    
+    h1 {
+      font-size: clamp(32px, 6vw, 64px);
+      color: var(--glow);
+      text-shadow: 0 0 20px var(--glow), 0 0 40px var(--accent);
+      letter-spacing: 0.15em;
+      margin-bottom: 16px;
+      animation: pulse 3s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; text-shadow: 0 0 20px var(--glow); }
+      50% { opacity: 0.8; text-shadow: 0 0 40px var(--glow), 0 0 60px var(--accent); }
+    }
+    
+    .subtitle {
+      font-size: 18px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+    }
+    
+    .quote {
+      font-style: italic;
+      font-size: 14px;
+      opacity: 0.6;
+      margin-top: 20px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+    }
+    
+    /* Stats */
+    .stats {
+      display: flex;
+      gap: 40px;
+      justify-content: center;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .stat {
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 32px;
+      font-weight: bold;
+      color: var(--glow);
+      text-shadow: 0 0 10px var(--glow);
+    }
+    
+    .stat-label {
+      font-size: 11px;
+      opacity: 0.6;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+    
+    /* Generation Sections */
+    .generation {
+      margin-bottom: 60px;
+    }
+    
+    .generation-title {
+      font-size: 24px;
+      color: var(--glow);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      text-shadow: 0 0 10px var(--accent);
+    }
+    
+    /* Card Grid */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(94, 162, 117, 0.1), transparent);
+      transition: left 0.5s ease;
+    }
+    
+    .card:hover::before {
+      left: 100%;
+    }
+    
+    .card:hover {
+      background: var(--card-hover);
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(94, 162, 117, 0.3);
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    
+    .card-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--glow);
+      letter-spacing: 0.05em;
+    }
+    
+    .card-icon {
+      font-size: 24px;
+      opacity: 0.6;
+    }
+    
+    .card-description {
+      font-size: 13px;
+      line-height: 1.6;
+      opacity: 0.8;
+      margin-bottom: 16px;
+    }
+    
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    
+    .tag {
+      font-size: 10px;
+      padding: 4px 8px;
+      background: rgba(94, 162, 117, 0.2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    
+    /* Featured Projects */
+    .featured {
+      border-color: var(--glow);
+      background: linear-gradient(135deg, var(--card-bg), rgba(94, 162, 117, 0.1));
+    }
+    
+    .featured .card-title {
+      font-size: 20px;
+    }
+    
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      margin-top: 60px;
+      border-top: 2px solid var(--border);
+      opacity: 0.6;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .stats {
+        gap: 20px;
+      }
+      
+      h1 {
+        font-size: 36px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="lifeCanvas"></canvas>
+  
+  <div class="container">
+    <header>
+      <h1>⊞ DIRTY DISC</h1>
+      <div class="subtitle">THE PRIMORDIAL ARCHIVE</div>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-value" id="projectCount">25+</div>
+          <div class="stat-label">Projects</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">4</div>
+          <div class="stat-label">Generations</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">∞</div>
+          <div class="stat-label">Possibilities</div>
+        </div>
+      </div>
+      <div class="quote">
+        "I placed a jar in Tennessee..." — Wallace Stevens<br>
+        The primordial code from which all descended
+      </div>
+    </header>
+    
+    <!-- Featured: HOLO Project -->
+    <div class="generation">
+      <h2 class="generation-title">🎬 Featured: HOLO PROJECT</h2>
+      <div class="card-grid">
+        <a href="holo-project.html" class="card featured" style="grid-column: 1 / -1;">
+          <div class="card-header">
+            <div class="card-title" style="font-size: 28px;">🎬 HOLO PROJECT - Cinematic 3D Viewer</div>
+            <div class="card-icon" style="font-size: 48px; animation: pulse 2s infinite;">🎬</div>
+          </div>
+          <div class="card-description" style="font-size: 16px; margin-bottom: 20px;">
+            <strong>The flagship cinematic projection system.</strong> Full 3D stage with animated entities, laser eyes, information flow particles, generative ambient music, and ripple effects. Boxes animate outward from speakers. Click any entity for details. Built for passive watching with auto-play, text-to-speech, and mobile-optimized controls. A living theatrical simulation.
+          </div>
+          <div class="card-tags">
+            <span class="tag">🎭 Stage Performance</span>
+            <span class="tag">🎵 Generative Music</span>
+            <span class="tag">👁️ Laser Eyes</span>
+            <span class="tag">💫 Ripple Effects</span>
+            <span class="tag">📱 Mobile Friendly</span>
+            <span class="tag">🔊 Text-to-Speech</span>
+            <span class="tag">⚡ Auto-Play</span>
+            <span class="tag">🎬 Cinematic</span>
+          </div>
+          <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); opacity: 0.7; font-size: 12px;">
+            → <a href="holo-index.html" style="color: var(--glow); text-decoration: underline;">Read the full tutorial & philosophy</a>
+          </div>
+        </a>
+      </div>
+    </div>
+    
+    <!-- Nexadoc Generation -->
+    <div class="generation">
+      <h2 class="generation-title">📱 Nexadoc: Spatial Thinking Tools</h2>
+      <div class="card-grid">
+        <a href="thousand-tetrad.html" class="card">
+          <div class="card-header">
+            <div class="card-title">Thousand Tetrad</div>
+            <div class="card-icon">⚡</div>
+          </div>
+          <div class="card-description">
+            Multi-channel AI conversation generator. Creates spatial narratives with grid dynamics, scorecard power, and LEGOS entity tracking.
+          </div>
+          <div class="card-tags">
+            <span class="tag">Generator</span>
+            <span class="tag">LEGOS</span>
+            <span class="tag">Multi-Channel</span>
+          </div>
+        </a>
+        
+        <a href="projection-viewer.html" class="card">
+          <div class="card-header">
+            <div class="card-title">Projection Viewer</div>
+            <div class="card-icon">🎬</div>
+          </div>
+          <div class="card-description">
+            Cinematic projection player with horizontal scrolling scenes. Grid animations, chat timelines, swipe navigation, text-to-speech.
+          </div>
+          <div class="card-tags">
+            <span class="tag">Projector</span>
+            <span class="tag">Cinema</span>
+            <span class="tag">TTS</span>
+          </div>
+        </a>
+        
+        <a href="grid-thinking-viewer.html" class="card">
+          <div class="card-header">
+            <div class="card-title">Grid Thinking Viewer</div>
+            <div class="card-icon">🧠</div>
+          </div>
+          <div class="card-description">
+            Mobile-optimized spatial grid viewer. Swipeable panels with bubbles, timeline events, and power distribution bars.
+          </div>
+          <div class="card-tags">
+            <span class="tag">Mobile</span>
+            <span class="tag">Bubbles</span>
+            <span class="tag">Spatial</span>
+          </div>
+        </a>
+      </div>
+    </div>
+    
+    <!-- Generation 0: Origins -->
+    <div class="generation">
+      <h2 class="generation-title">Generation 0: The Origins</h2>
+      <div class="card-grid">
+        <a href="disc-data.json" class="card">
+          <div class="card-header">
+            <div class="card-title">DISC-DATA (Original)</div>
+            <div class="card-icon">💿</div>
+          </div>
+          <div class="card-description">
+            Original interrogation chamber dataset. 10 scenes featuring Officer, Clancy, Filing Cabinets, Apparatus, Scholars, and Guest Booth.
+          </div>
+          <div class="card-tags">
+            <span class="tag">Data</span>
+            <span class="tag">Example</span>
+          </div>
+        </a>
+        
+        <a href="black-metal-disc-data.json" class="card">
+          <div class="card-header">
+            <div class="card-title">Black Metal: Cosmic Alchemy</div>
+            <div class="card-icon">🌌</div>
+          </div>
+          <div class="card-description">
+            Afrofuturist spatial simulation generated from article. Features floramancy, self-transformation, spacesuit communication, and inner space exploration. 6 scenes, ancestral filing cabinets, spiritual apparatus.
+          </div>
+          <div class="card-tags">
+            <span class="tag">Generated</span>
+            <span class="tag">Afrofuturism</span>
+            <span class="tag">POML</span>
+          </div>
+        </a>
+        
+        <a href="sheep-parliament-fixed-grid.json" class="card">
+          <div class="card-header">
+            <div class="card-title">The Sheep Parliament Decides</div>
+            <div class="card-icon">🐑🗳️</div>
+          </div>
+          <div class="card-description">
+            Comedy! 5 individual sheep (Beatrice, Gerald, Penelope, Maurice, Dotty) debate crossing a virtual fence to reach premium grass. Features: broken translator, grass with feelings, chaotic democracy, underground fungal gossip network, surprise cliff reveal. 4 scenes of miscommunication and levity.
+          </div>
+          <div class="card-tags">
+            <span class="tag">Comedy</span>
+            <span class="tag">Worldbuilding</span>
+            <span class="tag">Visual</span>
+          </div>
+        </a>
+        
+        <a href="disc-data-black-metal-first-of-us.json" class="card">
+          <div class="card-header">
+            <div class="card-title">The First of Us (Zombie Origin)</div>
+            <div class="card-icon">🧟🌍</div>
+          </div>
+          <div class="card-description">
+            Ethnographic study of Afrotectopia practitioners in Brooklyn screening "The First of Us" film. 6 scenes documenting zombie origin cosmology, German Sheep Cyborgs, World Tree archives, Kelp Mermpeople, Nazi Zombie warnings. Real location, named characters (Ari, practitioners circle), film projector, notebooks.
+          </div>
+          <div class="card-tags">
+            <span class="tag">Ethnography</span>
+            <span class="tag">Black Metal</span>
+            <span class="tag">Brooklyn</span>
+          </div>
+        </a>
+        
+        <a href="disc-data-black-metal-ethnographic (1).json" class="card">
+          <div class="card-header">
+            <div class="card-title">Afrotectopia Gathering</div>
+            <div class="card-icon">🎓🏙️</div>
+          </div>
+          <div class="card-description">
+            Field study of Black Metal practitioners in Brooklyn. Ari (facilitator), Herma (observer), Alice (documenter), Pod Collective. Workshop space with projectors, computational anthropology, speculative design practice. Participatory observation of digital culture community.
+          </div>
+          <div class="card-tags">
+            <span class="tag">Ethnography</span>
+            <span class="tag">Workshop</span>
+            <span class="tag">Brooklyn</span>
+          </div>
+        </a>
+        
+        <a href="disc-data-shedding.json" class="card">
+          <div class="card-header">
+            <div class="card-title">Training: Shedding</div>
+            <div class="card-icon">🍂</div>
+          </div>
+          <div class="card-description">
+            Practice sequence. Seeker confronts Shadow Self—releasing accumulated patterns. Ground beneath waits. Archive records. Single scene, abstract meditation.
+          </div>
+          <div class="card-tags">
+            <span class="tag">Training</span>
+            <span class="tag">Practice</span>
+          </div>
+        </a>
+        
+        <a href="disc-data-integrating.json" class="card">
+          <div class="card-header">
+            <div class="card-title">Training: Integrating</div>
+            <div class="card-icon">🔗</div>
+          </div>
+          <div class="card-description">
+            Rebuilding from bedrock. Weaving essence and form. Integration apparatus assists reconstruction. Single scene, synthesis practice.
+          </div>
+          <div class="card-tags">
+            <span class="tag">Training</span>
+            <span class="tag">Practice</span>
+          </div>
+        </a>
+        
+        <a href="disc-data-grounding.json" class="card">
+          <div class="card-header">
+            <div class="card-title">Training: Grounding</div>
+            <div class="card-icon">⚓</div>
+          </div>
+          <div class="card-description">
+            Embodying truth in matter. Descent from essence (Y=1.5) into ground (Y=-1.5). Manifest Ground receives embodied presence. Final practice.
+          </div>
+          <div class="card-tags">
+            <span class="tag">Training</span>
+            <span class="tag">Practice</span>
+          </div>
+        </a>
+        
+        <a href="synthetic-test-sheep-consent.json" class="card">
+          <div class="card-header">
+            <div class="card-title">Sheep Consent Dashboard (Synthetic)</div>
+            <div class="card-icon">🐑</div>
+          </div>
+          <div class="card-description">
+            German virtual fence ethics lab. 2 scenes: consent check passes → threshold breach → opt-out protocol. Tests ritual mechanics, welfare metrics, evidence-colored citations. Real research-grounded.
+          </div>
+          <div class="card-tags">
+            <span class="tag">Synthetic</span>
+            <span class="tag">Ethics</span>
+            <span class="tag">Research</span>
+          </div>
+        </a>
+        
+        <a href="synthetic-test-apparatus-chorus.json" class="card">
+          <div class="card-header">
+            <div class="card-title">Apparatus Chorus (Synthetic)</div>
+            <div class="card-icon">📡</div>
+          </div>
+          <div class="card-description">
+            Environmental sensor array: 1 researcher + 6 apparatus (temp, humidity, CO2, pH, light, soil). Tests one-to-many info flow, chorus response pattern, sensor reading formats.
+          </div>
+          <div class="card-tags">
+            <span class="tag">Synthetic</span>
+            <span class="tag">Science</span>
+            <span class="tag">Sensors</span>
+          </div>
+        </a>
+        
+        <a href="synthetic-test-pentagon.json" class="card">
+          <div class="card-header">
+            <div class="card-title">Pentagon Formation (Synthetic)</div>
+            <div class="card-icon">⬟</div>
+          </div>
+          <div class="card-description">
+            5 nodes in perfect geometric circle (radius 3). Circular dialogue clockwise. Tests precise trigonometric positioning, equal power distribution, camera gaze rotation.
+          </div>
+          <div class="card-tags">
+            <span class="tag">Synthetic</span>
+            <span class="tag">Geometry</span>
+            <span class="tag">Test</span>
+          </div>
+        </a>
+        
+        <a href="synthetic-test-minimal.json" class="card">
+          <div class="card-header">
+            <div class="card-title">Minimal Test (Synthetic)</div>
+            <div class="card-icon">⚛️</div>
+          </div>
+          <div class="card-description">
+            Absolute minimum: 2 entities, 3 turns, 10 seconds. Tests basic rendering, timeline execution, cone/box decision. 389 bytes. Perfect for rapid iteration.
+          </div>
+          <div class="card-tags">
+            <span class="tag">Synthetic</span>
+            <span class="tag">Minimal</span>
+            <span class="tag">Test</span>
+          </div>
+        </a>
+      </div>
+    </div>
+    
+    <!-- Generation 3: Cellular Life -->
+    <div class="generation">
+      <h2 class="generation-title">Generation 3: Cellular Life</h2>
+      <div class="card-grid">
+        <a href="nd-13-cylindrical-automata.html" class="card">
+          <div class="card-header">
+            <div class="card-title">ND-13 Cylindrical Automata</div>
+            <div class="card-icon">🧬</div>
+          </div>
+          <div class="card-description">
+            Conway's Game of Life on a rotating 3D cylinder. 64×48 cells with toroidal wrap. Gliders travel infinitely, creating emergent patterns.
+          </div>
+          <div class="card-tags">
+            <span class="tag">Game of Life</span>
+            <span class="tag">3D</span>
+            <span class="tag">Emergent</span>
+          </div>
+        </a>
+        
+        <a href="nd-14-text-automata.html" class="card">
+          <div class="card-header">
+            <div class="card-title">ND-14 Text Automata</div>
+            <div class="card-icon">📜</div>
+          </div>
+          <div class="card-description">
+            Living letters on cylindrical Life. Each cell holds a character from Wallace Stevens' poetry. Text emerges from chaos.
+          </div>
+          <div class="card-tags">
+            <span class="tag">Living Text</span>
+            <span class="tag">Poetry</span>
+            <span class="tag">Hybrid</span>
+          </div>
+        </a>
+        
+        <a href="nd-15-hybrid.html" class="card">
+          <div class="card-header">
+            <div class="card-title">ND-15 Living Text Cylinder</div>
+            <div class="card-icon">✨</div>
+          </div>
+          <div class="card-description">
+            Polished synthesis of nd-14 + nd-12. Minimal hamburger UI, high-DPI canvas, clean interface. The final form.
+          </div>
+          <div class="card-tags">
+            <span class="tag">Minimal UI</span>
+            <span class="tag">High-DPI</span>
+            <span class="tag">Synthesis</span>
+          </div>
+        </a>
+      </div>
+    </div>
+    
+    <!-- Tools & Utilities -->
+    <div class="generation">
+      <h2 class="generation-title">🔧 Tools & Experiments</h2>
+      <div class="card-grid">
+        <a href="fork-01.html" class="card">
+          <div class="card-header">
+            <div class="card-title">Fork-01</div>
+            <div class="card-icon">🍴</div>
+          </div>
+          <div class="card-description">
+            Experimental fork exploring new interaction patterns and visual systems.
+          </div>
+          <div class="card-tags">
+            <span class="tag">Experiment</span>
+          </div>
+        </a>
+        
+        <a href="README-PROJECTION-SYSTEM.md" class="card">
+          <div class="card-header">
+            <div class="card-title">Projection System Docs</div>
+            <div class="card-icon">📚</div>
+          </div>
+          <div class="card-description">
+            Comprehensive documentation of the Generator→Projector architecture. Data formats, entity types, visual language.
+          </div>
+          <div class="card-tags">
+            <span class="tag">Documentation</span>
+            <span class="tag">Architecture</span>
+          </div>
+        </a>
+        
+        <a href="disc-data-poml.md" class="card">
+          <div class="card-header">
+            <div class="card-title">DISC-DATA Generator Prompt</div>
+            <div class="card-icon">🤖</div>
+          </div>
+          <div class="card-description">
+            POML-formatted LLM prompt for generating disc-data.json files. Transform any text, conversation, or idea into spatial 3D simulations.
+          </div>
+          <div class="card-tags">
+            <span class="tag">POML</span>
+            <span class="tag">Generator</span>
+            <span class="tag">Template</span>
+          </div>
+        </a>
+        
+        <a href="HOLO-LOADING-GUIDE.md" class="card">
+          <div class="card-header">
+            <div class="card-title">HOLO Loading Guide</div>
+            <div class="card-icon">📚</div>
+          </div>
+          <div class="card-description">
+            Complete guide to loading data into HOLO PROJECT. Covers 4 loading methods, troubleshooting, format requirements, and testing checklist.
+          </div>
+          <div class="card-tags">
+            <span class="tag">Tutorial</span>
+            <span class="tag">Troubleshooting</span>
+            <span class="tag">Reference</span>
+          </div>
+        </a>
+        
+        <a href="disc-data-poml-experimental.md" class="card">
+          <div class="card-header">
+            <div class="card-title">POML Experimental (Constraint-Based)</div>
+            <div class="card-icon">⚙️</div>
+          </div>
+          <div class="card-description">
+            Runtime compiler specification. Teaches HOLO rendering constraints (not examples). Enables infinite variety: ant parasites, sheep cyborgs, kelp holobionts—all within same bounds.
+          </div>
+          <div class="card-tags">
+            <span class="tag">Constraints</span>
+            <span class="tag">Negative Space</span>
+            <span class="tag">Generative</span>
+          </div>
+        </a>
+        
+        <a href="CONSTRAINT-VARIETY-PROOF.md" class="card">
+          <div class="card-header">
+            <div class="card-title">Constraint Variety Proof</div>
+            <div class="card-icon">🧪</div>
+          </div>
+          <div class="card-description">
+            Evidence that constraint-based generation works. 6 completely different data files (interrogation, Afrofuturism, geometry, sensors, ethics) all render in same viewer.
+          </div>
+          <div class="card-tags">
+            <span class="tag">Proof</span>
+            <span class="tag">Synthetic Data</span>
+            <span class="tag">Analysis</span>
+          </div>
+        </a>
+        
+        <a href="EXPERIMENTAL-FILM-GENERATION.md" class="card">
+          <div class="card-header">
+            <div class="card-title">Experimental Film: Thick Description</div>
+            <div class="card-icon">🎬🔬</div>
+          </div>
+          <div class="card-description">
+            How constraint-based POML enabled "Rootcare After Collapse"—4-scene synthesis of cordyceps biology, Arendt, sheep cyborgs, kelp mermpeople. Evidence color-coding (green/amber/purple). Cross-domain without examples.
+          </div>
+          <div class="card-tags">
+            <span class="tag">Case Study</span>
+            <span class="tag">Research Integration</span>
+            <span class="tag">Multispecies</span>
+          </div>
+        </a>
+        
+        <a href="BURNED-FILM-FORMAT.md" class="card">
+          <div class="card-header">
+            <div class="card-title">Burned Film Format</div>
+            <div class="card-icon">🔥📱</div>
+          </div>
+          <div class="card-description">
+            Minimal viewer mode for exported films. Single HTML file with embedded data. Just Play/Pause/Reset + Chat. Auto-plays. Mobile-first. Perfect for sharing. ~230 KB standalone. Unique Burn ID for provenance tracking.
+          </div>
+          <div class="card-tags">
+            <span class="tag">Export</span>
+            <span class="tag">Mobile</span>
+            <span class="tag">Sharing</span>
+          </div>
+        </a>
+      </div>
+    </div>
+    
+    <footer>
+      © 2025 DIRTY DISC · Living Archive · Generated with Stigmergic Memory
+    </footer>
+  </div>
+  
+  <script>
+    // Cellular Automata Background (Conway's Game of Life)
+    const canvas = document.getElementById('lifeCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    let width, height, cols, rows;
+    let grid, nextGrid;
+    const cellSize = 20;
+    
+    function setupCanvas() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      cols = Math.floor(width / cellSize);
+      rows = Math.floor(height / cellSize);
+      
+      grid = createGrid();
+      nextGrid = createGrid();
+      randomizeGrid(0.05); // 5% density
+    }
+    
+    function createGrid() {
+      return new Array(cols).fill(null).map(() => new Array(rows).fill(0));
+    }
+    
+    function randomizeGrid(density) {
+      for (let x = 0; x < cols; x++) {
+        for (let y = 0; y < rows; y++) {
+          grid[x][y] = Math.random() < density ? 1 : 0;
+        }
+      }
+    }
+    
+    function countNeighbors(x, y) {
+      let count = 0;
+      for (let dx = -1; dx <= 1; dx++) {
+        for (let dy = -1; dy <= 1; dy++) {
+          if (dx === 0 && dy === 0) continue;
+          const nx = (x + dx + cols) % cols;
+          const ny = (y + dy + rows) % rows;
+          count += grid[nx][ny];
+        }
+      }
+      return count;
+    }
+    
+    function update() {
+      // Conway's Life rules
+      for (let x = 0; x < cols; x++) {
+        for (let y = 0; y < rows; y++) {
+          const neighbors = countNeighbors(x, y);
+          const cell = grid[x][y];
+          
+          if (cell === 1 && (neighbors === 2 || neighbors === 3)) {
+            nextGrid[x][y] = 1;
+          } else if (cell === 0 && neighbors === 3) {
+            nextGrid[x][y] = 1;
+          } else {
+            nextGrid[x][y] = 0;
+          }
+        }
+      }
+      
+      [grid, nextGrid] = [nextGrid, grid];
+    }
+    
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = '#5ea275';
+      
+      for (let x = 0; x < cols; x++) {
+        for (let y = 0; y < rows; y++) {
+          if (grid[x][y] === 1) {
+            ctx.fillRect(x * cellSize, y * cellSize, cellSize - 1, cellSize - 1);
+          }
+        }
+      }
+    }
+    
+    let frame = 0;
+    function animate() {
+      if (frame % 8 === 0) { // Slow down updates
+        update();
+        draw();
+      }
+      frame++;
+      requestAnimationFrame(animate);
+    }
+    
+    setupCanvas();
+    animate();
+    
+    window.addEventListener('resize', setupCanvas);
+    
+    // Count actual projects
+    const projectCards = document.querySelectorAll('.card').length;
+    document.getElementById('projectCount').textContent = projectCards;
+  </script>
+</body>
+</html>

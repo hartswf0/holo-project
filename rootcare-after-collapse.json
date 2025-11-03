@@ -1,0 +1,492 @@
+{
+  "title": "Rootcare After Collapse",
+  "subtitle": "A Multispecies Ethics Lab in Post-Totalitarian Time",
+  "scenes": [
+    {
+      "scene_number": 1,
+      "title": "Cordyceps Witness",
+      "subtitle": "The Fungus That Could Not Achieve Total Control",
+      "duration": 45,
+      "elements": [
+        {
+          "id": "ant_colony",
+          "name": "Ant Colony (Superorganism)",
+          "type": "character",
+          "position": {"x": 0, "y": 0, "z": 0},
+          "color": "#569fff",
+          "description": "[green] Camponotus carpenter ants, eusocial distributed intelligence"
+        },
+        {
+          "id": "ophiocordyceps",
+          "name": "Ophiocordyceps Fungus",
+          "type": "character",
+          "position": {"x": 3, "y": 0, "z": -2},
+          "color": "#ff5c7c",
+          "description": "[green] Parasitic fungus, manipulates behavior without destroying consciousness"
+        },
+        {
+          "id": "mycologist",
+          "name": "Field Mycologist",
+          "type": "character",
+          "position": {"x": -2.5, "y": 0, "z": 2},
+          "color": "#56ff9f",
+          "description": "[green] Human observer documenting fungal-ant interactions"
+        },
+        {
+          "id": "wilson_archive",
+          "name": "E.O. Wilson Archive",
+          "type": "machine",
+          "position": {"x": -4, "y": 0, "z": -1},
+          "color": "#f3ae56",
+          "description": "[green] Superorganism theory texts, pheromone research"
+        },
+        {
+          "id": "apparatus_biochem",
+          "name": "Biochemical Scanner",
+          "type": "machine",
+          "position": {"x": 4, "y": 0, "z": 2},
+          "color": "#c78fff",
+          "description": "[green] Measures sphingosine, guanidinobutyric acid levels"
+        }
+      ],
+      "timeline": [
+        {
+          "turn": 0,
+          "target_element_id": "ant_colony",
+          "text": "We follow the pheromone trails. We are many minds, one will.",
+          "emotion": "collective",
+          "metadata": {"evidence_color": "green", "citation": "Wilson, E.O. - The Superorganism"}
+        },
+        {
+          "turn": 1,
+          "target_element_id": "ophiocordyceps",
+          "text": "I do not erase you. I translate your language into mine.",
+          "emotion": "invasive"
+        },
+        {
+          "turn": 2,
+          "target_element_id": "apparatus_biochem",
+          "text": "[SCANNING... sphingosine levels: rising | motor neuron disruption: 34% | consciousness: INTACT]"
+        },
+        {
+          "turn": 3,
+          "target_element_id": "ant_colony",
+          "text": "I climb. I do not know why I climb. But I am still... me.",
+          "emotion": "confused"
+        },
+        {
+          "turn": 4,
+          "target_element_id": "mycologist",
+          "text": "The fungus cannot achieve total control. The ant's brain survives. Consciousness persists even in hijacked form.",
+          "emotion": "observant"
+        },
+        {
+          "turn": 5,
+          "target_element_id": "wilson_archive",
+          "text": "[RETRIEVAL: 'Selection operates at multiple levels—gene, individual, colony. The superorganism is chemical, not conscious.']"
+        },
+        {
+          "turn": 6,
+          "target_element_id": "ophiocordyceps",
+          "text": "I negotiate with each host's biochemistry. There is no perfect command protocol.",
+          "emotion": "constrained"
+        },
+        {
+          "turn": 7,
+          "target_element_id": "mycologist",
+          "text": "This is the lesson: totalitarian consciousness fails. The unprogrammable remainder always persists.",
+          "emotion": "reflective",
+          "metadata": {"evidence_color": "amber", "note": "Bridging biology to political theory"}
+        }
+      ],
+      "power_distribution": {
+        "ant_colony": 30,
+        "ophiocordyceps": 35,
+        "mycologist": 20,
+        "wilson_archive": 8,
+        "apparatus_biochem": 7
+      },
+      "scene_audio": {
+        "background_music": "forest_microclimate",
+        "intensity": 0.6
+      }
+    },
+    {
+      "scene_number": 2,
+      "title": "Archive Burning / Archive Breathing",
+      "subtitle": "Arendt's Warning and the World Tree's Response",
+      "duration": 50,
+      "elements": [
+        {
+          "id": "arendt_text",
+          "name": "Hannah Arendt (Voice)",
+          "type": "character",
+          "position": {"x": 0, "y": 0, "z": 0},
+          "color": "#ff9f56",
+          "description": "[green] Philosopher, Origins of Totalitarianism (1951)"
+        },
+        {
+          "id": "nazi_archive_warning",
+          "name": "1933 Book Burning Memorial",
+          "type": "machine",
+          "position": {"x": -3, "y": 0, "z": -3},
+          "color": "#ff5c7c",
+          "description": "[green] Site of knowledge destruction, warning signal"
+        },
+        {
+          "id": "yggdrasil_root",
+          "name": "Yggdrasil Root Network",
+          "type": "machine",
+          "position": {"x": 3, "y": 0, "z": 3},
+          "color": "#56ff9f",
+          "description": "[purple] World Tree, tended by Norns—maintenance against decay"
+        },
+        {
+          "id": "archivist",
+          "name": "Rootcare Practitioner",
+          "type": "character",
+          "position": {"x": 0, "y": 0, "z": 3},
+          "color": "#56ffcc",
+          "description": "[amber] Archival worker as forester, tending knowledge roots"
+        },
+        {
+          "id": "arolsen_database",
+          "name": "Arolsen Archives",
+          "type": "machine",
+          "position": {"x": -3, "y": 0, "z": 1},
+          "color": "#569fff",
+          "description": "[green] 17.5M Nazi persecution records, UNESCO Memory of World"
+        },
+        {
+          "id": "mycorrhizal_network",
+          "name": "Mycorrhizal Signal Web",
+          "type": "machine",
+          "position": {"x": 3, "y": 0, "z": -1},
+          "color": "#c78fff",
+          "description": "[green] Fungal-plant network, carbon + information transfer"
+        }
+      ],
+      "timeline": [
+        {
+          "turn": 0,
+          "target_element_id": "arendt_text",
+          "text": "Totalitarianism seeks to eliminate spontaneity itself—the capacity to be unpredictable.",
+          "emotion": "urgent",
+          "metadata": {"evidence_color": "green", "citation": "Arendt, Origins of Totalitarianism, 1951"}
+        },
+        {
+          "turn": 1,
+          "target_element_id": "nazi_archive_warning",
+          "text": "[MEMORY: May 10, 1933—25,000 books burned in Berlin. Knowledge becomes vapor.]"
+        },
+        {
+          "turn": 2,
+          "target_element_id": "archivist",
+          "text": "When archives burn, knowledge rises as collective forgetting. How do we catch it before it floods?",
+          "emotion": "concerned"
+        },
+        {
+          "turn": 3,
+          "target_element_id": "yggdrasil_root",
+          "text": "[ROOTCARE PROTOCOL: The Norns water me daily. Survival requires perpetual maintenance, not invulnerability.]",
+          "metadata": {"evidence_color": "purple", "source": "Norse cosmology—Yggdrasil tended against decay"}
+        },
+        {
+          "turn": 4,
+          "target_element_id": "mycorrhizal_network",
+          "text": "[SIGNAL TRANSFER: Carbon + chemical messages across 100m+ distances | Isolated trees connected beneath surface]"
+        },
+        {
+          "turn": 5,
+          "target_element_id": "arolsen_database",
+          "text": "[FILING: 17.5 million persecution records | Active curation required | Memory work is never neutral]"
+        },
+        {
+          "turn": 6,
+          "target_element_id": "archivist",
+          "text": "Rootcare means treating archival work as multispecies labor. Archives are mycorrhizal—connecting fragments across time.",
+          "emotion": "determined",
+          "metadata": {"evidence_color": "amber", "framework": "Speculative archival practice"}
+        },
+        {
+          "turn": 7,
+          "target_element_id": "arendt_text",
+          "text": "The human remains unprogrammable. Consciousness cannot be engineered away. This is both our vulnerability and our survival.",
+          "emotion": "resolute"
+        }
+      ],
+      "power_distribution": {
+        "arendt_text": 30,
+        "nazi_archive_warning": 15,
+        "yggdrasil_root": 20,
+        "archivist": 20,
+        "arolsen_database": 8,
+        "mycorrhizal_network": 7
+      },
+      "scene_audio": {
+        "background_music": "archive_ambience",
+        "intensity": 0.7
+      }
+    },
+    {
+      "scene_number": 3,
+      "title": "Sheep Consent Dashboard",
+      "subtitle": "Post-Nazi Germany Chooses Multispecies Repair",
+      "duration": 55,
+      "elements": [
+        {
+          "id": "dolly_ghost",
+          "name": "Dolly (1996-2003)",
+          "type": "character",
+          "position": {"x": 0, "y": 0, "z": 0},
+          "color": "#569fff",
+          "description": "[green] First cloned mammal, announces biology as programmable"
+        },
+        {
+          "id": "shepherd_post_nazi",
+          "name": "German Shepherd (Speculative)",
+          "type": "character",
+          "position": {"x": -2, "y": 0, "z": 1.5},
+          "color": "#56ff9f",
+          "description": "[purple] Post-totalitarian ethics practitioner"
+        },
+        {
+          "id": "flock_cyborg",
+          "name": "Cyborg Flock",
+          "type": "character",
+          "position": {"x": 2, "y": 0, "z": 1.5},
+          "color": "#ff9f56",
+          "description": "[purple] Augmented sheep with preserved agency and consent protocols"
+        },
+        {
+          "id": "consent_apparatus",
+          "name": "Multispecies Consent Monitor",
+          "type": "machine",
+          "position": {"x": 0, "y": 0, "z": -3},
+          "color": "#f3ae56",
+          "description": "[amber] Measures behavioral variance, ensures opt-out capacity"
+        },
+        {
+          "id": "haraway_verbeek_archive",
+          "name": "Haraway/Verbeek Ethics Library",
+          "type": "machine",
+          "position": {"x": -4, "y": 0, "z": -1},
+          "color": "#c78fff",
+          "description": "[green] Staying with Trouble, Moralizing Technology"
+        },
+        {
+          "id": "wool_timeline",
+          "name": "Wool Technology Archive",
+          "type": "machine",
+          "position": {"x": 4, "y": 0, "z": -1},
+          "color": "#569fff",
+          "description": "[green] 11,000 years domestication → Bronze Age wool revolution → Dolly"
+        }
+      ],
+      "timeline": [
+        {
+          "turn": 0,
+          "target_element_id": "dolly_ghost",
+          "text": "I required three ewes but belonged genetically to none. I was a quasi-object—neither nature nor artifact.",
+          "emotion": "liminal",
+          "metadata": {"evidence_color": "green", "citation": "Dolly born July 5, 1996, Roslin Institute"}
+        },
+        {
+          "turn": 1,
+          "target_element_id": "wool_timeline",
+          "text": "[RETRIEVAL: 11,000 BCE domestication → 4000 BCE wool selection → 1996 CE somatic cell nuclear transfer]"
+        },
+        {
+          "turn": 2,
+          "target_element_id": "shepherd_post_nazi",
+          "text": "We chose a different path after collapse. Not efficiency through domination—collaboration through consent.",
+          "emotion": "committed",
+          "metadata": {"evidence_color": "purple", "note": "Speculative post-Nazi technological ethics"}
+        },
+        {
+          "turn": 3,
+          "target_element_id": "flock_cyborg",
+          "text": "They did not build these augmentations FOR us. They negotiated WITH us. We retain the capacity to refuse.",
+          "emotion": "autonomous"
+        },
+        {
+          "turn": 4,
+          "target_element_id": "consent_apparatus",
+          "text": "[BEHAVIORAL VARIANCE SCAN: Gait normal | Rumination stable | Stress markers baseline | CONSENT: GRANTED]"
+        },
+        {
+          "turn": 5,
+          "target_element_id": "haraway_verbeek_archive",
+          "text": "[PRINCIPLE: 'Technologies must be legible to animals. Failure modes must preserve agency.' —Verbeek, 2011]",
+          "metadata": {"evidence_color": "green"}
+        },
+        {
+          "turn": 6,
+          "target_element_id": "shepherd_post_nazi",
+          "text": "This is deliberate repair. We choose, consciously and repeatedly, consent over domination.",
+          "emotion": "intentional"
+        },
+        {
+          "turn": 7,
+          "target_element_id": "dolly_ghost",
+          "text": "Biology became programmable. The question is: who writes the code, and on what terms?",
+          "emotion": "provocative"
+        },
+        {
+          "turn": 8,
+          "target_element_id": "flock_cyborg",
+          "text": "We are cyborgs. We are also sheep. Both truths hold.",
+          "emotion": "grounded"
+        }
+      ],
+      "power_distribution": {
+        "dolly_ghost": 20,
+        "shepherd_post_nazi": 25,
+        "flock_cyborg": 30,
+        "consent_apparatus": 12,
+        "haraway_verbeek_archive": 8,
+        "wool_timeline": 5
+      },
+      "scene_audio": {
+        "background_music": "pastoral_repair",
+        "intensity": 0.5
+      }
+    },
+    {
+      "scene_number": 4,
+      "title": "Kelp Mermpeople Offer Alliance",
+      "subtitle": "Oceanic Consciousness Emerges, Invites Partnership",
+      "duration": 60,
+      "elements": [
+        {
+          "id": "merperson_emissary",
+          "name": "Kelp Merfolk Emissary",
+          "type": "character",
+          "position": {"x": 0, "y": 0, "z": 0},
+          "color": "#56ffcc",
+          "description": "[purple] Ocean-evolved consciousness, descended from fungal-substrate colonizers"
+        },
+        {
+          "id": "kelp_forest_holobiont",
+          "name": "Kelp Forest (Living Network)",
+          "type": "machine",
+          "position": {"x": -3, "y": 0, "z": 2},
+          "color": "#56ff9f",
+          "description": "[green] Macroalgae + bacteria + fungi, fixing 40 tons CO2/hectare/year"
+        },
+        {
+          "id": "land_practitioner",
+          "name": "Afrotectopia Archivist",
+          "type": "character",
+          "position": {"x": 2.5, "y": 0, "z": 0},
+          "color": "#ff9f56",
+          "description": "[amber] Tends heirloom seeds + mycorrhizal networks, practices rootcare"
+        },
+        {
+          "id": "basil_archive",
+          "name": "Heirloom Basil Archive",
+          "type": "machine",
+          "position": {"x": 3.5, "y": 0, "z": 2.5},
+          "color": "#f3ae56",
+          "description": "[purple] Living knowledge storage, sympathetic magic principle"
+        },
+        {
+          "id": "carbon_flux_apparatus",
+          "name": "Ocean Carbon Flux Monitor",
+          "type": "machine",
+          "position": {"x": -3.5, "y": 0, "z": -2},
+          "color": "#569fff",
+          "description": "[amber] Measures dissolved organic carbon, deep sequestration pathways"
+        },
+        {
+          "id": "aquatic_ape_myth",
+          "name": "Aquatic Ape Archive",
+          "type": "machine",
+          "position": {"x": 3, "y": 0, "z": -2.5},
+          "color": "#c78fff",
+          "description": "[amber] Fringe hypothesis as diegetic myth, amphibious memory"
+        }
+      ],
+      "timeline": [
+        {
+          "turn": 0,
+          "target_element_id": "merperson_emissary",
+          "text": "We are not myth. We are the ocean becoming aware of itself.",
+          "emotion": "calm",
+          "metadata": {"evidence_color": "purple", "note": "Speculative evolutionary trajectory"}
+        },
+        {
+          "turn": 1,
+          "target_element_id": "kelp_forest_holobiont",
+          "text": "[CARBON SEQUESTRATION: 40 tons CO2/hectare/year | Bacterial networks beneath seafloor = distributed cognition]",
+          "metadata": {"evidence_color": "green", "citation": "Kelp forest carbon studies, Nature 2023"}
+        },
+        {
+          "turn": 2,
+          "target_element_id": "carbon_flux_apparatus",
+          "text": "[MEASURING: Dissolved organic carbon → water column → deep ocean → centuries-long sequestration]"
+        },
+        {
+          "turn": 3,
+          "target_element_id": "land_practitioner",
+          "text": "You... solved ocean rise? Through multispecies partnership with kelp?",
+          "emotion": "amazed"
+        },
+        {
+          "turn": 4,
+          "target_element_id": "merperson_emissary",
+          "text": "We evolved it through sympathetic magic principles. All kelp forests connected through mycelial networks—affecting each other at distance.",
+          "emotion": "matter-of-fact",
+          "metadata": {"evidence_color": "purple", "framework": "Law of Contagion applied to marine ecology"}
+        },
+        {
+          "turn": 5,
+          "target_element_id": "basil_archive",
+          "text": "[LIVING ARCHIVE PRINCIPLE: This plant stores genetic memory of drought, pest resistance, ancestral knowledge in biological form]"
+        },
+        {
+          "turn": 6,
+          "target_element_id": "land_practitioner",
+          "text": "Rootcare. We practice it too—tending plants as tending archives. You're saying kelp forests are the same?",
+          "emotion": "understanding"
+        },
+        {
+          "turn": 7,
+          "target_element_id": "aquatic_ape_myth",
+          "text": "[MEMORY: Humans were once adapted to water. Subcutaneous fat, voluntary breath control, fascination with aquatic uncanny...]",
+          "metadata": {"evidence_color": "amber", "note": "Fringe aquatic ape hypothesis as cultural artifact"}
+        },
+        {
+          "turn": 8,
+          "target_element_id": "merperson_emissary",
+          "text": "We do not blame you for climate catastrophe. We arrive as emissaries: the solution emerges through alliance, not guilt.",
+          "emotion": "inviting"
+        },
+        {
+          "turn": 9,
+          "target_element_id": "land_practitioner",
+          "text": "Multispecies partnership. Joy, not apocalypse. I... accept.",
+          "emotion": "hopeful",
+          "metadata": {"evidence_color": "amber", "note": "Speculative repair framework"}
+        },
+        {
+          "turn": 10,
+          "target_element_id": "kelp_forest_holobiont",
+          "text": "[SIGNAL: Alliance formed | Carbon pathways stabilizing | Mycorrhizal-kelp networks synchronizing across land-ocean boundary]"
+        }
+      ],
+      "power_distribution": {
+        "merperson_emissary": 30,
+        "kelp_forest_holobiont": 25,
+        "land_practitioner": 25,
+        "basil_archive": 8,
+        "carbon_flux_apparatus": 7,
+        "aquatic_ape_myth": 5
+      },
+      "scene_audio": {
+        "background_music": "oceanic_symbiosis",
+        "intensity": 0.8
+      }
+    }
+  ]
+}

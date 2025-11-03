@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Projection Viewer</title>
+  <style>
+    :root {
+      --bg: #050709;
+      --panel: rgba(10, 14, 20, 0.85);
+      --panel-soft: rgba(16, 20, 28, 0.75);
+      --line: rgba(95, 137, 132, 0.35);
+      --accent: #56ff9f;
+      --accent-soft: rgba(86, 255, 159, 0.22);
+      --text: #d8e6de;
+      --text-muted: #7a8c83;
+      --mono: 'IBM Plex Mono', 'SFMono-Regular', ui-monospace, monospace;
+      --sans: 'Space Grotesk', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      justify-content: center;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      padding: clamp(12px, 2vw, 32px);
+    }
+
+    .app {
+      width: min(1080px, 100%);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 18px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--panel);
+    }
+
+    .topline .logo {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-size: 0.92rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .topline .logo span {
+      font-size: 1.4rem;
+      color: var(--accent);
+    }
+
+    .topline .controls {
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: transparent;
+      color: inherit;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 8px 14px;
+      cursor: pointer;
+      transition: border 0.2s ease, color 0.2s ease, background 0.2s ease;
+    }
+
+    button:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    button.active {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: 160px minmax(0, 1fr) minmax(280px, 1fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--panel);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .scene-info {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .scene-title {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--accent);
+      margin-top: 4px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(9, minmax(0, 1fr));
+      gap: 4px;
+      padding: 12px;
+      border-radius: 18px;
+      background: rgba(8, 12, 18, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      flex: 1;
+    }
+
+    .cell {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      transition: all 0.2s ease;
+    }
+
+    .cell span {
+      opacity: 0.8;
+    }
+
+    .cell.has-entity {
+      border-color: rgba(86, 255, 159, 0.35);
+      background: rgba(86, 255, 159, 0.05);
+    }
+
+    .cell.active {
+      animation: cellPulse 0.8s ease-in-out;
+    }
+
+    @keyframes cellPulse {
+      0%, 100% {
+        background: rgba(86, 255, 159, 0.05);
+        box-shadow: inset 0 0 8px transparent;
+      }
+      50% {
+        background: rgba(86, 255, 159, 0.15);
+        box-shadow: inset 0 0 20px rgba(86, 255, 159, 0.3),
+                    0 0 16px rgba(86, 255, 159, 0.4);
+      }
+    }
+
+    .status-line,
+    .turn-line {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+
+    .turn-line {
+      color: var(--accent);
+    }
+
+    .chat-log {
+      flex: 1;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 12px;
+      background: rgba(6, 9, 14, 0.88);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-family: var(--mono);
+      font-size: 0.76rem;
+      overflow-y: auto;
+      max-height: 600px;
+    }
+
+    .message {
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 10px 12px;
+      display: grid;
+      gap: 6px;
+      background: rgba(10, 16, 22, 0.75);
+      opacity: 0;
+      transform: translateY(8px);
+      animation: messageAppear 0.3s ease forwards;
+    }
+
+    @keyframes messageAppear {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .message.system {
+      border-color: rgba(248, 214, 106, 0.4);
+      color: #f8d66a;
+    }
+
+    .message.assistant {
+      border-color: rgba(86, 255, 159, 0.3);
+    }
+
+    .message.user {
+      border-color: rgba(99, 179, 255, 0.35);
+    }
+
+    .message__role {
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .message__time {
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      opacity: 0.7;
+    }
+
+    .message__entity {
+      font-size: 0.65rem;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .file-input-label {
+      display: inline-block;
+      padding: 10px 18px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      cursor: pointer;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: border 0.2s ease, color 0.2s ease;
+    }
+
+    .file-input-label:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    @media (max-width: 960px) {
+      .board {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .panel {
+        min-height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topline">
+      <div class="logo"><span>🎬</span> Projection Viewer</div>
+      <div class="controls">
+        <label class="file-input-label">
+          Load Data
+          <input type="file" id="fileInput" accept=".json">
+        </label>
+        <button id="playPauseBtn">Play</button>
+        <button id="stepBtn">Step</button>
+        <button id="resetBtn">Reset</button>
+      </div>
+    </header>
+
+    <section class="board">
+      <aside class="panel">
+        <div class="scene-info" id="sceneInfo">Scene Info</div>
+        <div class="scene-title" id="sceneTitle">No data loaded</div>
+        <div class="status-line" id="statusLine">Turn 0 / 0</div>
+        <div class="turn-line" id="turnLine">Ready</div>
+      </aside>
+
+      <section class="panel playfield">
+        <div class="grid" id="grid"></div>
+      </section>
+
+      <section class="panel chat-panel">
+        <div class="chat-log" id="chatLog">
+          <div class="message system">
+            <div class="message__role">SYSTEM</div>
+            <div>Load a JSON file to begin playback</div>
+          </div>
+        </div>
+      </section>
+    </section>
+  </div>
+
+  <script>
+    (() => {
+      const GRID_SIZE = 9;
+      
+      // State
+      let currentData = null;
+      let currentScene = null;
+      let currentTurn = 0;
+      let timeline = [];
+      let isPlaying = false;
+      let playbackInterval = null;
+      let gridState = Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(null));
+      
+      // Elements
+      const elements = {
+        fileInput: document.getElementById('fileInput'),
+        playPauseBtn: document.getElementById('playPauseBtn'),
+        stepBtn: document.getElementById('stepBtn'),
+        resetBtn: document.getElementById('resetBtn'),
+        sceneInfo: document.getElementById('sceneInfo'),
+        sceneTitle: document.getElementById('sceneTitle'),
+        statusLine: document.getElementById('statusLine'),
+        turnLine: document.getElementById('turnLine'),
+        grid: document.getElementById('grid'),
+        chatLog: document.getElementById('chatLog'),
+        cellRefs: []
+      };
+      
+      // Initialize grid
+      function buildGrid() {
+        elements.grid.innerHTML = '';
+        elements.cellRefs = Array.from({ length: GRID_SIZE }, () => new Array(GRID_SIZE));
+        
+        for (let y = 0; y < GRID_SIZE; y++) {
+          for (let x = 0; x < GRID_SIZE; x++) {
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            cell.dataset.x = x;
+            cell.dataset.y = y;
+            elements.grid.appendChild(cell);
+            elements.cellRefs[y][x] = cell;
+          }
+        }
+      }
+      
+      // Parse different data formats
+      function detectAndParse(data) {
+        // disc-data.json format
+        if (data.scenes && Array.isArray(data.scenes)) {
+          console.log('📊 Detected disc-data.json format');
+          return parseDiscData(data);
+        }
+        
+        // legos-multi-channel.json format
+        if (data.conversation && Array.isArray(data.conversation)) {
+          console.log('📊 Detected legos-multi-channel.json format');
+          return parseMultiChannel(data);
+        }
+        
+        // legos-ring-memory.json format
+        if (data.threads && Array.isArray(data.threads)) {
+          console.log('📊 Detected legos-ring-memory.json format');
+          return parseRingMemory(data);
+        }
+        
+        console.warn('⚠️ Unknown data format, attempting generic parse');
+        return { scenes: [{ title: 'Unknown Format', timeline: [] }] };
+      }
+      
+      function parseDiscData(data) {
+        return {
+          scenes: data.scenes.map(scene => ({
+            title: scene.title || 'Untitled',
+            duration: scene.duration || 0,
+            timeline: scene.events || []
+          }))
+        };
+      }
+      
+      function parseMultiChannel(data) {
+        const timeline = [];
+        let time = 0;
+        
+        data.conversation.forEach((msg, idx) => {
+          timeline.push({
+            time: time,
+            type: 'message',
+            role: msg.role || 'system',
+            content: msg.content || '',
+            entity: msg.entity || msg.speaker || null,
+            position: msg.position || null
+          });
+          time += 2; // 2 second intervals
+        });
+        
+        return {
+          scenes: [{
+            title: data.title || 'Conversation',
+            duration: time,
+            timeline: timeline
+          }]
+        };
+      }
+      
+      function parseRingMemory(data) {
+        const timeline = [];
+        
+        data.threads.forEach(thread => {
+          if (thread.messages) {
+            thread.messages.forEach(msg => {
+              timeline.push({
+                time: msg.timestamp || 0,
+                type: 'memory',
+                role: 'system',
+                content: msg.content || msg.text || '',
+                thread: thread.name || 'unknown'
+              });
+            });
+          }
+        });
+        
+        timeline.sort((a, b) => a.time - b.time);
+        
+        return {
+          scenes: [{
+            title: 'Memory Timeline',
+            duration: timeline.length * 2,
+            timeline: timeline
+          }]
+        };
+      }
+      
+      // Load data
+      elements.fileInput.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        try {
+          const text = await file.text();
+          const data = JSON.parse(text);
+          const parsed = detectAndParse(data);
+          
+          currentData = parsed;
+          currentScene = parsed.scenes[0];
+          timeline = currentScene.timeline;
+          
+          elements.sceneInfo.textContent = `Scene 1 / ${parsed.scenes.length}`;
+          elements.sceneTitle.textContent = currentScene.title;
+          
+          addMessage('system', `Loaded: ${currentScene.title} (${timeline.length} events)`);
+          resetPlayback();
+          
+          console.log('✅ Data loaded successfully');
+        } catch (err) {
+          console.error('❌ Error loading file:', err);
+          addMessage('system', `Error: ${err.message}`);
+        }
+      });
+      
+      // Playback controls
+      elements.playPauseBtn.addEventListener('click', () => {
+        if (isPlaying) {
+          pause();
+        } else {
+          play();
+        }
+      });
+      
+      elements.stepBtn.addEventListener('click', () => {
+        step();
+      });
+      
+      elements.resetBtn.addEventListener('click', () => {
+        resetPlayback();
+      });
+      
+      function play() {
+        if (!currentScene || currentTurn >= timeline.length) return;
+        
+        isPlaying = true;
+        elements.playPauseBtn.textContent = 'Pause';
+        elements.playPauseBtn.classList.add('active');
+        
+        playbackInterval = setInterval(() => {
+          step();
+          if (currentTurn >= timeline.length) {
+            pause();
+          }
+        }, 1500); // 1.5 second per turn
+      }
+      
+      function pause() {
+        isPlaying = false;
+        elements.playPauseBtn.textContent = 'Play';
+        elements.playPauseBtn.classList.remove('active');
+        
+        if (playbackInterval) {
+          clearInterval(playbackInterval);
+          playbackInterval = null;
+        }
+      }
+      
+      function step() {
+        if (!currentScene || currentTurn >= timeline.length) return;
+        
+        const event = timeline[currentTurn];
+        processEvent(event);
+        
+        currentTurn++;
+        updateStatus();
+      }
+      
+      function resetPlayback() {
+        pause();
+        currentTurn = 0;
+        gridState = Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(null));
+        
+        elements.chatLog.innerHTML = '';
+        addMessage('system', 'Playback reset to beginning');
+        
+        renderGrid();
+        updateStatus();
+      }
+      
+      function processEvent(event) {
+        if (!event) return;
+        
+        // Add message to chat
+        if (event.type === 'message' || event.content) {
+          addMessage(event.role || 'system', event.content, event.entity);
+        }
+        
+        // Update grid
+        if (event.position) {
+          const { row, col } = event.position;
+          if (row >= 0 && row < GRID_SIZE && col >= 0 && col < GRID_SIZE) {
+            gridState[row][col] = {
+              symbol: event.entity?.[0]?.toUpperCase() || '●',
+              entity: event.entity
+            };
+            highlightCell(row, col);
+          }
+        }
+        
+        renderGrid();
+      }
+      
+      function highlightCell(row, col) {
+        const cell = elements.cellRefs[row]?.[col];
+        if (cell) {
+          cell.classList.add('active');
+          setTimeout(() => cell.classList.remove('active'), 800);
+        }
+      }
+      
+      function renderGrid() {
+        for (let y = 0; y < GRID_SIZE; y++) {
+          for (let x = 0; x < GRID_SIZE; x++) {
+            const cell = elements.cellRefs[y][x];
+            const state = gridState[y][x];
+            
+            if (state) {
+              cell.innerHTML = `<span>${state.symbol}</span>`;
+              cell.classList.add('has-entity');
+            } else {
+              cell.innerHTML = '';
+              cell.classList.remove('has-entity');
+            }
+          }
+        }
+      }
+      
+      function updateStatus() {
+        const total = timeline.length;
+        elements.statusLine.textContent = `Turn ${currentTurn} / ${total}`;
+        
+        if (currentTurn >= total) {
+          elements.turnLine.textContent = 'Playback Complete';
+        } else {
+          elements.turnLine.textContent = isPlaying ? 'Playing...' : 'Paused';
+        }
+      }
+      
+      function addMessage(role, content, entity = null) {
+        const messageEl = document.createElement('div');
+        messageEl.className = `message ${role}`;
+        
+        const roleEl = document.createElement('div');
+        roleEl.className = 'message__role';
+        roleEl.textContent = role.toUpperCase();
+        
+        if (entity) {
+          const entityEl = document.createElement('div');
+          entityEl.className = 'message__entity';
+          entityEl.textContent = entity;
+          messageEl.appendChild(entityEl);
+        }
+        
+        const bodyEl = document.createElement('div');
+        bodyEl.textContent = content;
+        
+        messageEl.appendChild(roleEl);
+        messageEl.appendChild(bodyEl);
+        
+        elements.chatLog.appendChild(messageEl);
+        elements.chatLog.scrollTop = elements.chatLog.scrollHeight;
+      }
+      
+      // Initialize
+      buildGrid();
+      console.log('🎬 Projection Viewer initialized');
+    })();
+  </script>
+</body>
+</html>

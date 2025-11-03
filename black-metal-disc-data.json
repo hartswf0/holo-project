@@ -1,0 +1,555 @@
+{
+  "title": "Black Metal: Cosmic Alchemy",
+  "subtitle": "A Journey Through Afrofuturist Space and Self",
+  "scenes": [
+    {
+      "scene_number": 1,
+      "title": "First Contact",
+      "subtitle": "The Email Arrives",
+      "duration": 30,
+      "elements": [
+        {
+          "id": "amon_focus",
+          "name": "Amon Focus",
+          "type": "character",
+          "position": { "x": 0, "y": 0, "z": 0 },
+          "color": "#56ff9f",
+          "description": "Writer and observer, gateway to Black Metal's universe"
+        },
+        {
+          "id": "ari_melenciano",
+          "name": "Ari Melenciano",
+          "type": "character",
+          "position": { "x": 2.5, "y": 0, "z": 0 },
+          "color": "#ff9f56",
+          "description": "Creator of Celestial Florilegia, guide to floramancy"
+        },
+        {
+          "id": "filing_cabinet_ancestral",
+          "name": "Ancestral Memory Archive",
+          "type": "machine",
+          "position": { "x": -3, "y": 0, "z": 2 },
+          "color": "#569fff",
+          "description": "Repository of Black cultural knowledge and cosmic wisdom"
+        },
+        {
+          "id": "apparatus_potential",
+          "name": "Potential Scanner",
+          "type": "machine",
+          "position": { "x": 3, "y": 0, "z": -2 },
+          "color": "#ff5c7c",
+          "description": "Measures untapped human capacity and creative thresholds"
+        }
+      ],
+      "timeline": [
+        {
+          "turn": 0,
+          "target_element_id": "amon_focus",
+          "text": "I thought I'd reached my creative threshold at the Armory Show. Then the email arrived.",
+          "emotion": "reflective"
+        },
+        {
+          "turn": 1,
+          "target_element_id": "ari_melenciano",
+          "text": "Black Metal isn't just a work of art—it's a training manual for self-realization.",
+          "emotion": "inviting"
+        },
+        {
+          "turn": 2,
+          "target_element_id": "filing_cabinet_ancestral",
+          "text": "[FILING: 'Training manual for self-realization' → Slot COSMIC-001]",
+          "emotion": "mechanical"
+        },
+        {
+          "turn": 3,
+          "target_element_id": "apparatus_potential",
+          "text": "[SCANNING... creative threshold: 87% → potential expansion detected: +45%]",
+          "emotion": "mechanical"
+        },
+        {
+          "turn": 4,
+          "target_element_id": "amon_focus",
+          "text": "That conversation changed everything.",
+          "emotion": "awakening"
+        },
+        {
+          "turn": 5,
+          "target_element_id": "ari_melenciano",
+          "text": "We spent three years fusing speculative fiction, Black culture, spirituality, and extraterrestrial life.",
+          "emotion": "proud"
+        }
+      ],
+      "power_distribution": {
+        "amon_focus": 40,
+        "ari_melenciano": 50,
+        "filing_cabinet_ancestral": 5,
+        "apparatus_potential": 5
+      },
+      "scene_audio": {
+        "background_music": "ambient_cosmic",
+        "intensity": 0.5
+      }
+    },
+    {
+      "scene_number": 2,
+      "title": "Celestial Florilegia",
+      "subtitle": "Plants as Cosmic Guides",
+      "duration": 35,
+      "elements": [
+        {
+          "id": "ari_melenciano",
+          "name": "Ari Melenciano",
+          "type": "character",
+          "position": { "x": 0, "y": 0, "z": 0 },
+          "color": "#ff9f56",
+          "description": "Creator of floramancy system"
+        },
+        {
+          "id": "amon_focus",
+          "name": "Amon Focus",
+          "type": "character",
+          "position": { "x": 2, "y": 0, "z": 1 },
+          "color": "#56ff9f",
+          "description": "Learning the practice"
+        },
+        {
+          "id": "cosmic_plant_alpha",
+          "name": "Cosmic Flora Node",
+          "type": "location",
+          "position": { "x": -2.5, "y": 0, "z": -1 },
+          "color": "#4ade80",
+          "description": "Speculative plant serving as metaphysical guide"
+        },
+        {
+          "id": "filing_cabinet_ancestral",
+          "name": "Ancestral Memory Archive",
+          "type": "machine",
+          "position": { "x": -4, "y": 0, "z": 2 },
+          "color": "#569fff",
+          "description": "Storing floramancy knowledge"
+        },
+        {
+          "id": "apparatus_sense",
+          "name": "Sense Expansion Matrix",
+          "type": "machine",
+          "position": { "x": 4, "y": 0, "z": 1 },
+          "color": "#ff5c7c",
+          "description": "Analyzes expanded human perception capabilities"
+        }
+      ],
+      "timeline": [
+        {
+          "turn": 0,
+          "target_element_id": "ari_melenciano",
+          "text": "Floramancy: a practice where plants serve as cosmic guides. They expand our understanding of human senses.",
+          "emotion": "teaching"
+        },
+        {
+          "turn": 1,
+          "target_element_id": "filing_cabinet_ancestral",
+          "text": "[FILING: 'Floramancy = plants as cosmic guides' → Slot FLORA-001]",
+          "emotion": "mechanical"
+        },
+        {
+          "turn": 2,
+          "target_element_id": "amon_focus",
+          "text": "So it's about reconnecting with ancestral knowledge through nature?",
+          "emotion": "curious"
+        },
+        {
+          "turn": 3,
+          "target_element_id": "ari_melenciano",
+          "text": "Exactly. Our modern understanding of human experience is limited. This breaks through those limitations.",
+          "emotion": "affirming"
+        },
+        {
+          "turn": 4,
+          "target_element_id": "apparatus_sense",
+          "text": "[ANALYZING... standard human senses: 5 → potential senses via floramancy: 12+]",
+          "emotion": "mechanical"
+        },
+        {
+          "turn": 5,
+          "target_element_id": "ari_melenciano",
+          "text": "It's not abstract—it's a practical guide for spiritual growth and cosmic connection.",
+          "emotion": "emphatic"
+        },
+        {
+          "turn": 6,
+          "target_element_id": "filing_cabinet_ancestral",
+          "text": "[CROSS-REFERENCING: Ancestral plant knowledge + Cosmic alignment protocols]",
+          "emotion": "mechanical"
+        }
+      ],
+      "power_distribution": {
+        "ari_melenciano": 60,
+        "amon_focus": 20,
+        "cosmic_plant_alpha": 0,
+        "filing_cabinet_ancestral": 12,
+        "apparatus_sense": 8
+      },
+      "scene_audio": {
+        "background_music": "organic_drone",
+        "intensity": 0.6
+      }
+    },
+    {
+      "scene_number": 3,
+      "title": "Training Grounds",
+      "subtitle": "Shedding the Old Self",
+      "duration": 30,
+      "elements": [
+        {
+          "id": "jordan_caldwell",
+          "name": "Jordan Caldwell",
+          "type": "character",
+          "position": { "x": 0, "y": 0, "z": 0 },
+          "color": "#f3ae56",
+          "description": "Creator of Training Grounds workbook system"
+        },
+        {
+          "id": "amon_focus",
+          "name": "Amon Focus",
+          "type": "character",
+          "position": { "x": 2.5, "y": 0, "z": 0 },
+          "color": "#56ff9f",
+          "description": "Exploring self-transformation"
+        },
+        {
+          "id": "filing_cabinet_ancestral",
+          "name": "Ancestral Memory Archive",
+          "type": "machine",
+          "position": { "x": -3, "y": 0, "z": 1.5 },
+          "color": "#569fff",
+          "description": "Storing transformation protocols"
+        },
+        {
+          "id": "apparatus_alignment",
+          "name": "Chakra Alignment Engine",
+          "type": "machine",
+          "position": { "x": 3, "y": 0, "z": -1.5 },
+          "color": "#ff5c7c",
+          "description": "Measures energetic balance and potential"
+        }
+      ],
+      "timeline": [
+        {
+          "turn": 0,
+          "target_element_id": "jordan_caldwell",
+          "text": "Training Grounds is an interactive workbook. It guides you through shedding old layers of self.",
+          "emotion": "instructive"
+        },
+        {
+          "turn": 1,
+          "target_element_id": "amon_focus",
+          "text": "How do I know what needs to be shed?",
+          "emotion": "questioning"
+        },
+        {
+          "turn": 2,
+          "target_element_id": "apparatus_alignment",
+          "text": "[SCANNING ENERGY FIELD... blockages detected in root chakra, solar plexus]",
+          "emotion": "mechanical"
+        },
+        {
+          "turn": 3,
+          "target_element_id": "jordan_caldwell",
+          "text": "It draws on familiar systems—horoscopes, chakra alignment. Anyone can use this framework.",
+          "emotion": "accessible"
+        },
+        {
+          "turn": 4,
+          "target_element_id": "filing_cabinet_ancestral",
+          "text": "[RETRIEVING: Shedding protocols from ancestor lineage → Transmitting]",
+          "emotion": "mechanical"
+        }
+      ],
+      "power_distribution": {
+        "jordan_caldwell": 55,
+        "amon_focus": 15,
+        "filing_cabinet_ancestral": 15,
+        "apparatus_alignment": 15
+      },
+      "scene_audio": {
+        "background_music": "meditative_pulse",
+        "intensity": 0.5
+      }
+    },
+    {
+      "scene_number": 4,
+      "title": "Companion 180",
+      "subtitle": "The Spacesuit as Communication",
+      "duration": 35,
+      "elements": [
+        {
+          "id": "jeremy_kamal",
+          "name": "Jeremy Kamal",
+          "type": "character",
+          "position": { "x": 0, "y": 0, "z": 0 },
+          "color": "#c78fff",
+          "description": "Designer of speculative spacesuit technology"
+        },
+        {
+          "id": "amon_focus",
+          "name": "Amon Focus",
+          "type": "character",
+          "position": { "x": 2, "y": 0, "z": 1 },
+          "color": "#56ff9f",
+          "description": "Witnessing the demonstration"
+        },
+        {
+          "id": "spacesuit_prototype",
+          "name": "Companion 180 Suit",
+          "type": "apparatus",
+          "position": { "x": -2, "y": 0, "z": 0 },
+          "color": "#8b5cf6",
+          "description": "Black Metal-integrated suit translating internal states"
+        },
+        {
+          "id": "filing_cabinet_ancestral",
+          "name": "Ancestral Memory Archive",
+          "type": "machine",
+          "position": { "x": -4, "y": 0, "z": 2 },
+          "color": "#569fff",
+          "description": "Recording material science innovations"
+        },
+        {
+          "id": "apparatus_spirit",
+          "name": "Spirit-Matter Translator",
+          "type": "machine",
+          "position": { "x": 4, "y": 0, "z": -1 },
+          "color": "#ff5c7c",
+          "description": "Analyzes emotional-to-material transmutation"
+        }
+      ],
+      "timeline": [
+        {
+          "turn": 0,
+          "target_element_id": "jeremy_kamal",
+          "text": "The suit harmonizes body, mind, and soul with the cosmos through Black Metal material.",
+          "emotion": "visionary"
+        },
+        {
+          "turn": 1,
+          "target_element_id": "amon_focus",
+          "text": "It translates emotions without words?",
+          "emotion": "intrigued"
+        },
+        {
+          "turn": 2,
+          "target_element_id": "apparatus_spirit",
+          "text": "[DETECTING... emotional frequency 432Hz → material response: bioluminescent glow]",
+          "emotion": "mechanical"
+        },
+        {
+          "turn": 3,
+          "target_element_id": "filing_cabinet_ancestral",
+          "text": "[FILING: 'Material science as communication' → Slot TECH-045]",
+          "emotion": "mechanical"
+        },
+        {
+          "turn": 4,
+          "target_element_id": "jeremy_kamal",
+          "text": "Pure energetic transmission. Communication efficiency 340% higher than language.",
+          "emotion": "profound"
+        }
+      ],
+      "power_distribution": {
+        "jeremy_kamal": 50,
+        "amon_focus": 15,
+        "spacesuit_prototype": 5,
+        "filing_cabinet_ancestral": 15,
+        "apparatus_spirit": 15
+      },
+      "scene_audio": {
+        "background_music": "ethereal_transmission",
+        "intensity": 0.7
+      }
+    },
+    {
+      "scene_number": 5,
+      "title": "Dark Voyage",
+      "subtitle": "Inner Space Exploration",
+      "duration": 30,
+      "elements": [
+        {
+          "id": "kordae_henry",
+          "name": "Kordae Jatafa Henry",
+          "type": "character",
+          "position": { "x": 0, "y": 0, "z": 0 },
+          "color": "#ff5c7c",
+          "description": "Creator of Dark Voyage cinematic experience"
+        },
+        {
+          "id": "amon_focus",
+          "name": "Amon Focus",
+          "type": "character",
+          "position": { "x": 2.5, "y": 0, "z": 0 },
+          "color": "#56ff9f",
+          "description": "Preparing for inner journey"
+        },
+        {
+          "id": "filing_cabinet_ancestral",
+          "name": "Ancestral Memory Archive",
+          "type": "machine",
+          "position": { "x": -4, "y": 0, "z": 1.5 },
+          "color": "#569fff",
+          "description": "Archiving journey protocols"
+        },
+        {
+          "id": "apparatus_depth",
+          "name": "Depth Gauge",
+          "type": "machine",
+          "position": { "x": 4, "y": 0, "z": 1 },
+          "color": "#ff5c7c",
+          "description": "Measures psychological and spiritual depth"
+        }
+      ],
+      "timeline": [
+        {
+          "turn": 0,
+          "target_element_id": "kordae_henry",
+          "text": "Dark Voyage isn't about planets. It's about plunging into your inner world.",
+          "emotion": "intense"
+        },
+        {
+          "turn": 1,
+          "target_element_id": "apparatus_depth",
+          "text": "[MEASURING... external universe: 93 billion light-years → internal: INFINITE]",
+          "emotion": "mechanical"
+        },
+        {
+          "turn": 2,
+          "target_element_id": "filing_cabinet_ancestral",
+          "text": "[RETRIEVING: Ancient inner journey maps from ancestral archives]",
+          "emotion": "mechanical"
+        },
+        {
+          "turn": 3,
+          "target_element_id": "kordae_henry",
+          "text": "Every journey across space mirrors a journey within. I make that visible.",
+          "emotion": "revelatory"
+        }
+      ],
+      "power_distribution": {
+        "kordae_henry": 55,
+        "amon_focus": 15,
+        "filing_cabinet_ancestral": 15,
+        "apparatus_depth": 15
+      },
+      "scene_audio": {
+        "background_music": "deep_void",
+        "intensity": 0.8
+      }
+    },
+    {
+      "scene_number": 6,
+      "title": "Cosmic Alchemy",
+      "subtitle": "Base Metals into Gold",
+      "duration": 35,
+      "elements": [
+        {
+          "id": "ari_melenciano",
+          "name": "Ari Melenciano",
+          "type": "character",
+          "position": { "x": -1.5, "y": 0, "z": 1 },
+          "color": "#ff9f56",
+          "description": "Collective voice"
+        },
+        {
+          "id": "jordan_caldwell",
+          "name": "Jordan Caldwell",
+          "type": "character",
+          "position": { "x": 1.5, "y": 0, "z": 1 },
+          "color": "#f3ae56",
+          "description": "Transformation architect"
+        },
+        {
+          "id": "jeremy_kamal",
+          "name": "Jeremy Kamal",
+          "type": "character",
+          "position": { "x": -1.5, "y": 0, "z": -1 },
+          "color": "#c78fff",
+          "description": "Material alchemist"
+        },
+        {
+          "id": "kordae_henry",
+          "name": "Kordae Jatafa Henry",
+          "type": "character",
+          "position": { "x": 1.5, "y": 0, "z": -1 },
+          "color": "#ff5c7c",
+          "description": "Journey mapper"
+        },
+        {
+          "id": "amon_focus",
+          "name": "Amon Focus",
+          "type": "character",
+          "position": { "x": 0, "y": 0, "z": 2.5 },
+          "color": "#56ff9f",
+          "description": "Witness"
+        },
+        {
+          "id": "black_metal_book",
+          "name": "Black Metal",
+          "type": "artifact",
+          "position": { "x": 0, "y": 0, "z": 0 },
+          "color": "#0f0f0f",
+          "description": "The completed work"
+        },
+        {
+          "id": "filing_cabinet_ancestral",
+          "name": "Ancestral Memory Archive",
+          "type": "machine",
+          "position": { "x": -4, "y": 0, "z": 0 },
+          "color": "#569fff",
+          "description": "Final integration"
+        }
+      ],
+      "timeline": [
+        {
+          "turn": 0,
+          "target_element_id": "ari_melenciano",
+          "text": "Three years. Four visions. One mission: expanding Black imagination into cosmic realms.",
+          "emotion": "proud"
+        },
+        {
+          "turn": 1,
+          "target_element_id": "amon_focus",
+          "text": "Black Metal places Blackness at the center of futuristic thought—not as participants, as leaders.",
+          "emotion": "clear"
+        },
+        {
+          "turn": 2,
+          "target_element_id": "filing_cabinet_ancestral",
+          "text": "[ARCHIVING: All knowledge integrated → Ready for transmission across generations]",
+          "emotion": "mechanical"
+        },
+        {
+          "turn": 3,
+          "target_element_id": "amon_focus",
+          "text": "This is cosmic alchemy. Transforming base metals of current reality into unlimited Black potential.",
+          "emotion": "transformed"
+        },
+        {
+          "turn": 4,
+          "target_element_id": "ari_melenciano",
+          "text": "Black Metal opens portals we're only starting to walk through. This is just the beginning.",
+          "emotion": "anticipatory"
+        }
+      ],
+      "power_distribution": {
+        "ari_melenciano": 25,
+        "jordan_caldwell": 15,
+        "jeremy_kamal": 15,
+        "kordae_henry": 15,
+        "amon_focus": 20,
+        "black_metal_book": 5,
+        "filing_cabinet_ancestral": 5
+      },
+      "scene_audio": {
+        "background_music": "convergence_harmony",
+        "intensity": 0.9
+      }
+    }
+  ]
+}

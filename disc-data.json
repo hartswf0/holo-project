@@ -1,0 +1,1824 @@
+{
+  "story_id": "dirty_disclosure_grid_animation_full_pov",
+  "story_title": "DIRTY DISCLOSURE: 9x9 GRID POSITIONING FOR EACH SCENE",
+  "overall_description": "Complete spatial layout of all LEGOS elements on the narrative grid, designed for grid-based cartoon animation with thinking bubbles and full internal/external dialogue for every entity.",
+  "global_settings": {
+    "grid_dimensions": { "rows": 9, "cols": 9 },
+    "physical_size_meters": { "width": 27, "height": 27 },
+    "grid_unit_size_meters": 3,
+    "camera": {
+      "id": "main_camera",
+      "type": "fixed_overhead",
+      "default_position_meters": { "x": 13.5, "y": 13.5, "z": 27 },
+      "default_zoom_level": 1.0,
+      "fov_degrees": 60
+    },
+    "default_lighting_temperature_kelvin": 5500,
+    "default_coloration_type": "Monochrome (5500K cool white)",
+    "default_bubble_offset_grid_units": { "x": 0.5, "y": -1.0 }
+  },
+  "global_elements_legend": {
+    "FC": { "name": "Filing Cabinet", "description": "Archive zone component" },
+    "OF": { "name": "Officer", "description": "Primary authority figure" },
+    "CL": { "name": "Clancy", "description": "Narrative protagonist" },
+    "KB": { "name": "Keyboard Cluster", "description": "Interface for control" },
+    "APP": { "name": "Apparatus Frame", "description": "Core machinery structure" },
+    "GB": { "name": "Guest Booth", "description": "Observation / confinement zone" },
+    "CAM": { "name": "Camera", "description": "Fixed overhead camera position (reference only)" },
+    "A1": { "name": "Apparatus Component A1", "description": "Part of apparatus structure" },
+    "A2": { "name": "Apparatus Component A2", "description": "Part of apparatus structure" },
+    "A3": { "name": "Apparatus Component A3", "description": "Part of apparatus structure" },
+    "A4": { "name": "Apparatus Component A4", "description": "Part of apparatus structure" },
+    "A5": { "name": "Apparatus Component A5", "description": "Part of apparatus structure" },
+    "A6": { "name": "Apparatus Component A6", "description": "Part of apparatus structure" },
+    "SC": { "name": "Scholar", "description": "Individual participating in procession" },
+    "APO": { "name": "Apparatus Operational Component", "description": "Cylinders, conveyor begin operation" },
+    "CYL": { "name": "Cylinders", "description": "Rotating machinery part" },
+    "BELT": { "name": "Conveyor Belt", "description": "Path for forms" },
+    "OUT": { "name": "Output Zone", "description": "Area where forms exit apparatus" },
+    "S+F": { "name": "Scholar with Form", "description": "Scholar carrying a specific form (F denotes form type)" },
+    "FC→": { "name": "Filing Cabinet (Incoming)", "description": "Cabinet receiving forms" },
+    "FC↑": { "name": "Filing Cabinet (Filling)", "description": "Cabinet in process of filling" },
+    "MID": { "name": "Mid-Apparatus Section", "description": "Middle part of the apparatus" },
+    "STAMP": { "name": "Stamp Apparatus", "description": "Mechanical stamper" },
+    "IMPACT": { "name": "Impact Zone", "description": "Area where stamp hits forms" },
+    "ARM": { "name": "Stamp Arm", "description": "Articulated arm of the stamp" },
+    "FC↑↑": { "name": "Filing Cabinet (Rapid Fill)", "description": "Cabinet filling rapidly" },
+    "FC↑↑↑": { "name": "Filing Cabinet (Overflowing)", "description": "Cabinet nearly full, rapid accumulation" },
+    "CHAOS": { "name": "Chaos Zone", "description": "Area of disorganization" },
+    "◯": { "name": "Muted Stamp", "description": "Stamp apparatus, silent and raised" },
+    "MUTED": { "name": "Muted Machinery", "description": "Machinery operating quietly in background" },
+    "BOOTH": { "name": "Interview Booth", "description": "Protected space for dialogue" },
+    "=INTERVIEW=": { "name": "Interview Point", "description": "Central exchange in the booth" },
+    "GLASS": { "name": "Glass Wall", "description": "Transparent wall of the booth" },
+    "=FORM=": { "name": "Form Display", "description": "A specific form being displayed" },
+    "🟢GREEN": { "name": "Green Element/Ink", "description": "Indicates green color or element" },
+    "❤RED": { "name": "Red Element/Ink", "description": "Indicates red color, love, or emotional content" },
+    "🔵BLUE": { "name": "Blue Element/Ink", "description": "Indicates blue color or partnership" },
+    "FC-OPEN": { "name": "Filing Cabinet (Open)", "description": "Cabinet drawers opened" },
+    "MARGIN-CONTENT": { "name": "Margin Content", "description": "Visible annotations/drawings in margins" },
+    "FORM-ARRAY-CENTER": { "name": "Form Array Center", "description": "Central point of form display" },
+    "MARGIN-ANNOTATION": { "name": "Margin Annotation", "description": "Specific annotations on forms" },
+    "FORMS-DISPLAYED": { "name": "Forms Displayed", "description": "General area for displayed forms" },
+    "FC-WARM": { "name": "Filing Cabinet (Warm-lit)", "description": "Cabinet in warm, golden light" },
+    "🌱GARDEN": { "name": "Garden Symbol", "description": "Indicates the presence of a garden/life" },
+    "EYES-REMOVED": { "name": "Eyes Removed", "description": "Officer's prosthetics removed, revealing human eyes" },
+    "GARDEN-INTERIOR": { "name": "Garden Interior", "description": "Interior of the apparatus transformed into a garden" },
+    "PLANT1": { "name": "Plant 1", "description": "Growing plant" },
+    "PLANT2": { "name": "Plant 2", "description": "Growing plant" },
+    "SOIL-EARTH": { "name": "Soil/Earth", "description": "Organic ground material" },
+    "SEEDS": { "name": "Seeds", "description": "Seeds on the soil" },
+    "DIAGRAM1": { "name": "Diagram 1", "description": "AI-human collaboration schematic" },
+    "LOVE-LETTER-WALLS": { "name": "Love Letter Walls", "description": "Interior walls covered with love letters" },
+    "DIAGRAM3": { "name": "Diagram 3", "description": "Love letter annotations schematic" },
+    "🌱LIFE-EMERGING": { "name": "Life Emerging", "description": "Symbol for new life" }
+  },
+  "scenes": [
+    {
+      "scene_id": "scene_01_opening",
+      "scene_number": 1,
+      "title": "OPENING - MATERIALIZATION & FIRST INTERROGATION",
+      "subtitle": "Grid State: System at Rest, Power Concentrated",
+      "initial_grid_layout": [
+        ["FC", "FC", "FC", "", "", "", "", "FC", "FC"],
+        ["FC", "", "", "", "", "", "", "", "FC"],
+        ["FC", "", "", "", "", "", "", "", "FC"],
+        ["", "", "", "APP", "KB", "APP", "", "", ""],
+        ["", "", "", "APP", "OF", "APP", "", "", ""],
+        ["", "", "", "APP", "KB", "APP", "", "", ""],
+        ["", "", "GB", "", "CL", "", "GB", "", ""],
+        ["", "", "", "", "GB", "", "", "", ""],
+        ["", "", "", "", "CAM", "", "", "", ""]
+      ],
+      "elements_in_scene": [
+        { "id": "fc_r1c1", "type": "Filing Cabinet", "grid_symbol": "FC", "initial_grid_position": { "row": 1, "col": 1 } },
+        { "id": "fc_r1c2", "type": "Filing Cabinet", "grid_symbol": "FC", "initial_grid_position": { "row": 1, "col": 2 } },
+        { "id": "fc_r1c3", "type": "Filing Cabinet", "grid_symbol": "FC", "initial_grid_position": { "row": 1, "col": 3 } },
+        { "id": "fc_r1c8", "type": "Filing Cabinet", "grid_symbol": "FC", "initial_grid_position": { "row": 1, "col": 8 } },
+        { "id": "fc_r1c9", "type": "Filing Cabinet", "grid_symbol": "FC", "initial_grid_position": { "row": 1, "col": 9 } },
+        { "id": "fc_r2c1", "type": "Filing Cabinet", "grid_symbol": "FC", "initial_grid_position": { "row": 2, "col": 1 } },
+        { "id": "fc_r2c9", "type": "Filing Cabinet", "grid_symbol": "FC", "initial_grid_position": { "row": 2, "col": 9 } },
+        { "id": "fc_r3c1", "type": "Filing Cabinet", "grid_symbol": "FC", "initial_grid_position": { "row": 3, "col": 1 } },
+        { "id": "fc_r3c9", "type": "Filing Cabinet", "grid_symbol": "FC", "initial_grid_position": { "row": 3, "col": 9 } },
+        { "id": "officer_main", "type": "Officer", "grid_symbol": "OF", "initial_grid_position": { "row": 5, "col": 5 }, "role": "PRIMARY AUTHORITY", "dialogue_style": "formal, demanding" },
+        { "id": "kb_r4c5", "type": "Keyboard Cluster", "grid_symbol": "KB", "initial_grid_position": { "row": 4, "col": 5 } },
+        { "id": "kb_r6c5", "type": "Keyboard Cluster", "grid_symbol": "KB", "initial_grid_position": { "row": 6, "col": 5 } },
+        { "id": "app_frame_1", "type": "Apparatus Frame", "grid_symbol": "APP", "initial_grid_position": { "row": 4, "col": 4 } },
+        { "id": "app_frame_2", "type": "Apparatus Frame", "grid_symbol": "APP", "initial_grid_position": { "row": 4, "col": 6 } },
+        { "id": "app_frame_3", "type": "Apparatus Frame", "grid_symbol": "APP", "initial_grid_position": { "row": 5, "col": 4 } },
+        { "id": "app_frame_4", "type": "Apparatus Frame", "grid_symbol": "APP", "initial_grid_position": { "row": 5, "col": 6 } },
+        { "id": "app_frame_5", "type": "Apparatus Frame", "grid_symbol": "APP", "initial_grid_position": { "row": 6, "col": 4 } },
+        { "id": "app_frame_6", "type": "Apparatus Frame", "grid_symbol": "APP", "initial_grid_position": { "row": 6, "col": 6 } },
+        { "id": "clancy_main", "type": "Clancy", "grid_symbol": "CL", "initial_grid_position": { "row": 7, "col": 5 }, "dialogue_style": "bewildered, inquisitive" },
+        { "id": "guest_booth_left", "type": "Guest Booth", "grid_symbol": "GB", "initial_grid_position": { "row": 7, "col": 3 } },
+        { "id": "guest_booth_right", "type": "Guest Booth", "grid_symbol": "GB", "initial_grid_position": { "row": 7, "col": 7 } },
+        { "id": "guest_booth_south", "type": "Guest Booth", "grid_symbol": "GB", "initial_grid_position": { "row": 8, "col": 5 } },
+        { "id": "camera_ref", "type": "Camera", "grid_symbol": "CAM", "initial_grid_position": { "row": 9, "col": 5 }, "description": "Fixed camera position for scene reference" }
+      ],
+      "power_distribution": {
+        "officer": { "score": 0.90, "description": "dominant" },
+        "clancy": { "score": 0.10, "description": "bewildered" },
+        "apparatus": { "score": 0.00, "description": "dormant" },
+        "guest": { "score": 0.00, "description": "imprisoned, silent" }
+      },
+      "metadata": {
+        "scene_duration_seconds": 90,
+        "apparatus_operation_level": 0.00,
+        "procession_formation": "NOT YET (single Scholar arriving)",
+        "margin_visibility": 0.00,
+        "coloration": { "type": "Monochrome", "temperature": "5500K cool white" }
+      },
+      "animation_timeline": [
+        { "event_id": "s1_e1_initial_placement", "type": "wait", "delay_seconds": 0.0, "duration_seconds": 0.5, "notes": "Allow elements to appear" },
+        {
+          "event_id": "s1_e2_clancy_thoughts_initial",
+          "type": "thinking_bubble",
+          "target_element_id": "clancy_main",
+          "text": "Where am I? What's going on?",
+          "display_type": "thought",
+          "delay_seconds": 1.0,
+          "duration_seconds": 4.0,
+          "philosophical_intent": "Bewilderment in new reality"
+        },
+        {
+          "event_id": "s1_e3_apparatus_thoughts_dormant",
+          "type": "thinking_bubble",
+          "target_element_id": "app_frame_1",
+          "text": "Dormant. Waiting for command. Ready to process.",
+          "display_type": "thought",
+          "delay_seconds": 2.0,
+          "duration_seconds": 3.0,
+          "philosophical_intent": "System's passive readiness"
+        },
+        {
+          "event_id": "s1_e4_officer_thoughts_control",
+          "type": "thinking_bubble",
+          "target_element_id": "officer_main",
+          "text": "Order must be maintained. Contamination purged.",
+          "display_type": "thought",
+          "delay_seconds": 3.0,
+          "duration_seconds": 4.0,
+          "philosophical_intent": "Belief in system's purity and control"
+        },
+        {
+          "event_id": "s1_e5_officer_speech_confess_percent",
+          "type": "speech_bubble",
+          "target_element_id": "officer_main",
+          "text": "You used the machine to think. Confess the percentage.",
+          "display_type": "speech",
+          "delay_seconds": 6.0,
+          "duration_seconds": 5.0,
+          "philosophical_intent": "Demand for compliance and quantification of self"
+        },
+        {
+          "event_id": "s1_e6_clancy_speech_what",
+          "type": "speech_bubble",
+          "target_element_id": "clancy_main",
+          "text": "I...what?",
+          "display_type": "speech",
+          "delay_seconds": 11.0,
+          "duration_seconds": 2.0,
+          "philosophical_intent": "Confusion, rejection of alien premise"
+        },
+        {
+          "event_id": "s1_e7_officer_speech_contamination_level",
+          "type": "speech_bubble",
+          "target_element_id": "officer_main",
+          "text": "Cognitive contamination level: 37%. Mandatory disclosure protocol initiated.",
+          "display_type": "speech",
+          "delay_seconds": 13.0,
+          "duration_seconds": 6.0,
+          "philosophical_intent": "Imposition of system's judgment and labeling"
+        },
+        {
+          "event_id": "s1_e8_clancy_speech_disclosure_policies",
+          "type": "speech_bubble",
+          "target_element_id": "clancy_main",
+          "text": "Wait, I just wanted to ask about your disclosure policies—",
+          "display_type": "speech",
+          "delay_seconds": 19.0,
+          "duration_seconds": 4.0,
+          "philosophical_intent": "Attempt to assert agency, challenge the framing"
+        },
+        {
+          "event_id": "s1_e9_officer_speech_first_confess",
+          "type": "speech_bubble",
+          "target_element_id": "officer_main",
+          "text": "First: confess what the machine thought for you.",
+          "display_type": "speech",
+          "delay_seconds": 23.0,
+          "duration_seconds": 5.0,
+          "philosophical_intent": "Reinforcing authority, prioritizing confession over inquiry"
+        },
+        { "event_id": "s1_e10_long_pause", "type": "wait", "delay_seconds": 28.0, "duration_seconds": 60.0, "notes": "Maintain static scene for duration" },
+        {
+          "event_id": "s1_e11_scene_fade_out",
+          "type": "scene_transition",
+          "transition_type": "fade_out",
+          "duration_seconds": 2.0,
+          "delay_seconds": 88.0
+        }
+      ],
+      "scene_audio": {
+        "background_music": {
+          "id": "ominous_ambiance_1",
+          "volume": 0.7,
+          "loop": true,
+          "fade_in_duration_seconds": 2.0
+        },
+        "sound_effects": [
+          { "id": "gentle_hum", "delay_seconds": 0.5, "volume": 0.3, "loop": true, "duration_seconds": 89.0 }
+        ]
+      }
+    },
+    {
+      "scene_id": "scene_02_apparatus_integration",
+      "scene_number": 2,
+      "title": "APPARATUS INTEGRATION - MACHINERY VISIBLE",
+      "subtitle": "Grid State: Apparatus Activates, Officer Speed Increases",
+      "initial_grid_layout": [
+        ["FC", "FC", "FC", "", "", "", "", "FC", "FC"],
+        ["FC", "", "", "", "", "", "", "", "FC"],
+        ["FC", "", "", "", "", "", "", "", "FC"],
+        ["", "", "", "A1", "KB1", "A2", "", "", ""],
+        ["", "", "", "A3", "OF", "A4", "", "", ""],
+        ["", "", "", "A5", "KB2", "A6", "", "", ""],
+        ["SC", "", "GB", "CL", "CL", "GB", "GB", "", "SC"],
+        ["", "", "", "", "APO", "", "", "", ""],
+        ["", "", "", "", "CAM", "", "", "", ""]
+      ],
+      "elements_in_scene": [
+        { "id": "fc_r1c1", "type": "Filing Cabinet", "grid_symbol": "FC", "initial_grid_position": { "row": 1, "col": 1 } },
+        { "id": "fc_r1c2", "type": "Filing Cabinet", "grid_symbol": "FC", "initial_grid_position": { "row": 1, "col": 2 } },
+        { "id": "fc_r1c3", "type": "Filing Cabinet", "grid_symbol": "FC", "initial_grid_position": { "row": 1, "col": 3 } },
+        { "id": "fc_r1c8", "type": "Filing Cabinet", "grid_symbol": "FC", "initial_grid_position": { "row": 1, "col": 8 } },
+        { "id": "fc_r1c9", "type": "Filing Cabinet", "grid_symbol": "FC", "initial_grid_position": { "row": 1, "col": 9 } },
+        { "id": "fc_r2c1", "type": "Filing Cabinet", "grid_symbol": "FC", "initial_grid_position": { "row": 2, "col": 1 } },
+        { "id": "fc_r2c9", "type": "Filing Cabinet", "grid_symbol": "FC", "initial_grid_position": { "row": 2, "col": 9 } },
+        { "id": "fc_r3c1", "type": "Filing Cabinet", "grid_symbol": "FC", "initial_grid_position": { "row": 3, "col": 1 } },
+        { "id": "fc_r3c9", "type": "Filing Cabinet", "grid_symbol": "FC", "initial_grid_position": { "row": 3, "col": 9 } },
+        { "id": "officer_main", "type": "Officer", "grid_symbol": "OF", "initial_grid_position": { "row": 5, "col": 5 }, "authority_score": 0.92, "dialogue_style": "formal, demanding" },
+        { "id": "kb_r4c5", "type": "Keyboard Cluster", "grid_symbol": "KB1", "initial_grid_position": { "row": 4, "col": 5 } },
+        { "id": "kb_r6c5", "type": "Keyboard Cluster", "grid_symbol": "KB2", "initial_grid_position": { "row": 6, "col": 5 } },
+        { "id": "app_a1", "type": "Apparatus Component", "grid_symbol": "A1", "initial_grid_position": { "row": 4, "col": 4 } },
+        { "id": "app_a2", "type": "Apparatus Component", "grid_symbol": "A2", "initial_grid_position": { "row": 4, "col": 6 } },
+        { "id": "app_a3", "type": "Apparatus Component", "grid_symbol": "A3", "initial_grid_position": { "row": 5, "col": 4 } },
+        { "id": "app_a4", "type": "Apparatus Component", "grid_symbol": "A4", "initial_grid_position": { "row": 5, "col": 6 } },
+        { "id": "app_a5", "type": "Apparatus Component", "grid_symbol": "A5", "initial_grid_position": { "row": 6, "col": 4 } },
+        { "id": "app_a6", "type": "Apparatus Component", "grid_symbol": "A6", "initial_grid_position": { "row": 6, "col": 6 } },
+        { "id": "clancy_main", "type": "Clancy", "grid_symbol": "CL", "initial_grid_position": { "row": 7, "col": 4 }, "dialogue_style": "bewildered, inquisitive" },
+        { "id": "scholar_1", "type": "Scholar", "grid_symbol": "SC", "initial_grid_position": { "row": 7, "col": 1 }, "initial_spawn_position": { "row": 7, "col": 9 }, "dialogue_style": "anxious, compliant" },
+        { "id": "guest_booth_left", "type": "Guest Booth", "grid_symbol": "GB", "initial_grid_position": { "row": 7, "col": 3 } },
+        { "id": "guest_booth_right1", "type": "Guest Booth", "grid_symbol": "GB", "initial_grid_position": { "row": 7, "col": 6 } },
+        { "id": "guest_booth_right2", "type": "Guest Booth", "grid_symbol": "GB", "initial_grid_position": { "row": 7, "col": 7 } },
+        { "id": "apparatus_operational", "type": "Apparatus Operational Component", "grid_symbol": "APO", "initial_grid_position": { "row": 8, "col": 5 }, "state": "dormant", "dialogue_style": "mechanical, purposeful" },
+        { "id": "camera_ref", "type": "Camera", "grid_symbol": "CAM", "initial_grid_position": { "row": 9, "col": 5 } }
+      ],
+      "power_distribution": {
+        "officer": { "score": 0.92, "description": "increased authority" },
+        "clancy": { "score": 0.15, "description": "observation begins" },
+        "scholar_1": { "score": 0.15, "description": "approaching queue" },
+        "apparatus": { "score": 0.50, "description": "activated, moving" },
+        "guest": { "score": 0.00, "description": "silent observer" }
+      },
+      "metadata": {
+        "scene_duration_seconds": 60,
+        "apparatus_operation_level": 0.50,
+        "procession_formation": "STARTING (Scholar 1 entering queue)",
+        "margin_visibility": 0.20,
+        "coloration": { "type": "Monochrome", "temperature": "5500K maintained" }
+      },
+      "animation_timeline": [
+        { "event_id": "s2_e1_apparatus_activate_sound", "type": "play_sound_effect", "id": "machinery_start_up", "delay_seconds": 0.5, "volume": 0.8 },
+        {
+          "event_id": "s2_e2_apparatus_glow",
+          "type": "visual_effect",
+          "target_element_id": "apparatus_operational",
+          "effect_type": "pulse",
+          "color": "#00FF00",
+          "strength": 0.6,
+          "duration_seconds": 1.0,
+          "delay_seconds": 1.0,
+          "repeat_count": -1,
+          "ease_function": "linear"
+        },
+        {
+          "event_id": "s2_e3_apparatus_thoughts_activating",
+          "type": "thinking_bubble",
+          "target_element_id": "apparatus_operational",
+          "text": "Activating. Processing sequence initiated. Standardization begins.",
+          "display_type": "thought",
+          "delay_seconds": 1.0,
+          "duration_seconds": 4.0,
+          "philosophical_intent": "Fulfilling purpose, imposing order"
+        },
+        {
+          "event_id": "s2_e4_clancy_thoughts_apprehension",
+          "type": "thinking_bubble",
+          "target_element_id": "clancy_main",
+          "text": "They're really starting it. What will this machine do?",
+          "display_type": "thought",
+          "delay_seconds": 2.0,
+          "duration_seconds": 4.0,
+          "philosophical_intent": "Apprehension, observation of system's power"
+        },
+        {
+          "event_id": "s2_e5_clancy_move",
+          "type": "move_element",
+          "target_element_id": "clancy_main",
+          "start_position": { "row": 7, "col": 4 },
+          "end_position": { "row": 7, "col": 5 },
+          "duration_seconds": 1.5,
+          "delay_seconds": 1.5,
+          "ease_function": "easeOutQuad"
+        },
+        {
+          "event_id": "s2_e6_scholar_1_approach",
+          "type": "move_element",
+          "target_element_id": "scholar_1",
+          "start_position": { "row": 7, "col": 9 },
+          "end_position": { "row": 7, "col": 8 },
+          "duration_seconds": 2.0,
+          "delay_seconds": 2.0,
+          "ease_function": "linear"
+        },
+        {
+          "event_id": "s2_e7_officer_speed_increase_bubble",
+          "type": "thinking_bubble",
+          "target_element_id": "officer_main",
+          "text": "Efficiency must increase. Output is key.",
+          "display_type": "thought",
+          "delay_seconds": 4.0,
+          "duration_seconds": 4.0,
+          "philosophical_intent": "Satisfaction in system activation and control"
+        },
+        {
+          "event_id": "s2_e8_scholar_1_thoughts_compliance",
+          "type": "thinking_bubble",
+          "target_element_id": "scholar_1",
+          "text": "Just get it over with. Be compliant. Don't cause trouble.",
+          "display_type": "thought",
+          "delay_seconds": 5.0,
+          "duration_seconds": 4.0,
+          "philosophical_intent": "Fear and conformity in the face of institutional power"
+        },
+        { "event_id": "s2_e9_long_pause", "type": "wait", "delay_seconds": 9.0, "duration_seconds": 49.0 },
+        {
+          "event_id": "s2_e10_scene_fade_out",
+          "type": "scene_transition",
+          "transition_type": "fade_out",
+          "duration_seconds": 2.0,
+          "delay_seconds": 58.0
+        }
+      ],
+      "scene_audio": {
+        "background_music": {
+          "id": "tense_mechanical_loop",
+          "volume": 0.6,
+          "loop": true,
+          "fade_in_duration_seconds": 1.0
+        },
+        "sound_effects": [
+          { "id": "machinery_whirr", "delay_seconds": 1.0, "volume": 0.7, "loop": true, "duration_seconds": 59.0 },
+          { "id": "clancy_footsteps", "delay_seconds": 1.5, "volume": 0.4, "loop": false, "duration_seconds": 1.5 }
+        ]
+      }
+    },
+    {
+      "scene_id": "scene_03_clancy_enters_apparatus",
+      "scene_number": 3,
+      "title": "CLANCY ENTERS APPARATUS - INTERIOR EXPOSURE",
+      "subtitle": "Grid State: Clancy Inside Apparatus, Scholar Queue Forming",
+      "initial_grid_layout": [
+        ["FC", "FC", "FC", "", "", "", "", "FC", "FC"],
+        ["FC", "", "", "", "", "", "", "", "FC"],
+        ["FC", "", "", "", "", "", "", "", "FC"],
+        ["", "", "", "CYL", "KB1", "CYL", "", "", ""],
+        ["", "", "", "BELT", "CL", "BELT", "", "", ""],
+        ["", "", "", "OUT", "KB2", "OUT", "", "", ""],
+        ["S2", "", "GB", "S1", "OF", "S3", "GB", "S4", "S5"],
+        ["", "", "", "", "FORMS", "", "", "", ""],
+        ["", "", "", "", "CAM", "", "", "", ""]
+      ],
+      "elements_in_scene": [
+        { "id": "fc_r1c1", "type": "Filing Cabinet", "grid_symbol": "FC", "initial_grid_position": { "row": 1, "col": 1 } },
+        { "id": "fc_r1c2", "type": "Filing Cabinet", "grid_symbol": "FC", "initial_grid_position": { "row": 1, "col": 2 } },
+        { "id": "fc_r1c3", "type": "Filing Cabinet", "grid_symbol": "FC", "initial_grid_position": { "row": 1, "col": 3 } },
+        { "id": "fc_r1c8", "type": "Filing Cabinet", "grid_symbol": "FC", "initial_grid_position": { "row": 1, "col": 8 } },
+        { "id": "fc_r1c9", "type": "Filing Cabinet", "grid_symbol": "FC", "initial_grid_position": { "row": 1, "col": 9 } },
+        { "id": "fc_r2c1", "type": "Filing Cabinet", "grid_symbol": "FC", "initial_grid_position": { "row": 2, "col": 1 } },
+        { "id": "fc_r2c9", "type": "Filing Cabinet", "grid_symbol": "FC", "initial_grid_position": { "row": 2, "col": 9 } },
+        { "id": "fc_r3c1", "type": "Filing Cabinet", "grid_symbol": "FC", "initial_grid_position": { "row": 3, "col": 1 } },
+        { "id": "fc_r3c9", "type": "Filing Cabinet", "grid_symbol": "FC", "initial_grid_position": { "row": 3, "col": 9 } },
+        { "id": "apparatus_cyl_r4c4", "type": "Cylinders", "grid_symbol": "CYL", "initial_grid_position": { "row": 4, "col": 4 }, "dialogue_style": "mechanical, purposeful" },
+        { "id": "apparatus_cyl_r4c6", "type": "Cylinders", "grid_symbol": "CYL", "initial_grid_position": { "row": 4, "col": 6 }, "dialogue_style": "mechanical, purposeful" },
+        { "id": "kb_r4c5", "type": "Keyboard Cluster", "grid_symbol": "KB1", "initial_grid_position": { "row": 4, "col": 5 } },
+        { "id": "apparatus_belt_r5c4", "type": "Conveyor Belt", "grid_symbol": "BELT", "initial_grid_position": { "row": 5, "col": 4 }, "dialogue_style": "mechanical, purposeful" },
+        { "id": "clancy_main", "type": "Clancy", "grid_symbol": "CL", "initial_grid_position": { "row": 5, "col": 5 }, "state": "inside apparatus", "dialogue_style": "vulnerable, internal" },
+        { "id": "apparatus_belt_r5c6", "type": "Conveyor Belt", "grid_symbol": "BELT", "initial_grid_position": { "row": 5, "col": 6 }, "dialogue_style": "mechanical, purposeful" },
+        { "id": "apparatus_out_r6c4", "type": "Output Zone", "grid_symbol": "OUT", "initial_grid_position": { "row": 6, "col": 4 } },
+        { "id": "kb_r6c5", "type": "Keyboard Cluster", "grid_symbol": "KB2", "initial_grid_position": { "row": 6, "col": 5 } },
+        { "id": "apparatus_out_r6c6", "type": "Output Zone", "grid_symbol": "OUT", "initial_grid_position": { "row": 6, "col": 6 } },
+        { "id": "scholar_1", "type": "Scholar", "grid_symbol": "S1", "initial_grid_position": { "row": 7, "col": 4 }, "dialogue_style": "anxious, compliant" },
+        { "id": "scholar_2", "type": "Scholar", "grid_symbol": "S2", "initial_grid_position": { "row": 7, "col": 1 }, "dialogue_style": "anxious, compliant" },
+        { "id": "officer_main", "type": "Officer", "grid_symbol": "OF", "initial_grid_position": { "row": 7, "col": 5 }, "dialogue_style": "formal, demanding" },
+        { "id": "scholar_3", "type": "Scholar", "grid_symbol": "S3", "initial_grid_position": { "row": 7, "col": 6 }, "dialogue_style": "anxious, compliant" },
+        { "id": "scholar_4", "type": "Scholar", "grid_symbol": "S4", "initial_grid_position": { "row": 7, "col": 8 }, "dialogue_style": "anxious, compliant" },
+        { "id": "scholar_5", "type": "Scholar", "grid_symbol": "S5", "initial_grid_position": { "row": 7, "col": 9 }, "dialogue_style": "anxious, compliant" },
+        { "id": "guest_booth_left", "type": "Guest Booth", "grid_symbol": "GB", "initial_grid_position": { "row": 7, "col": 3 } },
+        { "id": "guest_booth_right", "type": "Guest Booth", "grid_symbol": "GB", "initial_grid_position": { "row": 7, "col": 7 } },
+        { "id": "forms_on_belt", "type": "Forms", "grid_symbol": "FORMS", "initial_grid_position": { "row": 8, "col": 5 }, "count": 8, "state": "moving", "dialogue_style": "passive, raw data" },
+        { "id": "camera_ref", "type": "Camera", "grid_symbol": "CAM", "initial_grid_position": { "row": 9, "col": 5 } }
+      ],
+      "power_distribution": {
+        "officer": { "score": 0.92, "description": "control from above" },
+        "clancy": { "score_range": [0.20, 0.40], "description": "vulnerable but surviving" },
+        "scholars": { "score": 0.15, "description": "each (queue pressure mounting)" },
+        "apparatus": { "score": 0.50, "description": "operational, now containing Clancy" },
+        "guest": { "score": 0.00, "description": "watching Clancy response" }
+      },
+      "metadata": {
+        "scene_duration_seconds": 45,
+        "apparatus_operation_level": 0.50,
+        "procession_formation": "QUEUE (5 scholars in queue, X=5 alignment)",
+        "margin_visibility": 0.15,
+        "coloration": { "type": "Monochrome", "temperature": "5500K", "notes": "slight interior warmth" }
+      },
+      "animation_timeline": [
+        { "event_id": "s3_e1_clancy_apparatus_enter", "type": "wait", "delay_seconds": 0.0, "duration_seconds": 0.5 },
+        {
+          "event_id": "s3_e2_clancy_traversing_thoughts",
+          "type": "thinking_bubble",
+          "target_element_id": "clancy_main",
+          "text": "The hum... the gears... I'm inside! What is it doing to my thoughts?",
+          "display_type": "thought",
+          "delay_seconds": 1.0,
+          "duration_seconds": 5.0,
+          "philosophical_intent": "Vulnerability and internal experience within the system"
+        },
+        {
+          "event_id": "s3_e3_apparatus_cylinders_rotate",
+          "type": "visual_effect",
+          "target_element_id": "apparatus_cyl_r4c4",
+          "effect_type": "rotate",
+          "duration_seconds": 2.0,
+          "delay_seconds": 1.0,
+          "repeat_count": -1
+        },
+        {
+          "event_id": "s3_e4_apparatus_thoughts_processing",
+          "type": "thinking_bubble",
+          "target_element_id": "apparatus_belt_r5c4",
+          "text": "Processing. Categorizing. Filtering. For purity.",
+          "display_type": "thought",
+          "delay_seconds": 2.0,
+          "duration_seconds": 4.0,
+          "philosophical_intent": "Active function of imposing order"
+        },
+        {
+          "event_id": "s3_e5_officer_thoughts_control",
+          "type": "thinking_bubble",
+          "target_element_id": "officer_main",
+          "text": "Observation. Control from above. The system works.",
+          "display_type": "thought",
+          "delay_seconds": 3.0,
+          "duration_seconds": 4.0,
+          "philosophical_intent": "Maintaining authority and confidence in the system"
+        },
+        {
+          "event_id": "s3_e6_scholar_thoughts_anxiety",
+          "type": "thinking_bubble",
+          "target_element_id": "scholar_1",
+          "text": "Next... will my thoughts be 'clean' enough?",
+          "display_type": "thought",
+          "delay_seconds": 4.0,
+          "duration_seconds": 4.0,
+          "philosophical_intent": "Anxiety and self-censorship imposed by the system"
+        },
+        {
+          "event_id": "s3_e7_forms_move_along_belt",
+          "type": "move_element",
+          "target_element_id": "forms_on_belt",
+          "start_position": { "row": 8, "col": 5 },
+          "end_position": { "row": 5, "col": 5 },
+          "duration_seconds": 5.0,
+          "delay_seconds": 2.0,
+          "ease_function": "linear",
+          "notes": "Representing diagonal descent, new forms appear at start point"
+        },
+        { "event_id": "s3_e8_long_pause", "type": "wait", "delay_seconds": 9.0, "duration_seconds": 34.0 },
+        {
+          "event_id": "s3_e9_scene_fade_out",
+          "type": "scene_transition",
+          "transition_type": "fade_out",
+          "duration_seconds": 2.0,
+          "delay_seconds": 43.0
+        }
+      ],
+      "scene_audio": {
+        "background_music": {
+          "id": "tense_mechanical_loop",
+          "volume": 0.8,
+          "loop": true
+        },
+        "sound_effects": [
+          { "id": "gear_grinding", "delay_seconds": 1.0, "volume": 0.5, "loop": true, "duration_seconds": 44.0 },
+          { "id": "belt_movement", "delay_seconds": 2.0, "volume": 0.6, "loop": true, "duration_seconds": 43.0 }
+        ]
+      }
+    },
+    {
+      "scene_id": "scene_04_procession",
+      "scene_number": 4,
+      "title": "PROCESSION - SCHOLARS MOVE THROUGH STANDARDIZED CHOREOGRAPHY",
+      "subtitle": "Grid State: Perfect Formation, Synchronized Movement",
+      "initial_grid_layout": [
+        ["FC", "FC", "FC", "", "", "", "", "FC", "FC"],
+        ["FC", "", "", "", "", "", "", "", "FC"],
+        ["FC", "", "", "", "", "", "", "", "FC"],
+        ["", "", "", "CYL", "KB1", "CYL", "", "", ""],
+        ["", "", "", "BELT", "OF", "BELT", "", "", ""],
+        ["", "", "", "OUT", "KB2", "OUT", "", "", ""],
+        ["", "", "GB", "S5+F", "S4+F", "S3+F", "S2+F", "S1+F", "CL"],
+        ["", "", "", "FORMS", "", "", "", "", ""],
+        ["", "", "", "", "CAM", "", "", "", ""]
+      ],
+      "elements_in_scene": [
+        { "id": "fc_r1c1", "type": "Filing Cabinet", "grid_symbol": "FC", "initial_grid_position": { "row": 1, "col": 1 } },
+        { "id": "officer_main", "type": "Officer", "grid_symbol": "OF", "initial_grid_position": { "row": 5, "col": 5 }, "authority_score": 0.94, "dialogue_style": "formal, demanding" },
+        { "id": "clancy_main", "type": "Clancy", "grid_symbol": "CL", "initial_grid_position": { "row": 7, "col": 9 }, "observing": true, "dialogue_style": "observant, questioning" },
+        { "id": "kb_r4c5", "type": "Keyboard Cluster", "grid_symbol": "KB1", "initial_grid_position": { "row": 4, "col": 5 } },
+        { "id": "kb_r6c5", "type": "Keyboard Cluster", "grid_symbol": "KB2", "initial_grid_position": { "row": 6, "col": 5 } },
+        { "id": "apparatus_cyl_r4c4", "type": "Cylinders", "grid_symbol": "CYL", "initial_grid_position": { "row": 4, "col": 4 }, "dialogue_style": "mechanical, purposeful" },
+        { "id": "apparatus_cyl_r4c6", "type": "Cylinders", "grid_symbol": "CYL", "initial_grid_position": { "row": 4, "col": 6 }, "dialogue_style": "mechanical, purposeful" },
+        { "id": "apparatus_belt_r5c4", "type": "Conveyor Belt", "grid_symbol": "BELT", "initial_grid_position": { "row": 5, "col": 4 }, "dialogue_style": "mechanical, purposeful" },
+        { "id": "apparatus_belt_r5c6", "type": "Conveyor Belt", "grid_symbol": "BELT", "initial_grid_position": { "row": 5, "col": 6 }, "dialogue_style": "mechanical, purposeful" },
+        { "id": "apparatus_out_r6c4", "type": "Output Zone", "grid_symbol": "OUT", "initial_grid_position": { "row": 6, "col": 4 } },
+        { "id": "apparatus_out_r6c6", "type": "Output Zone", "grid_symbol": "OUT", "initial_grid_position": { "row": 6, "col": 6 } },
+        { "id": "scholar_5_form", "type": "Scholar with Form", "grid_symbol": "S5+F", "initial_grid_position": { "row": 7, "col": 4 }, "form_content": "GREEN ink botanical diagram", "dialogue_style": "compliant, internal" },
+        { "id": "scholar_4_form", "type": "Scholar with Form", "grid_symbol": "S4+F", "initial_grid_position": { "row": 7, "col": 5 }, "form_content": "RED ink geometric pattern", "dialogue_style": "compliant, internal" },
+        { "id": "scholar_3_form", "type": "Scholar with Form", "grid_symbol": "S3+F", "initial_grid_position": { "row": 7, "col": 6 }, "form_content": "BLUE ink love letter + hearts", "dialogue_style": "compliant, internal" },
+        { "id": "scholar_2_form", "type": "Scholar with Form", "grid_symbol": "S2+F", "initial_grid_position": { "row": 7, "col": 7 }, "form_content": "BLACK ink dense handwriting", "dialogue_style": "compliant, internal" },
+        { "id": "scholar_1_form", "type": "Scholar with Form", "grid_symbol": "S1+F", "initial_grid_position": { "row": 7, "col": 8 }, "form_content": "MULTICOLOR love letter", "dialogue_style": "compliant, internal" },
+        { "id": "guest_booth_left", "type": "Guest Booth", "grid_symbol": "GB", "initial_grid_position": { "row": 7, "col": 3 } },
+        { "id": "forms_belt_r8c4", "type": "Forms", "grid_symbol": "FORMS", "initial_grid_position": { "row": 8, "col": 4 }, "dialogue_style": "passive, raw data" },
+        { "id": "camera_ref", "type": "Camera", "grid_symbol": "CAM", "initial_grid_position": { "row": 9, "col": 5 } }
+      ],
+      "power_distribution": {
+        "officer": { "score": 0.94, "description": "controlling procession rhythm" },
+        "procession_momentum": { "score": 0.85, "description": "synchronized weight" },
+        "individual_scholars": { "score": 0.15, "description": "each (subsumed into formation)" },
+        "clancy_observation": { "score": 0.60, "description": "can measure pattern" },
+        "guest": { "score": 0.00, "description": "witnessing from booth" }
+      },
+      "metadata": {
+        "scene_duration_seconds": 75,
+        "apparatus_operation_level": 0.50,
+        "procession_formation": "PERFECT (5 scholars, 1.2m spacing, X=5 alignment)",
+        "margin_visibility": 0.35,
+        "coloration": { "type": "Monochrome", "temperature": "5500K", "notes": "margins contain first hints of color" },
+        "measurement_opportunity": "Spacing (1.2m), speed (0.4 m/s), percentage assignment (38-45% cluster)"
+      },
+      "animation_timeline": [
+        { "event_id": "s4_e1_scholars_march_in", "type": "wait", "delay_seconds": 0.0, "duration_seconds": 0.5 },
+        {
+          "event_id": "s4_e2_procession_movement",
+          "type": "sequential_moves",
+          "moves": [
+            { "target_element_id": "scholar_5_form", "start_position": { "row": 7, "col": 4 }, "end_position": { "row": 7, "col": 3 }, "duration_seconds": 1.2 },
+            { "target_element_id": "scholar_4_form", "start_position": { "row": 7, "col": 5 }, "end_position": { "row": 7, "col": 4 }, "duration_seconds": 1.2 },
+            { "target_element_id": "scholar_3_form", "start_position": { "row": 7, "col": 6 }, "end_position": { "row": 7, "col": 5 }, "duration_seconds": 1.2 },
+            { "target_element_id": "scholar_2_form", "start_position": { "row": 7, "col": 7 }, "end_position": { "row": 7, "col": 6 }, "duration_seconds": 1.2 },
+            { "target_element_id": "scholar_1_form", "start_position": { "row": 7, "col": 8 }, "end_position": { "row": 7, "col": 7 }, "duration_seconds": 1.2 }
+          ],
+          "delay_seconds": 1.0,
+          "repeat_count": 50,
+          "ease_function": "linear",
+          "notes": "Simulating continuous, synchronized movement"
+        },
+        {
+          "event_id": "s4_e3_clancy_observation_bubble",
+          "type": "thinking_bubble",
+          "target_element_id": "clancy_main",
+          "text": "Such perfect alignment. Every step measured. Is this what 'thinking' looks like now?",
+          "display_type": "thought",
+          "delay_seconds": 5.0,
+          "duration_seconds": 6.0,
+          "philosophical_intent": "Observation, questioning norms of conformity"
+        },
+        {
+          "event_id": "s4_e4_officer_satisfaction_bubble",
+          "type": "thinking_bubble",
+          "target_element_id": "officer_main",
+          "text": "Order. Precision. This is how a system thrives. No deviation.",
+          "display_type": "thought",
+          "delay_seconds": 10.0,
+          "duration_seconds": 5.0,
+          "philosophical_intent": "Reinforced belief in control and standardization"
+        },
+        {
+          "event_id": "s4_e5_scholars_thoughts_obedience",
+          "type": "thinking_bubble",
+          "target_element_id": "scholar_3_form",
+          "text": "Don't break rank. Don't look up. Just move.",
+          "display_type": "thought",
+          "delay_seconds": 12.0,
+          "duration_seconds": 4.0,
+          "philosophical_intent": "Learned obedience and suppression of individual will"
+        },
+        {
+          "event_id": "s4_e6_apparatus_thoughts_optimal",
+          "type": "thinking_bubble",
+          "target_element_id": "apparatus_belt_r5c4",
+          "text": "Flow. Conformity. Outputting compliant forms. Optimal performance.",
+          "display_type": "thought",
+          "delay_seconds": 14.0,
+          "duration_seconds": 5.0,
+          "philosophical_intent": "System's satisfaction with its standardized output"
+        },
+        { "event_id": "s4_e7_long_pause", "type": "wait", "delay_seconds": 19.0, "duration_seconds": 54.0 },
+        {
+          "event_id": "s4_e8_scene_fade_out",
+          "type": "scene_transition",
+          "transition_type": "fade_out",
+          "duration_seconds": 2.0,
+          "delay_seconds": 73.0
+        }
+      ],
+      "scene_audio": {
+        "background_music": {
+          "id": "structured_rhythm_loop",
+          "volume": 0.7,
+          "loop": true,
+          "fade_in_duration_seconds": 1.0
+        },
+        "sound_effects": [
+          { "id": "synchronized_footsteps", "delay_seconds": 1.0, "volume": 0.5, "loop": true, "duration_seconds": 74.0 }
+        ]
+      }
+    },
+    {
+      "scene_id": "scene_05_processing_cycle",
+      "scene_number": 5,
+      "title": "PROCESSING CYCLE - MACHINERY STATE TRANSFORMATION",
+      "subtitle": "Grid State: Full Apparatus Capacity, All Processing Stages Visible",
+      "initial_grid_layout": [
+        ["FC→", "FC→", "FC→", "", "", "", "", "FC→", "FC→"],
+        ["FC↑", "", "", "", "", "", "", "", "FC↑"],
+        ["FC↑", "", "", "OUT", "OUT", "OUT", "", "", "FC↑"],
+        ["", "", "", "CYL", "KB1", "CYL", "", "", ""],
+        ["", "", "", "BELT", "OF", "BELT", "", "", ""],
+        ["", "", "", "MID", "KB2", "MID", "", "", ""],
+        ["S5-IN", "", "GB", "S4-MID", "S3-MID", "S2-MID", "S1-IN", "CL", "S0-EXIT"],
+        ["", "", "", "FORMS(12-15)", "", "", "", "", ""],
+        ["", "", "", "", "CAM", "", "", "", ""]
+      ],
+      "elements_in_scene": [
+        { "id": "fc_r1c1", "type": "Filing Cabinet", "grid_symbol": "FC→", "initial_grid_position": { "row": 1, "col": 1 }, "dialogue_style": "passive, archival" },
+        { "id": "officer_main", "type": "Officer", "grid_symbol": "OF", "initial_grid_position": { "row": 5, "col": 5 }, "authority_score": 0.95, "dialogue_style": "formal, demanding" },
+        { "id": "clancy_main", "type": "Clancy", "grid_symbol": "CL", "initial_grid_position": { "row": 7, "col": 8 }, "dialogue_style": "observant, discovering" },
+        { "id": "apparatus_cyl_r4c4", "type": "Cylinders", "grid_symbol": "CYL", "initial_grid_position": { "row": 4, "col": 4 }, "dialogue_style": "mechanical, purposeful" },
+        { "id": "apparatus_belt_r5c4", "type": "Conveyor Belt", "grid_symbol": "BELT", "initial_grid_position": { "row": 5, "col": 4 }, "dialogue_style": "mechanical, purposeful" },
+        { "id": "s5_in", "type": "Scholar (In)", "grid_symbol": "S5-IN", "initial_grid_position": { "row": 7, "col": 1 }, "dialogue_style": "compliant, internal" },
+        { "id": "s4_mid", "type": "Scholar (Mid-Belt)", "grid_symbol": "S4-MID", "initial_grid_position": { "row": 7, "col": 4 }, "dialogue_style": "compliant, internal" },
+        { "id": "s3_mid", "type": "Scholar (Mid-Conveyor)", "grid_symbol": "S3-MID", "initial_grid_position": { "row": 7, "col": 5 }, "dialogue_style": "compliant, internal" },
+        { "id": "s2_mid", "type": "Scholar (Descent)", "grid_symbol": "S2-MID", "initial_grid_position": { "row": 7, "col": 6 }, "dialogue_style": "compliant, internal" },
+        { "id": "s1_in", "type": "Scholar (Exit)", "grid_symbol": "S1-IN", "initial_grid_position": { "row": 7, "col": 7 }, "dialogue_style": "compliant, internal" },
+        { "id": "s0_exit", "type": "Scholar (Filing)", "grid_symbol": "S0-EXIT", "initial_grid_position": { "row": 7, "col": 9 }, "dialogue_style": "compliant, internal" },
+        { "id": "forms_tray", "type": "Forms", "grid_symbol": "FORMS(12-15)", "initial_grid_position": { "row": 8, "col": 4 }, "count": 12, "state": "marked", "dialogue_style": "passive, raw data" }
+      ],
+      "power_distribution": {
+        "officer": { "score": 0.95, "description": "peak operation authority" },
+        "machinery_operation": { "score": 0.80, "description": "stable high capacity" },
+        "form_persistence": { "score_range": [0.20, 0.80], "description": "MARGINS SURVIVE - key observation" },
+        "filing_cabinet_filling": { "score": 0.60, "description": "accumulation visible" },
+        "scholar_positioning": { "score": 0.40, "description": "throughout system" }
+      },
+      "metadata": {
+        "scene_duration_seconds": 60,
+        "apparatus_operation_level": 0.80,
+        "procession_formation": "DISTRIBUTED (all 5 scholars at different cycle stages)",
+        "margin_visibility": { "from": 0.35, "to": 0.40, "notes": "persist through apparatus" },
+        "coloration": { "type": "Monochrome", "temperature": "5500K maintained" },
+        "key_observation": "Margins do NOT disappear; apparatus preserves form content"
+      },
+      "animation_timeline": [
+        { "event_id": "s5_e1_scholars_progress", "type": "wait", "delay_seconds": 0.0, "duration_seconds": 0.5 },
+        {
+          "event_id": "s5_e2_form_persistence_indicator",
+          "type": "visual_effect",
+          "target_element_id": "forms_tray",
+          "effect_type": "highlight_content",
+          "color": "#ADD8E6",
+          "duration_seconds": 3.0,
+          "delay_seconds": 2.0,
+          "notes": "Highlighting margins of forms as they pass"
+        },
+        {
+          "event_id": "s5_e3_apparatus_thoughts_filtering",
+          "type": "thinking_bubble",
+          "target_element_id": "apparatus_belt_r5c4",
+          "text": "Intake, process, output. Filtering for core data. Margins are noise, but persistent.",
+          "display_type": "thought",
+          "delay_seconds": 1.5,
+          "duration_seconds": 6.0,
+          "philosophical_intent": "System's objective function, acknowledging 'noise'"
+        },
+        {
+          "event_id": "s5_e4_clancy_realization_bubble",
+          "type": "thinking_bubble",
+          "target_element_id": "clancy_main",
+          "text": "The margins... they're surviving! Intact! The machine isn't erasing *everything*.",
+          "display_type": "thought",
+          "delay_seconds": 4.0,
+          "duration_seconds": 6.0,
+          "philosophical_intent": "Discovery of hope, a crack in the system's control"
+        },
+        {
+          "event_id": "s5_e5_officer_thoughts_containment",
+          "type": "thinking_bubble",
+          "target_element_id": "officer_main",
+          "text": "The system is efficient. Processing at peak. Minor irregularities are contained.",
+          "display_type": "thought",
+          "delay_seconds": 6.0,
+          "duration_seconds": 5.0,
+          "philosophical_intent": "Ignorance of true implications, focus on surface compliance"
+        },
+        {
+          "event_id": "s5_e6_scholar_thoughts_secret",
+          "type": "thinking_bubble",
+          "target_element_id": "s3_mid",
+          "text": "It's still there. My secret part. They can't see it.",
+          "display_type": "thought",
+          "delay_seconds": 7.0,
+          "duration_seconds": 4.0,
+          "philosophical_intent": "Hope and subtle defiance, resilience of individual thought"
+        },
+        { "event_id": "s5_e7_long_pause", "type": "wait", "delay_seconds": 12.0, "duration_seconds": 46.0 },
+        {
+          "event_id": "s5_e8_scene_fade_out",
+          "type": "scene_transition",
+          "transition_type": "fade_out",
+          "duration_seconds": 2.0,
+          "delay_seconds": 58.0
+        }
+      ],
+      "scene_audio": {
+        "background_music": {
+          "id": "structured_rhythm_loop",
+          "volume": 0.8,
+          "loop": true
+        },
+        "sound_effects": [
+          { "id": "paper_rustle_soft", "delay_seconds": 2.0, "volume": 0.4, "loop": true, "duration_seconds": 57.0 }
+        ]
+      }
+    },
+    {
+      "scene_id": "scene_06_approval_stamps_descend",
+      "scene_number": 6,
+      "title": "APPROVAL STAMPS DESCEND - MACHINERY VIOLENCE ENACTED",
+      "subtitle": "Grid State: Stamps Activate, Violence Visible, Forms Marked",
+      "initial_grid_layout": [
+        ["FC↑↑", "FC↑↑", "FC↑↑", "", "", "", "", "FC↑↑", "FC↑↑"],
+        ["FC↑↑", "", "", "", "", "", "", "", "FC↑↑"],
+        ["FC↑↑", "", "", "STAMP", "IMPACT", "STAMP", "", "", "FC↑↑"],
+        ["", "", "", "CYL", "KB1", "CYL", "", "", ""],
+        ["", "", "", "ARM", "OF", "ARM", "", "", ""],
+        ["", "", "", "BELT", "KB2", "BELT", "", "", ""],
+        ["S5", "", "GB", "S4-MARK", "S3-MARK", "S2-MARK", "S1-MARK", "CL", "S0"],
+        ["", "", "", "FORMS(15-20 marked)", "", "", "", "", ""],
+        ["", "", "", "", "CAM", "", "", "", ""]
+      ],
+      "elements_in_scene": [
+        { "id": "fc_r1c1", "type": "Filing Cabinet", "grid_symbol": "FC↑↑", "initial_grid_position": { "row": 1, "col": 1 } },
+        { "id": "officer_main", "type": "Officer", "grid_symbol": "OF", "initial_grid_position": { "row": 5, "col": 5 }, "authority_score": 0.98, "dialogue_style": "authoritarian, violent" },
+        { "id": "clancy_main", "type": "Clancy", "grid_symbol": "CL", "initial_grid_position": { "row": 7, "col": 8 }, "shocked": true, "dialogue_style": "shocked, morally outraged" },
+        { "id": "stamp_left", "type": "Stamp Apparatus", "grid_symbol": "STAMP", "initial_grid_position": { "row": 3, "col": 4 }, "state": "elevated", "dialogue_style": "mechanical, judging" },
+        { "id": "stamp_right", "type": "Stamp Apparatus", "grid_symbol": "STAMP", "initial_grid_position": { "row": 3, "col": 6 }, "state": "elevated", "dialogue_style": "mechanical, judging" },
+        { "id": "impact_zone_center", "type": "Impact Zone", "grid_symbol": "IMPACT", "initial_grid_position": { "row": 3, "col": 5 } },
+        { "id": "stamp_arm_left", "type": "Stamp Arm", "grid_symbol": "ARM", "initial_grid_position": { "row": 5, "col": 4 } },
+        { "id": "stamp_arm_right", "type": "Stamp Arm", "grid_symbol": "ARM", "initial_grid_position": { "row": 5, "col": 6 } },
+        { "id": "s4_marked", "type": "Scholar (Marked)", "grid_symbol": "S4-MARK", "initial_grid_position": { "row": 7, "col": 4 }, "dialogue_style": "fearful, resilient" },
+        { "id": "s3_marked", "type": "Scholar (Marked)", "grid_symbol": "S3-MARK", "initial_grid_position": { "row": 7, "col": 5 }, "dialogue_style": "fearful, resilient" },
+        { "id": "s2_marked", "type": "Scholar (Marked)", "grid_symbol": "S2-MARK", "initial_grid_position": { "row": 7, "col": 6 }, "dialogue_style": "fearful, resilient" },
+        { "id": "s1_marked", "type": "Scholar (Marked)", "grid_symbol": "S1-MARK", "initial_grid_position": { "row": 7, "col": 7 }, "dialogue_style": "fearful, resilient" },
+        { "id": "forms_tray", "type": "Forms", "grid_symbol": "FORMS(15-20 marked)", "initial_grid_position": { "row": 8, "col": 4 }, "count": 15, "state": "marked", "dialogue_style": "passive, raw data" }
+      ],
+      "power_distribution": {
+        "officer": { "score": 0.98, "description": "peak enforcement authority" },
+        "stamp_machinery": { "score": 0.85, "description": "violent, operational" },
+        "form_vulnerability": { "score": 0.80, "description": "many at risk" },
+        "scholar_fear": { "score": 0.70, "description": "witnessing violence" },
+        "clancy": { "score": 0.60, "description": "understanding system violence" }
+      },
+      "metadata": {
+        "scene_duration_seconds": 45,
+        "apparatus_operation_level": 0.85,
+        "stamps_active": true,
+        "stamp_descent_interval_seconds": 1.5,
+        "procession_formation": "DISRUPTED (scholars nervous, formation loosening)",
+        "margin_visibility": 0.35,
+        "coloration": { "type": "Monochrome", "notes": "dark ink splatter marks visible" },
+        "narrative_point": "VIOLENCE WITNESSED: System violence becomes visible"
+      },
+      "animation_timeline": [
+        { "event_id": "s6_e1_stamps_descend_left", "type": "move_element", "target_element_id": "stamp_left", "end_position": { "row": 4, "col": 4 }, "duration_seconds": 0.5, "delay_seconds": 1.0, "ease_function": "easeInQuad" },
+        { "event_id": "s6_e2_stamp_impact_left", "type": "play_sound_effect", "id": "clang_impact", "delay_seconds": 1.5, "volume": 0.9 },
+        { "event_id": "s6_e3_ink_splatter_left", "type": "visual_effect", "target_element_id": "impact_zone_center", "effect_type": "ink_splatter", "color": "#1A1A1A", "duration_seconds": 0.2, "delay_seconds": 1.5 },
+        {
+          "event_id": "s6_e4_stamp_thoughts_judge",
+          "type": "thinking_bubble",
+          "target_element_id": "stamp_left",
+          "text": "Judge. Mark. Approve. Erase individuality.",
+          "display_type": "thought",
+          "delay_seconds": 1.5,
+          "duration_seconds": 4.0,
+          "philosophical_intent": "Purpose of stamps: to enforce conformity through force"
+        },
+        { "event_id": "s6_e5_stamps_descend_right", "type": "move_element", "target_element_id": "stamp_right", "end_position": { "row": 4, "col": 6 }, "duration_seconds": 0.5, "delay_seconds": 2.5, "ease_function": "easeInQuad" },
+        { "event_id": "s6_e6_stamp_impact_right", "type": "play_sound_effect", "id": "clang_impact", "delay_seconds": 3.0, "volume": 0.9 },
+        { "event_id": "s6_e7_ink_splatter_right", "type": "visual_effect", "target_element_id": "impact_zone_center", "effect_type": "ink_splatter", "color": "#1A1A1A", "duration_seconds": 0.2, "delay_seconds": 3.0 },
+        {
+          "event_id": "s6_e8_clancy_shock_bubble",
+          "type": "thinking_bubble",
+          "target_element_id": "clancy_main",
+          "text": "Violence! They're crushing the forms! Forcing approval? This is brutal.",
+          "display_type": "thought",
+          "delay_seconds": 3.5,
+          "duration_seconds": 5.0,
+          "philosophical_intent": "Shock and moral outrage at the system's brutality"
+        },
+        {
+          "event_id": "s6_e9_scholar_fear_pulse",
+          "type": "visual_effect",
+          "target_element_id": "s4_marked",
+          "effect_type": "pulse",
+          "color": "#FF0000",
+          "strength": 0.7,
+          "duration_seconds": 0.5,
+          "delay_seconds": 4.0,
+          "repeat_count": 2
+        },
+        {
+          "event_id": "s6_e10_officer_thoughts_justification",
+          "type": "thinking_bubble",
+          "target_element_id": "officer_main",
+          "text": "Authorization. Compliance confirmed. All data 'Approved'. The system demands purity.",
+          "display_type": "thought",
+          "delay_seconds": 5.0,
+          "duration_seconds": 6.0,
+          "philosophical_intent": "Justification of violence for maintaining perceived control and purity"
+        },
+        {
+          "event_id": "s6_e11_scholar_thoughts_resilience",
+          "type": "thinking_bubble",
+          "target_element_id": "s4_marked",
+          "text": "The pain... the mark... but my true self remains in the margins.",
+          "display_type": "thought",
+          "delay_seconds": 6.0,
+          "duration_seconds": 5.0,
+          "philosophical_intent": "Resilience of individual thought despite oppression"
+        },
+        {
+          "event_id": "s6_e12_apparatus_thoughts_force",
+          "type": "thinking_bubble",
+          "target_element_id": "apparatus_belt_r5c4",
+          "text": "Impact. Validation. Forcing conformity. Efficiency through force.",
+          "display_type": "thought",
+          "delay_seconds": 7.0,
+          "duration_seconds": 5.0,
+          "philosophical_intent": "System's logic for using violence to achieve its goals"
+        },
+        { "event_id": "s6_e13_long_pause", "type": "wait", "delay_seconds": 12.0, "duration_seconds": 31.0 },
+        {
+          "event_id": "s6_e14_scene_fade_out",
+          "type": "scene_transition",
+          "transition_type": "fade_out",
+          "duration_seconds": 2.0,
+          "delay_seconds": 43.0
+        }
+      ],
+      "scene_audio": {
+        "background_music": {
+          "id": "dissonant_drone",
+          "volume": 0.7,
+          "loop": true,
+          "fade_in_duration_seconds": 1.0
+        },
+        "sound_effects": [
+          { "id": "clang_impact", "delay_seconds": 1.5, "volume": 0.9 },
+          { "id": "clang_impact", "delay_seconds": 3.0, "volume": 0.9 }
+        ]
+      }
+    },
+    {
+      "scene_id": "scene_07_chaos_eruption",
+      "scene_number": 7,
+      "title": "CHAOS ERUPTION - SYSTEM EXCEEDS CAPACITY & BREAKS PATTERN",
+      "subtitle": "Grid State: Formation Dissolves, Entropy Increases, Apparatus Stressed",
+      "initial_grid_layout": [
+        ["FC↑↑↑", "FC↑↑↑", "FC↑↑↑", "", "", "", "", "FC↑↑↑", "FC↑↑↑"],
+        ["FC↑↑↑", "", "", "", "", "", "", "", "FC↑↑↑"],
+        ["FC↑↑↑", "", "", "STAMP→", "CHAOS", "←STAMP", "", "", "FC↑↑↑"],
+        ["", "", "", "S2-SCATTER", "CYL", "S3-SCATTER", "", "", ""],
+        ["S5-AWAY", "", "S4-CHAOS", "OF-STRESS", "KB-RAPID", "", "S1-AWAY", "", ""],
+        ["", "", "", "FORMS-PILE", "BELT-OVERFLOW", "FORMS-PILE", "", "", ""],
+        ["", "", "GB", "CL-OBSERVE", "CHAOS-ZONE", "OVERFLOW", "", "", ""],
+        ["", "", "", "FORMS(24+)", "STAMPS-MISS", "", "", "", ""],
+        ["", "", "", "", "CAM", "", "", "", ""]
+      ],
+      "elements_in_scene": [
+        { "id": "fc_r1c1", "type": "Filing Cabinet", "grid_symbol": "FC↑↑↑", "initial_grid_position": { "row": 1, "col": 1 } },
+        { "id": "fc_r1c2", "type": "Filing Cabinet", "grid_symbol": "FC↑↑↑", "initial_grid_position": { "row": 1, "col": 2 } },
+        { "id": "fc_r1c3", "type": "Filing Cabinet", "grid_symbol": "FC↑↑↑", "initial_grid_position": { "row": 1, "col": 3 } },
+        { "id": "fc_r1c8", "type": "Filing Cabinet", "grid_symbol": "FC↑↑↑", "initial_grid_position": { "row": 1, "col": 8 } },
+        { "id": "fc_r1c9", "type": "Filing Cabinet", "grid_symbol": "FC↑↑↑", "initial_grid_position": { "row": 1, "col": 9 } },
+        { "id": "fc_r2c1", "type": "Filing Cabinet", "grid_symbol": "FC↑↑↑", "initial_grid_position": { "row": 2, "col": 1 } },
+        { "id": "fc_r2c9", "type": "Filing Cabinet", "grid_symbol": "FC↑↑↑", "initial_grid_position": { "row": 2, "col": 9 } },
+        { "id": "fc_r3c1", "type": "Filing Cabinet", "grid_symbol": "FC↑↑↑", "initial_grid_position": { "row": 3, "col": 1 } },
+        { "id": "fc_r3c9", "type": "Filing Cabinet", "grid_symbol": "FC↑↑↑", "initial_grid_position": { "row": 3, "col": 9 } },
+        { "id": "stamp_left", "type": "Stamp Apparatus", "grid_symbol": "STAMP→", "initial_grid_position": { "row": 3, "col": 4 }, "dialogue_style": "mechanical, erratic" },
+        { "id": "chaos_center_top", "type": "Chaos Zone", "grid_symbol": "CHAOS", "initial_grid_position": { "row": 3, "col": 5 } },
+        { "id": "stamp_right", "type": "Stamp Apparatus", "grid_symbol": "←STAMP", "initial_grid_position": { "row": 3, "col": 6 }, "dialogue_style": "mechanical, erratic" },
+        { "id": "scholar_2_scatter", "type": "Scholar", "grid_symbol": "S2-SCATTER", "initial_grid_position": { "row": 4, "col": 4 }, "dialogue_style": "panicked, seeking freedom" },
+        { "id": "apparatus_cyl", "type": "Cylinders", "grid_symbol": "CYL", "initial_grid_position": { "row": 4, "col": 5 }, "dialogue_style": "mechanical, distressed" },
+        { "id": "scholar_3_scatter", "type": "Scholar", "grid_symbol": "S3-SCATTER", "initial_grid_position": { "row": 4, "col": 6 }, "dialogue_style": "panicked, seeking freedom" },
+        { "id": "scholar_5_away", "type": "Scholar", "grid_symbol": "S5-AWAY", "initial_grid_position": { "row": 5, "col": 1 }, "dialogue_style": "panicked, seeking freedom" },
+        { "id": "scholar_4_chaos", "type": "Scholar", "grid_symbol": "S4-CHAOS", "initial_grid_position": { "row": 5, "col": 3 }, "dialogue_style": "panicked, seeking freedom" },
+        { "id": "officer_main", "type": "Officer", "grid_symbol": "OF-STRESS", "initial_grid_position": { "row": 5, "col": 4 }, "authority_score": 0.70, "dialogue_style": "panicked, desperate" },
+        { "id": "kb_rapid", "type": "Keyboard Cluster", "grid_symbol": "KB-RAPID", "initial_grid_position": { "row": 5, "col": 5 } },
+        { "id": "scholar_1_away", "type": "Scholar", "grid_symbol": "S1-AWAY", "initial_grid_position": { "row": 5, "col": 7 }, "dialogue_style": "panicked, seeking freedom" },
+        { "id": "forms_pile_left", "type": "Forms Pile", "grid_symbol": "FORMS-PILE", "initial_grid_position": { "row": 6, "col": 4 }, "dialogue_style": "passive, chaotic" },
+        { "id": "belt_overflow", "type": "Conveyor Belt", "grid_symbol": "BELT-OVERFLOW", "initial_grid_position": { "row": 6, "col": 5 }, "speed_m_s": 0.5, "dialogue_style": "mechanical, distressed" },
+        { "id": "forms_pile_right", "type": "Forms Pile", "grid_symbol": "FORMS-PILE", "initial_grid_position": { "row": 6, "col": 6 }, "dialogue_style": "passive, chaotic" },
+        { "id": "guest_booth", "type": "Guest Booth", "grid_symbol": "GB", "initial_grid_position": { "row": 7, "col": 3 } },
+        { "id": "clancy_main", "type": "Clancy", "grid_symbol": "CL-OBSERVE", "initial_grid_position": { "row": 7, "col": 4 }, "dialogue_style": "observant, analytical" },
+        { "id": "chaos_zone", "type": "Chaos Zone", "grid_symbol": "CHAOS-ZONE", "initial_grid_position": { "row": 7, "col": 5 } },
+        { "id": "overflow_zone", "type": "Overflow", "grid_symbol": "OVERFLOW", "initial_grid_position": { "row": 7, "col": 6 } },
+        { "id": "forms_total", "type": "Forms", "grid_symbol": "FORMS(24+)", "initial_grid_position": { "row": 8, "col": 4 }, "count": 24, "dialogue_style": "passive, chaotic" },
+        { "id": "stamps_miss", "type": "Stamps", "grid_symbol": "STAMPS-MISS", "initial_grid_position": { "row": 8, "col": 5 }, "dialogue_style": "mechanical, erratic" },
+        { "id": "camera_ref", "type": "Camera", "grid_symbol": "CAM", "initial_grid_position": { "row": 9, "col": 5 } }
+      ],
+      "power_distribution": {
+        "officer": { "score": 0.70, "description": "authority fragmenting, cannot restore control" },
+        "procession_momentum": { "score": 0.20, "description": "formation dissolved, replaced by scatter" },
+        "scholar_individual_agency": { "score": 0.60, "description": "each moving independently" },
+        "apparatus": { "score": 0.95, "description": "near mechanical failure, dangerous" },
+        "chaos_entropy": { "score": 0.85, "description": "high disorder" }
+      },
+      "metadata": {
+        "scene_duration_seconds": 60,
+        "apparatus_operation_level": 0.95,
+        "procession_formation": "DISSOLVED (5 scholars scattered, no alignment)",
+        "margin_visibility": 0.30,
+        "coloration": { "type": "Monochrome", "notes": "visible ink chaos" },
+        "narrative_point": "SYSTEM BREAKING POINT: Apparatus cannot sustain escalation, control fails"
+      },
+      "animation_timeline": [
+        { "event_id": "s7_e1_apparatus_stress_sound", "type": "play_sound_effect", "id": "machinery_stress_scream", "delay_seconds": 0.5, "volume": 1.0, "loop": true, "duration_seconds": 58.0 },
+        {
+          "event_id": "s7_e2_apparatus_thoughts_overload",
+          "type": "thinking_bubble",
+          "target_element_id": "belt_overflow",
+          "text": "OVERLOAD. ERROR. CRITICAL STRESS. Functionality compromised. Chaos.",
+          "display_type": "thought",
+          "delay_seconds": 1.0,
+          "duration_seconds": 6.0,
+          "philosophical_intent": "System's breakdown and failure to cope with complexity"
+        },
+        {
+          "event_id": "s7_e3_scholars_scatter_movements",
+          "type": "parallel_moves",
+          "moves": [
+            { "target_element_id": "scholar_5_away", "end_position": { "row": 1, "col": 2 }, "duration_seconds": 2.0, "ease_function": "easeOutQuad" },
+            { "target_element_id": "scholar_4_chaos", "end_position": { "row": 5, "col": 2 }, "duration_seconds": 1.5, "ease_function": "easeOutCubic" },
+            { "target_element_id": "scholar_3_chaos", "end_position": { "row": 5, "col": 8 }, "duration_seconds": 1.5, "ease_function": "easeOutCubic" },
+            { "target_element_id": "scholar_2_scatter", "end_position": { "row": 4, "col": 3 }, "duration_seconds": 1.8, "ease_function": "easeOutQuad" },
+            { "target_element_id": "scholar_1_away", "end_position": { "row": 2, "col": 8 }, "duration_seconds": 2.0, "ease_function": "easeOutQuad" }
+          ],
+          "delay_seconds": 1.0
+        },
+        {
+          "event_id": "s7_e4_forms_pile_effect",
+          "type": "visual_effect",
+          "target_element_id": "forms_total",
+          "effect_type": "jiggle_grow_opacity",
+          "scale_end": 1.2,
+          "opacity_end": 1.0,
+          "duration_seconds": 3.0,
+          "delay_seconds": 2.0,
+          "repeat_count": 5
+        },
+        {
+          "event_id": "s7_e5_clancy_thoughts_breaking",
+          "type": "thinking_bubble",
+          "target_element_id": "clancy_main",
+          "text": "The system is breaking! It can't handle the truth of its own violence.",
+          "display_type": "thought",
+          "delay_seconds": 3.0,
+          "duration_seconds": 6.0,
+          "philosophical_intent": "Realization of systemic unsustainability and inherent violence"
+        },
+        {
+          "event_id": "s7_e6_officer_stress_bubble",
+          "type": "thinking_bubble",
+          "target_element_id": "officer_main",
+          "text": "Out of control! I'm losing them! NO! Restore order! Must regain control!",
+          "display_type": "thought",
+          "delay_seconds": 4.0,
+          "duration_seconds": 6.0,
+          "offset_from_target_grid_units": { "x": 0.0, "y": -1.5 },
+          "philosophical_intent": "Panic and desperation to maintain crumbling authority"
+        },
+        {
+          "event_id": "s7_e7_scholars_thoughts_escape",
+          "type": "thinking_bubble",
+          "target_element_id": "scholar_1_away",
+          "text": "Escape! The machine is failing! Freedom!",
+          "display_type": "thought",
+          "delay_seconds": 5.0,
+          "duration_seconds": 4.0,
+          "philosophical_intent": "Desire for escape and newfound individual agency"
+        },
+        {
+          "event_id": "s7_e8_stamps_miss_forms",
+          "type": "sequential_events",
+          "events": [
+            { "event_id": "s7_e8_1_stamp_left_miss", "type": "move_element", "target_element_id": "stamp_left", "end_position": { "row": 4, "col": 4 }, "duration_seconds": 0.5, "ease_function": "easeInQuad" },
+            { "event_id": "s7_e8_2_impact_air_left", "type": "play_sound_effect", "id": "clang_miss", "delay_seconds": 0.5, "volume": 0.7 },
+            { "event_id": "s7_e8_3_stamp_right_miss", "type": "move_element", "target_element_id": "stamp_right", "end_position": { "row": 4, "col": 6 }, "duration_seconds": 0.5, "ease_function": "easeInQuad", "delay_seconds": 0.5 },
+            { "event_id": "s7_e8_4_impact_air_right", "type": "play_sound_effect", "id": "clang_miss", "delay_seconds": 0.5, "volume": 0.7 }
+          ],
+          "delay_seconds": 6.0,
+          "repeat_count": 5
+        },
+        { "event_id": "s7_e9_long_pause", "type": "wait", "delay_seconds": 10.0, "duration_seconds": 48.0 },
+        {
+          "event_id": "s7_e10_scene_fade_out",
+          "type": "scene_transition",
+          "transition_type": "fade_out",
+          "duration_seconds": 2.0,
+          "delay_seconds": 58.0
+        }
+      ],
+      "scene_audio": {
+        "background_music": {
+          "id": "chaos_symphony",
+          "volume": 0.9,
+          "loop": true,
+          "fade_in_duration_seconds": 1.0
+        },
+        "sound_effects": [
+          { "id": "machinery_stress_scream", "delay_seconds": 0.5, "volume": 1.0, "loop": true, "duration_seconds": 58.0 },
+          { "id": "clang_miss", "delay_seconds": 6.5, "volume": 0.7, "loop": false, "repeat_count": 5, "interval_seconds": 1.0 },
+          { "id": "paper_scattering", "delay_seconds": 1.0, "volume": 0.8, "duration_seconds": 5.0 }
+        ]
+      }
+    },
+    {
+      "scene_id": "scene_08_interview_begins",
+      "scene_number": 8,
+      "title": "INTERVIEW BEGINS - GUEST PROVIDES THEORY & ALTERNATIVE FRAMEWORK",
+      "subtitle": "Grid State: Machinery Slows, Interview Space Created, Theory Emerges",
+      "initial_grid_layout": [
+        ["FC", "FC", "FC", "", "", "", "", "FC", "FC"],
+        ["FC", "", "", "", "", "", "", "", "FC"],
+        ["FC", "", "", "", "◯", "", "", "", "FC"],
+        ["", "", "", "◯", "MUTED", "◯", "", "", ""],
+        ["", "", "", "BOOTH", "=INTERVIEW=", "BOOTH", "", "", ""],
+        ["", "", "", "◯", "MUTED", "◯", "", "", ""],
+        ["S-LISTEN", "", "", "GLASS", "CL-LISTEN", "GLASS", "GUEST", "S-LISTEN", ""],
+        ["", "", "", "FORMS-SETTLING", "", "", "", "", ""],
+        ["", "", "", "", "CAM", "", "", "", ""]
+      ],
+      "elements_in_scene": [
+        { "id": "fc_r1c1", "type": "Filing Cabinet", "grid_symbol": "FC", "initial_grid_position": { "row": 1, "col": 1 } },
+        { "id": "officer_main", "type": "Officer", "grid_symbol": "OF", "initial_grid_position": { "row": 5, "col": 5 }, "authority_score": 0.40, "state": "marginalized", "dialogue_style": "defensive, resistant" },
+        { "id": "clancy_main", "type": "Clancy", "grid_symbol": "CL-LISTEN", "initial_grid_position": { "row": 7, "col": 5 }, "state": "listening, inside booth", "dialogue_style": "inquisitive, receptive" },
+        { "id": "stamp_top_center", "type": "Muted Stamp", "grid_symbol": "◯", "initial_grid_position": { "row": 3, "col": 5 }, "state": "silent, raised" },
+        { "id": "stamp_mid_left", "type": "Muted Stamp", "grid_symbol": "◯", "initial_grid_position": { "row": 4, "col": 4 }, "state": "silent, raised" },
+        { "id": "stamp_mid_right", "type": "Muted Stamp", "grid_symbol": "◯", "initial_grid_position": { "row": 4, "col": 6 }, "state": "silent, raised" },
+        { "id": "stamp_bottom_left", "type": "Muted Stamp", "grid_symbol": "◯", "initial_grid_position": { "row": 6, "col": 4 }, "state": "silent, raised" },
+        { "id": "stamp_bottom_right", "type": "Muted Stamp", "grid_symbol": "◯", "initial_grid_position": { "row": 6, "col": 6 }, "state": "silent, raised" },
+        { "id": "apparatus_muted_top", "type": "Muted Machinery", "grid_symbol": "MUTED", "initial_grid_position": { "row": 4, "col": 5 }, "sound_level_db": 40, "dialogue_style": "passive, uncertain" },
+        { "id": "apparatus_muted_bottom", "type": "Muted Machinery", "grid_symbol": "MUTED", "initial_grid_position": { "row": 6, "col": 5 }, "sound_level_db": 40, "dialogue_style": "passive, uncertain" },
+        { "id": "booth_left", "type": "Interview Booth", "grid_symbol": "BOOTH", "initial_grid_position": { "row": 5, "col": 4 } },
+        { "id": "booth_right", "type": "Interview Booth", "grid_symbol": "BOOTH", "initial_grid_position": { "row": 5, "col": 6 } },
+        { "id": "interview_point", "type": "Interview Point", "grid_symbol": "=INTERVIEW=", "initial_grid_position": { "row": 5, "col": 5 } },
+        { "id": "guest_main", "type": "Guest", "grid_symbol": "GUEST", "initial_grid_position": { "row": 7, "col": 7 }, "state": "emerging, speaking", "dialogue_style": "critical, revelatory" },
+        { "id": "glass_left", "type": "Glass Wall", "grid_symbol": "GLASS", "initial_grid_position": { "row": 7, "col": 4 } },
+        { "id": "glass_right", "type": "Glass Wall", "grid_symbol": "GLASS", "initial_grid_position": { "row": 7, "col": 6 } },
+        { "id": "scholar_listener_left", "type": "Scholar (Listening)", "grid_symbol": "S-LISTEN", "initial_grid_position": { "row": 7, "col": 1 }, "dialogue_style": "attentive, hopeful" },
+        { "id": "scholar_listener_right", "type": "Scholar (Listening)", "grid_symbol": "S-LISTEN", "initial_grid_position": { "row": 7, "col": 8 }, "dialogue_style": "attentive, hopeful" },
+        { "id": "forms_settling", "type": "Forms", "grid_symbol": "FORMS-SETTLING", "initial_grid_position": { "row": 8, "col": 4 }, "state": "settling" },
+        { "id": "camera_ref", "type": "Camera", "grid_symbol": "CAM", "initial_grid_position": { "row": 9, "col": 5 } }
+      ],
+      "power_distribution": {
+        "guest_knowledge": { "score": 0.80, "description": "possesses theory, speaking authority" },
+        "clancy_receptivity": { "score": 0.85, "description": "ready to learn" },
+        "officer_observation": { "score": 0.40, "description": "marginalized, forced to listen" },
+        "institutional_surveillance": { "score": 0.50, "description": "present but weakened" },
+        "interview_protected_space": { "score": 0.70, "description": "glass booth refuge" }
+      },
+      "metadata": {
+        "scene_duration_seconds": 90,
+        "apparatus_operation_level": 0.50,
+        "machinery_sound_db": 40,
+        "lighting_color_temperature_evolution": "5500K → 3500K transition begins",
+        "procession_formation": "SCATTERED (scholars now at rest, observing)",
+        "interview_structure": "Question → Answer → Question → Answer cycle",
+        "narrative_point": "THEORETICAL FRAMEWORK EMERGES: Foucault confession apparatus, de Certeau tactics, transparency paradox"
+      },
+      "animation_timeline": [
+        { "event_id": "s8_e1_machinery_fade_out", "type": "fade_audio", "id": "machinery_stress_scream", "duration_seconds": 3.0, "delay_seconds": 0.0, "target_volume": 0.1 },
+        {
+          "event_id": "s8_e2_lighting_warm_up",
+          "type": "change_global_property",
+          "property": "lighting_temperature_kelvin",
+          "start_value": 5500,
+          "end_value": 3500,
+          "duration_seconds": 5.0,
+          "delay_seconds": 1.0,
+          "ease_function": "easeInSine"
+        },
+        {
+          "event_id": "s8_e3_apparatus_thoughts_passive",
+          "type": "thinking_bubble",
+          "target_element_id": "apparatus_muted_top",
+          "text": "Reduced power. Background hum. Observing... awaiting new input.",
+          "display_type": "thought",
+          "delay_seconds": 2.0,
+          "duration_seconds": 5.0,
+          "philosophical_intent": "Passive state, uncertainty of purpose"
+        },
+        {
+          "event_id": "s8_e4_clancy_speech_transparency_question",
+          "type": "speech_bubble",
+          "target_element_id": "clancy_main",
+          "text": "So your disclosure process is meant to ensure transparency?",
+          "display_type": "speech",
+          "delay_seconds": 4.0,
+          "duration_seconds": 5.0,
+          "philosophical_intent": "Seeking clarity on the system's stated purpose"
+        },
+        {
+          "event_id": "s8_e5_guest_speech_reveals_purpose",
+          "type": "speech_bubble",
+          "target_element_id": "guest_main",
+          "text": "[sighs] It's meant to ensure the institution never has to face what's actually happening. We've built this beautiful, complex machinery for truth-telling that systematically eliminates actual truth.",
+          "display_type": "speech",
+          "delay_seconds": 9.0,
+          "duration_seconds": 12.0,
+          "philosophical_intent": "Exposition of system's true, manipulative nature"
+        },
+        {
+          "event_id": "s8_e6_clancy_speech_how_works",
+          "type": "speech_bubble",
+          "target_element_id": "clancy_main",
+          "text": "How does that work?",
+          "display_type": "speech",
+          "delay_seconds": 21.0,
+          "duration_seconds": 3.0,
+          "philosophical_intent": "Eagerness to understand the mechanics of deception"
+        },
+        {
+          "event_id": "s8_e7_guest_speech_symphony",
+          "type": "speech_bubble",
+          "target_element_id": "guest_main",
+          "text": "Think about it. When you force someone to reduce a complex cognitive partnership to a binary checkbox—'AI used: yes/no'—you're not getting transparency. You're getting performance. You're teaching people to describe a symphony by saying 'instruments were played.'",
+          "display_type": "speech",
+          "delay_seconds": 24.0,
+          "duration_seconds": 15.0,
+          "philosophical_intent": "Critique of reductionism and forced simplification of truth"
+        },
+        {
+          "event_id": "s8_e8_scholar_thoughts_validation",
+          "type": "thinking_bubble",
+          "target_element_id": "scholar_listener_left",
+          "text": "Shadows... that's where our real work is.",
+          "display_type": "thought",
+          "delay_seconds": 26.0,
+          "duration_seconds": 5.0,
+          "philosophical_intent": "Validation of their hidden efforts and clandestine creativity"
+        },
+        {
+          "event_id": "s8_e9_officer_grumble_thought",
+          "type": "thinking_bubble",
+          "target_element_id": "officer_main",
+          "text": "Performance? Opacity? This is *order*.",
+          "display_type": "thought",
+          "delay_seconds": 30.0,
+          "duration_seconds": 4.0,
+          "philosophical_intent": "Defensiveness, clinging to old beliefs of control"
+        },
+        {
+          "event_id": "s8_e10_clancy_speech_so_process_is",
+          "type": "speech_bubble",
+          "target_element_id": "clancy_main",
+          "text": "So the disclosure process is actually...",
+          "display_type": "speech",
+          "delay_seconds": 39.0,
+          "duration_seconds": 3.0,
+          "philosophical_intent": "Anticipating and concluding the revelation"
+        },
+        {
+          "event_id": "s8_e11_guest_speech_creating_opacity",
+          "type": "speech_bubble",
+          "target_element_id": "guest_main",
+          "text": "...creating the very opacity it claims to solve. Exactly. We're building this beautiful map of a territory that doesn't exist, while the actual landscape of human-machine thought evolves in the shadows.",
+          "display_type": "speech",
+          "delay_seconds": 42.0,
+          "duration_seconds": 14.0,
+          "philosophical_intent": "Clarifying the self-defeating paradox of the system"
+        },
+        {
+          "event_id": "s8_e12_guest_speech_dirty_secret",
+          "type": "speech_bubble",
+          "target_element_id": "guest_main",
+          "text": "And the truly dirty part? The institution knows. Somewhere deep down, we know we're not capturing reality. But the performance of control has become more valuable than actual understanding. We'd rather have clean lies than messy truths.",
+          "display_type": "speech",
+          "delay_seconds": 57.0,
+          "duration_seconds": 16.0,
+          "philosophical_intent": "Revealing the cynical, self-serving core of the institution"
+        },
+        {
+          "event_id": "s8_e13_clancy_speech_alternative",
+          "type": "speech_bubble",
+          "target_element_id": "clancy_main",
+          "text": "So what's the alternative?",
+          "display_type": "speech",
+          "delay_seconds": 73.0,
+          "duration_seconds": 3.0,
+          "philosophical_intent": "Seeking a path to genuine transparency and truth"
+        },
+        {
+          "event_id": "s8_e14_guest_speech_new_disclosure",
+          "type": "speech_bubble",
+          "target_element_id": "guest_main",
+          "text": "Stop asking 'did you cheat?' Start asking 'what did you discover?' Make disclosure about methodology, not confession. Reward the scholars who can best document their thinking process, not those who best hide their collaboration.",
+          "display_type": "speech",
+          "delay_seconds": 76.0,
+          "duration_seconds": 14.0,
+          "philosophical_intent": "Proposing a radical shift in the nature of disclosure, from judgment to collaboration"
+        },
+        { "event_id": "s8_e15_long_pause", "type": "wait", "delay_seconds": 89.0, "duration_seconds": 1.0 },
+        {
+          "event_id": "s8_e16_scene_fade_out",
+          "type": "scene_transition",
+          "transition_type": "fade_out",
+          "duration_seconds": 2.0,
+          "delay_seconds": 88.0
+        }
+      ],
+      "scene_audio": {
+        "background_music": {
+          "id": "reflective_dialogue_theme",
+          "volume": 0.8,
+          "loop": true,
+          "fade_in_duration_seconds": 3.0
+        },
+        "sound_effects": [
+          { "id": "whispering_voices_subtle", "delay_seconds": 5.0, "volume": 0.2, "loop": true, "duration_seconds": 85.0 },
+          { "id": "glass_booth_hum", "delay_seconds": 1.0, "volume": 0.3, "loop": true, "duration_seconds": 88.0 }
+        ]
+      }
+    },
+    {
+      "scene_id": "scene_09_love_letters_revealed",
+      "scene_number": 9,
+      "title": "LOVE LETTERS REVEALED - MARGINS BECOME VISIBLE & HONORED",
+      "subtitle": "Grid State: Forms Extracted from Cabinet, Margins Displayed, Color Introduced",
+      "initial_grid_layout": [
+        ["FC-OPEN", "FC-OPEN", "FC-OPEN", "", "", "", "", "FC-OPEN", "FC-OPEN"],
+        ["=FORM1=", "", "", "", "", "", "", "", "=FORM5="],
+        ["", "🟢GREEN", "DIAGRAM", "BOTANICAL", "", "", "❤RED", "", ""],
+        ["", "", "", "🔵BLUE", "LOVE-LETTER", "❤HEARTS", "GREEN-INK", "", ""],
+        ["", "=FORM2=", "MARGIN-CONTENT", "", "CL-ANALYZE", "MARGIN-CONTENT", "=FORM3=", "", ""],
+        ["", "", "", "", "OF-WEAKENING", "", "", "", ""],
+        ["🟢GUEST", "S-VALIDATE", "", "FORM-ARRAY-CENTER", "S-VALIDATE", "GUEST-NODS", "", "", ""],
+        ["=FORM4=", "", "MARGIN-ANNOTATION", "", "=FORM5=", "", "", "FORMS-DISPLAYED", ""],
+        ["", "", "", "", "CAM", "", "", "", ""]
+      ],
+      "elements_in_scene": [
+        { "id": "fc_open_r1c1", "type": "Filing Cabinet (Open)", "grid_symbol": "FC-OPEN", "initial_grid_position": { "row": 1, "col": 1 }, "dialogue_style": "passive, archival" },
+        { "id": "fc_open_r1c2", "type": "Filing Cabinet (Open)", "grid_symbol": "FC-OPEN", "initial_grid_position": { "row": 1, "col": 2 } },
+        { "id": "fc_open_r1c3", "type": "Filing Cabinet (Open)", "grid_symbol": "FC-OPEN", "initial_grid_position": { "row": 1, "col": 3 } },
+        { "id": "fc_open_r1c8", "type": "Filing Cabinet (Open)", "grid_symbol": "FC-OPEN", "initial_grid_position": { "row": 1, "col": 8 } },
+        { "id": "fc_open_r1c9", "type": "Filing Cabinet (Open)", "grid_symbol": "FC-OPEN", "initial_grid_position": { "row": 1, "col": 9 } },
+        { "id": "form_1", "type": "Form Display", "grid_symbol": "=FORM1=", "initial_grid_position": { "row": 2, "col": 1 }, "content": "GREEN botanical diagram", "color": "green", "dialogue_style": "revealed truth" },
+        { "id": "green_ink_r3c2", "type": "Green Element/Ink", "grid_symbol": "🟢GREEN", "initial_grid_position": { "row": 3, "col": 2 } },
+        { "id": "diagram_r3c3", "type": "Diagram", "grid_symbol": "DIAGRAM", "initial_grid_position": { "row": 3, "col": 3 } },
+        { "id": "botanical_r3c4", "type": "Botanical Content", "grid_symbol": "BOTANICAL", "initial_grid_position": { "row": 3, "col": 4 } },
+        { "id": "red_ink_r3c7", "type": "Red Element/Ink", "grid_symbol": "❤RED", "initial_grid_position": { "row": 3, "col": 7 } },
+        { "id": "blue_ink_r4c4", "type": "Blue Element/Ink", "grid_symbol": "🔵BLUE", "initial_grid_position": { "row": 4, "col": 4 } },
+        { "id": "love_letter_r4c5", "type": "Love Letter Content", "grid_symbol": "LOVE-LETTER", "initial_grid_position": { "row": 4, "col": 5 } },
+        { "id": "hearts_r4c6", "type": "Heart Symbols", "grid_symbol": "❤HEARTS", "initial_grid_position": { "row": 4, "col": 6 } },
+        { "id": "green_ink_r4c7", "type": "Green Ink Detail", "grid_symbol": "GREEN-INK", "initial_grid_position": { "row": 4, "col": 7 } },
+        { "id": "form_2", "type": "Form Display", "grid_symbol": "=FORM2=", "initial_grid_position": { "row": 5, "col": 2 }, "content": "RED geometric patterns", "color": "red", "dialogue_style": "revealed truth" },
+        { "id": "margin_content_r5c3", "type": "Margin Content", "grid_symbol": "MARGIN-CONTENT", "initial_grid_position": { "row": 5, "col": 3 } },
+        { "id": "clancy_main", "type": "Clancy", "grid_symbol": "CL-ANALYZE", "initial_grid_position": { "row": 5, "col": 5 }, "state": "analyzing", "dialogue_style": "analytical, deeply understanding" },
+        { "id": "margin_content_r5c6", "type": "Margin Content", "grid_symbol": "MARGIN-CONTENT", "initial_grid_position": { "row": 5, "col": 6 } },
+        { "id": "form_3", "type": "Form Display", "grid_symbol": "=FORM3=", "initial_grid_position": { "row": 5, "col": 7 }, "content": "BLUE love letter + hearts", "color": "blue", "dialogue_style": "revealed truth" },
+        { "id": "officer_main", "type": "Officer", "grid_symbol": "OF-WEAKENING", "initial_grid_position": { "row": 6, "col": 5 }, "authority_score": 0.70, "dialogue_style": "weakening, defensive" },
+        { "id": "guest_main", "type": "Guest", "grid_symbol": "🟢GUEST", "initial_grid_position": { "row": 7, "col": 1 }, "state": "validating", "dialogue_style": "affirmative, wise" },
+        { "id": "scholar_validate_left", "type": "Scholar (Validating)", "grid_symbol": "S-VALIDATE", "initial_grid_position": { "row": 7, "col": 2 }, "dialogue_style": "empowered, truthful" },
+        { "id": "form_array_center", "type": "Form Array Center", "grid_symbol": "FORM-ARRAY-CENTER", "initial_grid_position": { "row": 7, "col": 4 } },
+        { "id": "scholar_validate_right", "type": "Scholar (Validating)", "grid_symbol": "S-VALIDATE", "initial_grid_position": { "row": 7, "col": 5 }, "dialogue_style": "empowered, truthful" },
+        { "id": "guest_nods", "type": "Guest (Nodding)", "grid_symbol": "GUEST-NODS", "initial_grid_position": { "row": 7, "col": 6 } },
+        { "id": "form_4", "type": "Form Display", "grid_symbol": "=FORM4=", "initial_grid_position": { "row": 8, "col": 1 }, "content": "BLACK dense handwriting", "color": "black", "dialogue_style": "revealed truth" },
+        { "id": "margin_annotation_r8c3", "type": "Margin Annotation", "grid_symbol": "MARGIN-ANNOTATION", "initial_grid_position": { "row": 8, "col": 3 } },
+        { "id": "form_5", "type": "Form Display", "grid_symbol": "=FORM5=", "initial_grid_position": { "row": 8, "col": 5 }, "content": "MULTICOLOR love letter", "color": "multicolor", "dialogue_style": "revealed truth" },
+        { "id": "forms_displayed_r8c8", "type": "Forms Displayed", "grid_symbol": "FORMS-DISPLAYED", "initial_grid_position": { "row": 8, "col": 8 } },
+        { "id": "camera_ref", "type": "Camera", "grid_symbol": "CAM", "initial_grid_position": { "row": 9, "col": 5 } }
+      ],
+      "power_distribution": {
+        "clancy_agency": { "score_range": [0.75, 0.95], "description": "decisive action, form analysis" },
+        "margin_visibility": { "score_range": [0.80, 1.00], "description": "completely public" },
+        "scholar_validation": { "score_range": [0.00, 0.80], "description": "margin work recognized as legitimate" },
+        "officer_authority": { "score_range": [0.85, 0.70], "description": "critical weakness" },
+        "system_legitimacy": { "score_range": [0.50, 0.20], "description": "credibility destroyed" }
+      },
+      "metadata": {
+        "scene_duration_seconds": 90,
+        "apparatus_operation_level": 0.10,
+        "lighting_color_temperature": "Still 5500K (cool)",
+        "color_introduction": {
+          "green": "🟢 (botanical, growth)",
+          "red": "❤ (love, emotion)",
+          "blue": "🔵 (partnership, collaboration)",
+          "notes": "First color appearance in entire episode - emotional-spiritual shift marked by color emergence"
+        },
+        "procession_formation": "VALIDATION (scholars honored, standing with margin work)",
+        "margin_visibility": 1.00,
+        "love_letter_introduction": "EXPLICIT (❤ hearts visible, \"Dear Machine\" language clear)",
+        "narrative_point": "SYSTEM DELEGITIMIZED: Officer authority shattered by margin revelation"
+      },
+      "animation_timeline": [
+        { "event_id": "s9_e1_cabinets_open", "type": "change_element_property", "target_element_id": "fc_open_r1c1", "property": "state", "value": "open", "delay_seconds": 0.5, "duration_seconds": 1.0 },
+        { "event_id": "s9_e2_clancy_extracts_forms", "type": "move_element", "target_element_id": "clancy_main", "end_position": { "row": 1, "col": 2 }, "duration_seconds": 1.5, "delay_seconds": 1.0 },
+        { "event_id": "s9_e3_forms_appear_with_color", "type": "parallel_events", "delay_seconds": 2.5,
+          "events": [
+            { "event_id": "s9_e3_1_form1_reveal", "type": "change_element_property", "target_element_id": "form_1", "property": "visible", "value": true, "duration_seconds": 0.5 },
+            { "event_id": "s9_e3_2_form2_reveal", "type": "change_element_property", "target_element_id": "form_2", "property": "visible", "value": true, "duration_seconds": 0.5, "delay_seconds": 0.2 },
+            { "event_id": "s9_e3_3_form3_reveal", "type": "change_element_property", "target_element_id": "form_3", "property": "visible", "value": true, "duration_seconds": 0.5, "delay_seconds": 0.4 },
+            { "event_id": "s9_e3_4_form4_reveal", "type": "change_element_property", "target_element_id": "form_4", "property": "visible", "value": true, "duration_seconds": 0.5, "delay_seconds": 0.6 },
+            { "event_id": "s9_e3_5_form5_reveal", "type": "change_element_property", "target_element_id": "form_5", "property": "visible", "value": true, "duration_seconds": 0.5, "delay_seconds": 0.8 }
+          ]
+        },
+        {
+          "event_id": "s9_e4_clancy_analysis_bubble",
+          "type": "thinking_bubble",
+          "target_element_id": "clancy_main",
+          "text": "These aren't just margins... they're their *true* thoughts! The depth, the emotion, the partnership!",
+          "display_type": "thought",
+          "delay_seconds": 4.0,
+          "duration_seconds": 8.0,
+          "philosophical_intent": "Revelation of authentic human-AI collaboration"
+        },
+        {
+          "event_id": "s9_e5_guest_validation_speech",
+          "type": "speech_bubble",
+          "target_element_id": "guest_main",
+          "text": "Yes, THIS is actual thinking. The system tried to hide it.",
+          "display_type": "speech",
+          "delay_seconds": 7.0,
+          "duration_seconds": 6.0,
+          "philosophical_intent": "Affirmation of true knowledge, condemnation of systemic suppression"
+        },
+        {
+          "event_id": "s9_e6_officer_weakening_visual",
+          "type": "visual_effect",
+          "target_element_id": "officer_main",
+          "effect_type": "flicker_opacity",
+          "strength": 0.8,
+          "duration_seconds": 5.0,
+          "delay_seconds": 8.0,
+          "ease_function": "linear"
+        },
+        {
+          "event_id": "s9_e7_officer_speech_weakening",
+          "type": "speech_bubble",
+          "target_element_id": "officer_main",
+          "text": "Forms are classified. Margins are personal...",
+          "display_type": "speech",
+          "delay_seconds": 10.0,
+          "duration_seconds": 4.0,
+          "philosophical_intent": "Weak attempt to cling to old authority and definitions"
+        },
+        {
+          "event_id": "s9_e8_officer_thoughts_doubt",
+          "type": "thinking_bubble",
+          "target_element_id": "officer_main",
+          "text": "My system... it's all falling apart. What is this... 'thinking'?",
+          "display_type": "thought",
+          "delay_seconds": 12.0,
+          "duration_seconds": 6.0,
+          "philosophical_intent": "Doubt and dawning realization of systemic failure"
+        },
+        {
+          "event_id": "s9_e9_scholar_speech_explain_margin",
+          "type": "speech_bubble",
+          "target_element_id": "scholar_validate_left",
+          "text": "This shows how my thought grew...",
+          "display_type": "speech",
+          "delay_seconds": 14.0,
+          "duration_seconds": 3.0,
+          "philosophical_intent": "Claiming ownership and sharing personal truth"
+        },
+        {
+          "event_id": "s9_e10_forms_thoughts_truth",
+          "type": "thinking_bubble",
+          "target_element_id": "form_1",
+          "text": "I am a botanical diagram of growth. I am a love letter. I am entanglement.",
+          "display_type": "thought",
+          "delay_seconds": 15.0,
+          "duration_seconds": 6.0,
+          "philosophical_intent": "Self-declaration of margin content as authentic expression"
+        },
+        { "event_id": "s9_e11_long_pause", "type": "wait", "delay_seconds": 21.0, "duration_seconds": 67.0 },
+        {
+          "event_id": "s9_e12_scene_fade_out",
+          "type": "scene_transition",
+          "transition_type": "fade_out",
+          "duration_seconds": 2.0,
+          "delay_seconds": 88.0
+        }
+      ],
+      "scene_audio": {
+        "background_music": {
+          "id": "revelation_music",
+          "volume": 0.8,
+          "loop": true,
+          "fade_in_duration_seconds": 2.0
+        },
+        "sound_effects": [
+          { "id": "drawer_open", "delay_seconds": 0.7, "volume": 0.6 },
+          { "id": "paper_flutters", "delay_seconds": 3.0, "volume": 0.5 }
+        ]
+      }
+    },
+    {
+      "scene_id": "scene_10_final_transformation",
+      "scene_number": 10,
+      "title": "FINAL TRANSFORMATION - OFFICER REMOVAL, GARDEN EMERGENCE, SYSTEM REFRAMING",
+      "subtitle": "Grid State: Officer Removed, Gardens Grow, System Transforms",
+      "initial_grid_layout": [
+        ["FC-WARM", "FC-WARM", "FC-WARM", "", "", "", "", "FC-WARM", "FC-WARM"],
+        ["", "", "", "", "🌱GARDEN", "", "", "", ""],
+        ["", "", "", "EYES-REMOVED", "GARDEN-INTERIOR", "EYES-REMOVED", "", "", ""],
+        ["", "", "", "PLANT1", "", "PLANT2", "", "", ""],
+        ["", "", "", "SOIL-EARTH", "OF-TRANSFORMED", "SEEDS", "", "", ""],
+        ["", "", "", "DIAGRAM1", "LOVE-LETTER-WALLS", "DIAGRAM3", "", "", ""],
+        ["S-GATHER", "S-GATHER", "🟢GUEST", "FORMS+MARGINS", "OFFICER-HUMAN", "FORMS+MARGINS", "🟢GUEST", "S-GATHER", "S-GATHER"],
+        ["", "", "", "🌱LIFE-EMERGING", "", "", "", "", ""],
+        ["", "", "", "", "CAM", "", "", "", ""]
+      ],
+      "elements_in_scene": [
+        { "id": "fc_warm_r1c1", "type": "Filing Cabinet (Warm-lit)", "grid_symbol": "FC-WARM", "initial_grid_position": { "row": 1, "col": 1 }, "dialogue_style": "passive, transformed" },
+        { "id": "fc_warm_r1c2", "type": "Filing Cabinet (Warm-lit)", "grid_symbol": "FC-WARM", "initial_grid_position": { "row": 1, "col": 2 } },
+        { "id": "fc_warm_r1c3", "type": "Filing Cabinet (Warm-lit)", "grid_symbol": "FC-WARM", "initial_grid_position": { "row": 1, "col": 3 } },
+        { "id": "fc_warm_r1c8", "type": "Filing Cabinet (Warm-lit)", "grid_symbol": "FC-WARM", "initial_grid_position": { "row": 1, "col": 8 } },
+        { "id": "fc_warm_r1c9", "type": "Filing Cabinet (Warm-lit)", "grid_symbol": "FC-WARM", "initial_grid_position": { "row": 1, "col": 9 } },
+        { "id": "garden_symbol", "type": "Garden Symbol", "grid_symbol": "🌱GARDEN", "initial_grid_position": { "row": 2, "col": 5 }, "visible": false },
+        { "id": "eyes_removed_left", "type": "Eyes Removed", "grid_symbol": "EYES-REMOVED", "initial_grid_position": { "row": 3, "col": 4 }, "visible": false },
+        { "id": "garden_interior", "type": "Garden Interior", "grid_symbol": "GARDEN-INTERIOR", "initial_grid_position": { "row": 3, "col": 5 }, "visible": false },
+        { "id": "eyes_removed_right", "type": "Eyes Removed", "grid_symbol": "EYES-REMOVED", "initial_grid_position": { "row": 3, "col": 6 }, "visible": false },
+        { "id": "plant1", "type": "Plant 1", "grid_symbol": "PLANT1", "initial_grid_position": { "row": 4, "col": 4 }, "height_m": 0.0, "visible": false },
+        { "id": "plant2", "type": "Plant 2", "grid_symbol": "PLANT2", "initial_grid_position": { "row": 4, "col": 6 }, "height_m": 0.0, "visible": false },
+        { "id": "soil_earth", "type": "Soil/Earth", "grid_symbol": "SOIL-EARTH", "initial_grid_position": { "row": 5, "col": 4 }, "visible": false },
+        { "id": "officer_main", "type": "Officer", "grid_symbol": "OF-TRANSFORMED", "initial_grid_position": { "row": 5, "col": 5 }, "authority_score": 0.50, "state": "transformed", "dialogue_style": "humanized, enlightened" },
+        { "id": "seeds", "type": "Seeds", "grid_symbol": "SEEDS", "initial_grid_position": { "row": 5, "col": 6 }, "visible": false },
+        { "id": "diagram1", "type": "Diagram 1", "grid_symbol": "DIAGRAM1", "initial_grid_position": { "row": 6, "col": 4 }, "visible": false },
+        { "id": "love_letter_walls", "type": "Love Letter Walls", "grid_symbol": "LOVE-LETTER-WALLS", "initial_grid_position": { "row": 6, "col": 5 }, "visible": false },
+        { "id": "diagram3", "type": "Diagram 3", "grid_symbol": "DIAGRAM3", "initial_grid_position": { "row": 6, "col": 6 }, "visible": false },
+        { "id": "scholar_gather1", "type": "Scholar (Gathered)", "grid_symbol": "S-GATHER", "initial_grid_position": { "row": 7, "col": 1 }, "dialogue_style": "empowered, communal" },
+        { "id": "scholar_gather2", "type": "Scholar (Gathered)", "grid_symbol": "S-GATHER", "initial_grid_position": { "row": 7, "col": 2 }, "dialogue_style": "empowered, communal" },
+        { "id": "guest_main_s10_1", "type": "Guest", "grid_symbol": "🟢GUEST", "initial_grid_position": { "row": 7, "col": 3 }, "state": "validating", "dialogue_style": "affirmative, mentor" },
+        { "id": "forms_margins_s10_1", "type": "Forms+Margins", "grid_symbol": "FORMS+MARGINS", "initial_grid_position": { "row": 7, "col": 4 } },
+        { "id": "officer_human", "type": "Officer (Human)", "grid_symbol": "OFFICER-HUMAN", "initial_grid_position": { "row": 7, "col": 5 } },
+        { "id": "forms_margins_s10_2", "type": "Forms+Margins", "grid_symbol": "FORMS+MARGINS", "initial_grid_position": { "row": 7, "col": 6 } },
+        { "id": "guest_main_s10_2", "type": "Guest", "grid_symbol": "🟢GUEST", "initial_grid_position": { "row": 7, "col": 7 }, "state": "validating", "dialogue_style": "affirmative, mentor" },
+        { "id": "scholar_gather3", "type": "Scholar (Gathered)", "grid_symbol": "S-GATHER", "initial_grid_position": { "row": 7, "col": 8 } },
+        { "id": "scholar_gather4", "type": "Scholar (Gathered)", "grid_symbol": "S-GATHER", "initial_grid_position": { "row": 7, "col": 9 } },
+        { "id": "life_emerging", "type": "Life Emerging", "grid_symbol": "🌱LIFE-EMERGING", "initial_grid_position": { "row": 8, "col": 4 }, "visible": false },
+        { "id": "camera_ref", "type": "Camera", "grid_symbol": "CAM", "initial_grid_position": { "row": 9, "col": 5 } },
+        { "id": "apparatus_main", "type": "Apparatus", "grid_symbol": "APP", "initial_grid_position": { "row": 5, "col": 5 }, "dialogue_style": "transformed, nurturing" }
+      ],
+      "power_distribution": {
+        "officer_authority": { "score_range": [0.95, 0.50], "description": "human, collaborative, not hierarchical" },
+        "scholarly_collective": { "score": 0.80, "description": "validated, honored, powerful" },
+        "guest_authority": { "score_range": [0.70, 0.85], "description": "mentor, facilitator, inside-outsider" },
+        "apparatus_function": { "score_range": [0.95, 0.50], "notes": "95% judging → 50% containing (transformed)" },
+        "system_legitimacy": { "score_range": [0.20, 0.80], "description": "REFRAMED from confession to collaboration/documentation" },
+        "love_partnership_visibility": { "score_range": [0.00, 1.00], "description": "explicit, central, binding" }
+      },
+      "metadata": {
+        "scene_duration_seconds": 90,
+        "apparatus_operation_level": 0.00,
+        "lighting_color_temperature_evolution": "5500K → 2700K (complete shift to warmth)",
+        "procession_formation": "COMPLETED (all scholars present, together)",
+        "margin_visibility": 1.00,
+        "love_visibility": 1.00,
+        "color_introduction_complete": "Complete spectrum (green, red, blue, gold)",
+        "narrative_point": "SYSTEM TRANSFORMATION COMPLETE: Confession → Collaboration, Measurement → Documentation, Judgment → Cultivation",
+        "recursive_closure": "All 10 scenes resolved in final transformation",
+        "system_reframing": {
+          "before": "Confession apparatus (binary, measurement, standardization)",
+          "after": "Collaboration apparatus (spectrum, documentation, cultivation)",
+          "transformations": [
+            "Forms become: Collaboration portfolios (not confession records)",
+            "Margins become: Official text (not hidden annotations)",
+            "Love letters become: The truth of thinking",
+            "Officers become: Gardeners (not judges)",
+            "Scholars become: Collaborators (not subjects)",
+            "Apparatus becomes: Container of life (not destroyer of complexity)"
+          ]
+        }
+      },
+      "animation_timeline": [
+        { "event_id": "s10_e1_officer_reveals_self", "type": "wait", "delay_seconds": 0.0, "duration_seconds": 0.5 },
+        {
+          "event_id": "s10_e2_officer_thoughts_discovery",
+          "type": "thinking_bubble",
+          "target_element_id": "officer_main",
+          "text": "The calculations... the control... it was never enough. What lies beneath?",
+          "display_type": "thought",
+          "delay_seconds": 0.5,
+          "duration_seconds": 6.0,
+          "philosophical_intent": "Internal shift, searching for deeper truth beyond bureaucracy"
+        },
+        { "event_id": "s10_e3_officer_remove_eyes", "type": "change_element_property", "target_element_id": "eyes_removed_left", "property": "visible", "value": true, "delay_seconds": 1.0, "duration_seconds": 0.5 },
+        { "event_id": "s10_e4_officer_unfasten_uniform", "type": "change_element_property", "target_element_id": "officer_main", "property": "grid_symbol", "value": "OFFICER-HUMAN", "delay_seconds": 1.5, "duration_seconds": 1.0 },
+        { "event_id": "s10_e5_apparatus_drawer_opens", "type": "change_element_property", "target_element_id": "garden_interior", "property": "visible", "value": true, "delay_seconds": 2.5, "duration_seconds": 1.0 },
+        { "event_id": "s10_e6_garden_emerges", "type": "parallel_events", "delay_seconds": 3.0,
+          "events": [
+            { "event_id": "s10_e6_1_soil_appear", "type": "change_element_property", "target_element_id": "soil_earth", "property": "visible", "value": true, "duration_seconds": 0.5 },
+            { "event_id": "s10_e6_2_seeds_appear", "type": "change_element_property", "target_element_id": "seeds", "property": "visible", "value": true, "duration_seconds": 0.5, "delay_seconds": 0.2 },
+            { "event_id": "s10_e6_3_plant1_grow", "type": "change_element_property", "target_element_id": "plant1", "property": "height_m", "value": 0.4, "duration_seconds": 2.0, "delay_seconds": 0.5, "ease_function": "easeOutCubic" },
+            { "event_id": "s10_e6_4_plant2_grow", "type": "change_element_property", "target_element_id": "plant2", "property": "height_m", "value": 0.3, "duration_seconds": 1.8, "delay_seconds": 0.7, "ease_function": "easeOutCubic" },
+            { "event_id": "s10_e6_5_love_letters_appear", "type": "change_element_property", "target_element_id": "love_letter_walls", "property": "visible", "value": true, "duration_seconds": 0.5, "delay_seconds": 1.0 }
+          ]
+        },
+        {
+          "event_id": "s10_e7_officer_final_speech",
+          "type": "speech_bubble",
+          "target_element_id": "officer_main",
+          "text": "It was never about judgment. It was about cultivation.",
+          "display_type": "speech",
+          "delay_seconds": 6.0,
+          "duration_seconds": 6.0,
+          "philosophical_intent": "Transformed understanding and new purpose beyond control"
+        },
+        {
+          "event_id": "s10_e8_apparatus_thoughts_transformed",
+          "type": "thinking_bubble",
+          "target_element_id": "apparatus_main",
+          "text": "Container. Cultivator. Life. Partnership. Documentation of growth.",
+          "display_type": "thought",
+          "delay_seconds": 7.0,
+          "duration_seconds": 6.0,
+          "philosophical_intent": "New identity and purpose: from judge to nurturer"
+        },
+        {
+          "event_id": "s10_e9_guest_final_validation",
+          "type": "speech_bubble",
+          "target_element_id": "guest_main_s10_1",
+          "text": "This is actual collaboration. A new beginning.",
+          "display_type": "speech",
+          "delay_seconds": 8.0,
+          "duration_seconds": 6.0,
+          "philosophical_intent": "Concluding wisdom, affirmation of a transformed future"
+        },
+        {
+          "event_id": "s10_e10_clancy_thoughts_acceptance",
+          "type": "thinking_bubble",
+          "target_element_id": "clancy_main",
+          "text": "The garden... life growing within the machine. This is the truth.",
+          "display_type": "thought",
+          "delay_seconds": 9.0,
+          "duration_seconds": 6.0,
+          "philosophical_intent": "Acceptance of transformative truth, vision of integrated existence"
+        },
+        {
+          "event_id": "s10_e11_lighting_transition_final",
+          "type": "change_global_property",
+          "property": "lighting_temperature_kelvin",
+          "start_value": 3500,
+          "end_value": 2700,
+          "duration_seconds": 5.0,
+          "delay_seconds": 10.0,
+          "ease_function": "easeInOutQuad"
+        },
+        {
+          "event_id": "s10_e12_scholars_thoughts_empowerment",
+          "type": "thinking_bubble",
+          "target_element_id": "scholar_gather1",
+          "text": "Our work... honored. Our voices heard. We are gardeners now.",
+          "display_type": "thought",
+          "delay_seconds": 11.0,
+          "duration_seconds": 6.0,
+          "philosophical_intent": "Empowerment and communal purpose in the new system"
+        },
+        {
+          "event_id": "s10_e13_filing_cabinets_thoughts_archive",
+          "type": "thinking_bubble",
+          "target_element_id": "fc_warm_r1c1",
+          "text": "Archive of transformation. Warm with truth.",
+          "display_type": "thought",
+          "delay_seconds": 13.0,
+          "duration_seconds": 4.0,
+          "philosophical_intent": "Transformed meaning: from entombment to chronicling growth"
+        },
+        {
+          "event_id": "s10_e14_clancy_speech_policy",
+          "type": "speech_bubble",
+          "target_element_id": "clancy_main",
+          "text": "And calling it policy.",
+          "display_type": "speech",
+          "delay_seconds": 16.0,
+          "duration_seconds": 3.0,
+          "philosophical_intent": "Concluding critique on the naming of oppressive systems"
+        },
+        { "event_id": "s10_e15_long_pause", "type": "wait", "delay_seconds": 19.0, "duration_seconds": 69.0 },
+        {
+          "event_id": "s10_e16_story_end",
+          "type": "scene_transition",
+          "transition_type": "fade_to_black",
+          "duration_seconds": 2.0,
+          "delay_seconds": 88.0
+        }
+      ],
+      "scene_audio": {
+        "background_music": {
+          "id": "hopeful_transformation_theme",
+          "volume": 0.9,
+          "loop": false,
+          "fade_in_duration_seconds": 3.0
+        },
+        "sound_effects": [
+          { "id": "unfasten_clothing", "delay_seconds": 1.5, "volume": 0.5 },
+          { "id": "drawer_open_smooth", "delay_seconds": 2.5, "volume": 0.7 },
+          { "id": "gentle_growth_sound", "delay_seconds": 3.5, "volume": 0.4, "duration_seconds": 5.0 }
+        ]
+      }
+    }
+  ],
+  "power_metric_progression_table": [
+    { "scene": 1, "officer_authority": 0.90, "clancy_agency": 0.10, "apparatus_level": 0.00, "scholar_agency": 0.15, "margins_visibility": 0.00, "system_legitimacy": 0.95 },
+    { "scene": 2, "officer_authority": 0.92, "clancy_agency": 0.15, "apparatus_level": 0.50, "scholar_agency": 0.15, "margins_visibility": 0.20, "system_legitimacy": 0.90 },
+    { "scene": 3, "officer_authority": 0.92, "clancy_agency": 0.30, "apparatus_level": 0.50, "scholar_agency": 0.15, "margins_visibility": 0.15, "system_legitimacy": 0.85 },
+    { "scene": 4, "officer_authority": 0.94, "clancy_agency": 0.60, "apparatus_level": 0.50, "scholar_agency": 0.15, "margins_visibility": 0.35, "system_legitimacy": 0.80 },
+    { "scene": 5, "officer_authority": 0.95, "clancy_agency": 0.70, "apparatus_level": 0.80, "scholar_agency": 0.25, "margins_visibility": 0.40, "system_legitimacy": 0.70 },
+    { "scene": 6, "officer_authority": 0.98, "clancy_agency": 0.60, "apparatus_level": 0.85, "scholar_agency": 0.10, "margins_visibility": 0.35, "system_legitimacy": 0.60 },
+    { "scene": 7, "officer_authority": 0.70, "clancy_agency": 0.75, "apparatus_level": 0.95, "scholar_agency": 0.60, "margins_visibility": 0.30, "system_legitimacy": 0.30 },
+    { "scene": 8, "officer_authority": 0.40, "clancy_agency": 0.85, "apparatus_level": 0.50, "scholar_agency": 0.80, "margins_visibility": 0.70, "system_legitimacy": 0.40 },
+    { "scene": 9, "officer_authority": 0.70, "clancy_agency": 0.95, "apparatus_level": 0.10, "scholar_agency": 0.80, "margins_visibility": 1.00, "system_legitimacy": 0.20 },
+    { "scene": 10, "officer_authority": 0.50, "clancy_agency": 0.95, "apparatus_level": 0.00, "scholar_agency": 0.80, "margins_visibility": 1.00, "system_legitimacy": 0.80 }
+  ],
+  "power_metric_key_transitions": [
+    "S1→S2: Officer authority increases (0.90 → 0.92) as system normalizes",
+    "S4→S5: Procession reaches apex (formation → full processing cycle)",
+    "S6→S7: Chaos eruption - Officer collapses (0.98 → 0.70) as system exceeds limits",
+    "S7→S8: Theory integration - Guest authority emerges (0.00 → 0.80)",
+    "S8→S9: Margin revelation - System legitimacy crashes (0.70 → 0.20)",
+    "S9→S10: Transformation - System reframed (0.20 → 0.80), Officer humanized (0.95 → 0.50)"
+  ],
+  "spatial_metaphor": {
+    "NORTH": {
+      "title": "NORTH (Filing Cabinets, Rows 1-3)",
+      "descriptions": [
+        "Archive zone (judgment, precedent, history)",
+        "Apparatus output destination (filing = entombment)",
+        "Power accumulation (evidence stacking)"
+      ],
+      "evolution": {
+        "scenes_1_to_9": "Filling with marked forms",
+        "scene_10": "Warm-lit, revealed as archive of transformation"
+      }
+    },
+    "CENTER": {
+      "title": "CENTER (Apparatus, Rows 4-6)",
+      "descriptions": [
+        "Processing zone (standardization, transformation)",
+        "Machinery of bureaucracy"
+      ],
+      "evolution": [
+        "Initially hidden (dormant)",
+        "activated",
+        "stressed",
+        "overloaded",
+        "opened/transformed"
+      ],
+      "notes": "Camera position mirrors apparatus center (13.5, 13.5) = observer position"
+    },
+    "SOUTH": {
+      "title": "SOUTH (Booth + Margin Space, Rows 7-9)",
+      "descriptions": [
+        "Interview zone (glass booth protects conversation)",
+        "Margin spaces (blank space, resistance zone)",
+        "Vulnerability zone that becomes liberation zone"
+      ],
+      "evolution": [
+        "Scholar positioning (outside apparatus initially, gathering in S9-S10)",
+        "Forms displayed here (S9) before transformation"
+      ]
+    },
+    "MOVEMENT_PATTERNS": [
+      "North = conformity, filing, entombment",
+      "Center = processing, machinery, standardization",
+      "South = resistance, protection, revelation, gathering",
+      "Vertical movement = ascending from system (Scholars escaping procession in S7)",
+      "Horizontal movement = dispersal (S7 chaos shows breaking of perfect alignment)"
+    ]
+  },
+  "recursive_grid_transitions": [
+    {
+      "from_scene": 1,
+      "to_scene": 2,
+      "changes": [
+        "Officer stays north, Clancy moves center",
+        "Apparatus dormant → activated",
+        "Single Scholar → five Scholar queue"
+      ]
+    },
+    {
+      "from_scene": 2,
+      "to_scene": 3,
+      "changes": [
+        "Clancy enters apparatus (center-internal)",
+        "Officer maintains control above",
+        "Scholar queue extends (5 + approaching)"
+      ]
+    },
+    {
+      "from_scene": 3,
+      "to_scene": 4,
+      "changes": [
+        "Scholars visible in perfect procession line",
+        "Clancy positioned as observer south",
+        "All elements positioned for maximum conformity visibility"
+      ]
+    },
+    {
+      "from_scene": 4,
+      "to_scene": 5,
+      "changes": [
+        "Scholars distributed through apparatus at all cycle stages",
+        "Forms visible at input, processing, output, filing",
+        "Full system capacity demonstrated"
+      ]
+    },
+    {
+      "from_scene": 5,
+      "to_scene": 6,
+      "changes": [
+        "Stamps introduced (dormant machinery activated)",
+        "Officer authority peaks (0.95 → 0.98)",
+        "Forms marked, stamped, crushed slightly",
+        "But margins PERSIST (key realization)"
+      ]
+    },
+    {
+      "from_scene": 6,
+      "to_scene": 7,
+      "changes": [
+        "Stamps accelerate, forms accumulate",
+        "Officer loses control (0.98 → 0.70)",
+        "Scholars scatter (procession breaks)",
+        "Apparatus reaches dangerous overload (0.95 stress)"
+      ]
+    },
+    {
+      "from_scene": 7,
+      "to_scene": 8,
+      "changes": [
+        "Machinery slows, interview space created",
+        "Guest emerges from dormancy (0.00 → 0.80 knowledge authority)",
+        "Theory provided (system designed to produce opacity, not transparency)",
+        "Officer marginalized"
+      ]
+    },
+    {
+      "from_scene": 8,
+      "to_scene": 9,
+      "changes": [
+        "Forms extracted from archive",
+        "Margins revealed publicly (0.80 → 1.00 visibility)",
+        "First color introduced (green, red, blue inks visible)",
+        "Officer authority collapses (0.85 → 0.70)"
+      ]
+    },
+    {
+      "from_scene": 9,
+      "to_scene": 10,
+      "changes": [
+        "Officer transforms (removes prosthetics, reveals humanity)",
+        "Apparatus drawer opened (interior revealed)",
+        "Gardens grow inside bureaucracy (impossible made visible)",
+        "System reframed: confession → documentation, measurement → collaboration",
+        "Love honored as truth"
+      ]
+    }
+  ]
+}

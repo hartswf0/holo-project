@@ -1,0 +1,230 @@
+{
+  "metadata": {
+    "generated_from": "disc-data.json",
+    "purpose": "Executable precursor to activate all latent cinematic elements",
+    "version": "1.0.0",
+    "timestamp": "2025-11-03T03:43:00Z"
+  },
+  "unexpressed_elements": {
+    "thinking_bubbles": {
+      "description": "Internal thoughts not yet visualized",
+      "implementation": "Create thought clouds with different styling than speech",
+      "visual_style": "Translucent, wispy, italic text, dashed border",
+      "examples": [
+        "I am a botanical diagram of growth. I am a love letter. I am entanglement.",
+        "Forms thinking about their own nature"
+      ]
+    },
+    "scene_transitions": {
+      "fade_in": {
+        "duration": "2.0s",
+        "implementation": "Opacity 0→1 on all entities + ambient light fade"
+      },
+      "fade_out": {
+        "duration": "2.0s", 
+        "implementation": "Opacity 1→0 on all entities + dim lights"
+      },
+      "crossfade": {
+        "duration": "3.0s",
+        "implementation": "Overlap old scene fading out with new scene fading in"
+      }
+    },
+    "philosophical_intents": {
+      "description": "Metadata guiding emotional tone",
+      "examples": [
+        "Self-declaration of margin content as authentic expression",
+        "Clancy recognizes the surveillance dimension",
+        "Power begins to shift toward organic life"
+      ],
+      "visualization": "Subtle color shifts in lighting, camera angle changes, tempo modifications"
+    },
+    "wait_events": {
+      "description": "Intentional pauses for contemplation",
+      "longest_pause": "67.0 seconds in scene 9",
+      "implementation": "Ambient motion only, no dialogue, breathing animations intensify"
+    }
+  },
+  "audio_synthesis_map": {
+    "machinery_stress_scream": {
+      "type": "NoiseSynth",
+      "config": {
+        "noise": "brown",
+        "envelope": { "attack": 0.1, "sustain": 0.8, "release": 1.0 },
+        "volume": -20
+      },
+      "description": "Low rumbling mechanical stress"
+    },
+    "clang_miss": {
+      "type": "MetalSynth", 
+      "config": {
+        "frequency": 200,
+        "harmonicity": 5.1,
+        "modulationIndex": 32,
+        "octaves": 1.5
+      },
+      "description": "Sharp metallic impact"
+    },
+    "paper_scattering": {
+      "type": "Noise",
+      "config": {
+        "type": "white",
+        "envelope": { "attack": 0.01, "release": 0.5 },
+        "volume": -30
+      },
+      "description": "High frequency flutter"
+    },
+    "drawer_open": {
+      "type": "PluckSynth",
+      "config": {
+        "note": "G2",
+        "duration": "0.3",
+        "attackNoise": 0.5
+      },
+      "description": "Sliding wooden resonance"
+    },
+    "chaos_symphony": {
+      "type": "Ambient",
+      "config": {
+        "layers": ["dissonant_chords", "rhythmic_pulses", "noise_wash"],
+        "volume": 0.9
+      },
+      "description": "Overwhelming cacophony"
+    },
+    "revelation_music": {
+      "type": "Ambient",
+      "config": {
+        "layers": ["warm_pads", "gentle_harmonics", "soft_bells"],
+        "volume": 0.8
+      },
+      "description": "Ethereal discovery"
+    }
+  },
+  "power_distribution_visualization": {
+    "description": "Visual bars showing entity influence",
+    "metrics": [
+      {
+        "entity": "officer",
+        "visual": "Tall red bar, pulsing",
+        "position": "top-left of scene",
+        "behavior": "Shrinks when power decreases"
+      },
+      {
+        "entity": "procession_momentum",
+        "visual": "Orange bar, steady rhythm",
+        "position": "top-center",
+        "behavior": "Oscillates with movement"
+      },
+      {
+        "entity": "individual_scholars",
+        "visual": "Small green bars",
+        "position": "distributed",
+        "behavior": "Grows during empowerment moments"
+      },
+      {
+        "entity": "clancy_observation",
+        "visual": "Blue bar, analytical",
+        "position": "top-right",
+        "behavior": "Brightens during insights"
+      }
+    ],
+    "animation": "Bars grow from 0 over 1s, pulse with events, color shifts with power changes"
+  },
+  "unexpressed_scene_elements": {
+    "lighting_temperature": {
+      "default": "5500K cool white",
+      "chaos_scene": "Shift to 6500K harsh white",
+      "revelation_scene": "Warm to 3200K golden",
+      "implementation": "THREE.Color.setHSL() based on kelvin conversion"
+    },
+    "bubble_offsets": {
+      "speech": { "x": 0.5, "y": -1.0 },
+      "thought": { "x": -0.5, "y": -1.2 },
+      "implementation": "Different vertical positions for thought vs speech"
+    },
+    "margin_content": {
+      "description": "Annotations and drawings on forms",
+      "visual": "Small sketches/text visible when forms examined",
+      "examples": ["botanical diagrams", "love letters", "partnership symbols"],
+      "implementation": "Texture overlays on form planes, visible on close camera"
+    },
+    "garden_transformation": {
+      "description": "Apparatus interior becomes garden",
+      "elements": ["PLANT1", "PLANT2", "SOIL-EARTH", "SEEDS"],
+      "animation": "Plants grow over time, soil darkens, seeds sprout",
+      "particle_effects": "Floating pollen, soil dust"
+    },
+    "eyes_removed": {
+      "description": "Officer's prosthetics reveal human eyes",
+      "visual": "Geometry swap on officer head, material change",
+      "emotional_impact": "Vulnerability, humanity revealed"
+    }
+  },
+  "execution_timeline": {
+    "scene_1": {
+      "audio": ["ambient_hum"],
+      "power": { "officer": 0.94, "clancy": 0.60 },
+      "lighting": "5500K",
+      "events": ["materialization", "first_interrogation"]
+    },
+    "scene_2": {
+      "audio": ["apparatus_activation", "machinery_hum"],
+      "power": { "officer": 0.90, "apparatus": 0.85 },
+      "lighting": "5500K",
+      "events": ["apparatus_integration", "processing_begins"]
+    },
+    "scene_3": {
+      "audio": ["rhythmic_stamps", "paper_movement"],
+      "power": { "officer": 0.88, "procession": 0.85 },
+      "lighting": "5500K",
+      "events": ["scholar_procession", "form_generation"]
+    },
+    "scene_6": {
+      "audio": ["chaos_symphony", "machinery_stress_scream", "clang_miss", "paper_scattering"],
+      "power": { "officer": 0.75, "apparatus": 0.95, "chaos": 0.90 },
+      "lighting": "6500K harsh",
+      "events": ["eruption", "system_overload"]
+    },
+    "scene_9": {
+      "audio": ["revelation_music", "drawer_open", "paper_flutters"],
+      "power": { "officer": 0.40, "margin_content": 0.85, "clancy": 0.75 },
+      "lighting": "3200K warm",
+      "events": ["forms_revealed", "love_letters_visible", "long_pause_67s"]
+    },
+    "scene_10": {
+      "audio": ["garden_ambience", "organic_sounds"],
+      "power": { "officer": 0.10, "garden": 0.90, "life": 0.85 },
+      "lighting": "3200K golden",
+      "events": ["officer_removal", "garden_emergence", "transformation_complete"]
+    }
+  },
+  "code_generators": {
+    "thinking_bubble_system": "function createThinkingBubble(text, entityPos) { /* wispy cloud with italic text */ }",
+    "scene_transition_system": "function executeTransition(type, duration) { /* fade/crossfade logic */ }",
+    "power_meter_system": "function updatePowerMeter(entity, score) { /* bar height + color */ }",
+    "audio_synthesis_system": "function synthesizeSound(sfxId, config) { /* Tone.js generation */ }",
+    "lighting_temperature_system": "function setSceneLighting(kelvin) { /* color temperature conversion */ }",
+    "margin_content_system": "function renderMarginAnnotations(form) { /* overlay textures */ }",
+    "garden_growth_system": "function animateGrowth(plantEntity, duration) { /* scale + sprout particles */ }"
+  },
+  "activation_checklist": {
+    "implemented": [
+      "✓ Power distribution visualization",
+      "✓ Scene audio execution", 
+      "✓ Sound effect synthesis (machinery, metal, paper, drawer)",
+      "✓ Communication ripples",
+      "✓ Name particles",
+      "✓ Cast introductions",
+      "✓ Play script dialogue"
+    ],
+    "pending": [
+      "⧗ Thinking bubbles (distinct from speech)",
+      "⧗ Scene transition effects (fade in/out)",
+      "⧗ Lighting temperature shifts",
+      "⧗ Margin content visualization",
+      "⧗ Garden growth animation",
+      "⧗ Officer eyes removal transformation",
+      "⧗ 67-second contemplative pause handling",
+      "⧗ Philosophical intent color grading"
+    ]
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "title": "Apparatus Chorus: 1 Human + 6 Sensors",
+  "scenes": [
+    {
+      "scene_number": 1,
+      "title": "Environmental Scan",
+      "duration": 35,
+      "elements": [
+        {
+          "id": "researcher",
+          "name": "Field Researcher",
+          "type": "character",
+          "position": {"x": 0, "y": 0, "z": 0},
+          "color": "#56ff9f",
+          "description": "Human observer coordinating sensor array"
+        },
+        {
+          "id": "temp_sensor",
+          "name": "Temperature",
+          "type": "machine",
+          "position": {"x": -3, "y": 0, "z": 2},
+          "color": "#ff5c7c"
+        },
+        {
+          "id": "humidity_sensor",
+          "name": "Humidity",
+          "type": "machine",
+          "position": {"x": -1.5, "y": 0, "z": 3},
+          "color": "#569fff"
+        },
+        {
+          "id": "co2_sensor",
+          "name": "CO2 Monitor",
+          "type": "machine",
+          "position": {"x": 1.5, "y": 0, "z": 3},
+          "color": "#f3ae56"
+        },
+        {
+          "id": "ph_sensor",
+          "name": "pH Probe",
+          "type": "machine",
+          "position": {"x": 3, "y": 0, "z": 2},
+          "color": "#c78fff"
+        },
+        {
+          "id": "light_sensor",
+          "name": "Light Meter",
+          "type": "machine",
+          "position": {"x": 3, "y": 0, "z": -1},
+          "color": "#ff9f56"
+        },
+        {
+          "id": "soil_sensor",
+          "name": "Soil Moisture",
+          "type": "machine",
+          "position": {"x": -3, "y": 0, "z": -1},
+          "color": "#56ffcc"
+        }
+      ],
+      "timeline": [
+        {
+          "turn": 0,
+          "target_element_id": "researcher",
+          "text": "Initiating baseline environmental scan. All sensors report."
+        },
+        {
+          "turn": 1,
+          "target_element_id": "temp_sensor",
+          "text": "[TEMP: 22.3°C, variance ±0.2°C]"
+        },
+        {
+          "turn": 2,
+          "target_element_id": "humidity_sensor",
+          "text": "[HUMIDITY: 67% RH, stable]"
+        },
+        {
+          "turn": 3,
+          "target_element_id": "co2_sensor",
+          "text": "[CO2: 412 ppm, +3 ppm/hr trend]"
+        },
+        {
+          "turn": 4,
+          "target_element_id": "ph_sensor",
+          "text": "[pH: 6.8, within optimal range]"
+        },
+        {
+          "turn": 5,
+          "target_element_id": "light_sensor",
+          "text": "[LIGHT: 850 lux, partial cloud cover]"
+        },
+        {
+          "turn": 6,
+          "target_element_id": "soil_sensor",
+          "text": "[SOIL: 42% moisture, irrigation threshold not reached]"
+        },
+        {
+          "turn": 7,
+          "target_element_id": "researcher",
+          "text": "Data logged. Conditions nominal. Continuing observation."
+        }
+      ],
+      "power_distribution": {
+        "researcher": 40,
+        "temp_sensor": 10,
+        "humidity_sensor": 10,
+        "co2_sensor": 10,
+        "ph_sensor": 10,
+        "light_sensor": 10,
+        "soil_sensor": 10
+      }
+    }
+  ]
+}

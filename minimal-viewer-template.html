@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{{FILM_TITLE}} - BURN {{BURN_ID}}</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Courier New', monospace; background: #03140d; color: #56ff9f; overflow: hidden; }
+    .viewer { display: grid; grid-template-rows: auto 1fr auto; height: 100vh; }
+    .header { padding: 8px 12px; border-bottom: 1px solid #1a3a2a; background: #06140d; }
+    .title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+    .burn-id { font-size: 9px; opacity: 0.6; margin-bottom: 8px; }
+    .controls { display: flex; gap: 8px; align-items: center; }
+    button { background: #1a3a2a; border: 1px solid #2a4a3a; color: #56ff9f; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-family: inherit; font-size: 12px; font-weight: 700; }
+    button:hover { background: #2a4a3a; }
+    button:active { background: #56ff9f; color: #000; }
+    .info { font-size: 11px; margin-left: auto; }
+    .viewport { position: relative; background: #000; }
+    canvas { width: 100%; height: 100%; display: block; }
+    .chat { padding: 8px; background: #06140d; border-top: 1px solid #1a3a2a; overflow-y: auto; max-height: 200px; font-size: 11px; line-height: 1.6; }
+    .msg { margin-bottom: 8px; padding: 6px; background: rgba(26,58,42,0.3); border-left: 3px solid #56ff9f; border-radius: 4px; }
+    .speaker { font-weight: 700; color: #ff9f56; margin-bottom: 2px; font-size: 10px; }
+    @media (max-width: 640px) {
+      .title { font-size: 14px; }
+      .burn-id { font-size: 8px; }
+      .controls { gap: 4px; flex-wrap: wrap; }
+      button { padding: 6px 12px; font-size: 11px; }
+      .info { font-size: 10px; }
+      .chat { max-height: 150px; font-size: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="viewer">
+    <div class="header">
+      <div class="title">{{FILM_TITLE}}</div>
+      <div class="burn-id">BURN ID: {{BURN_ID}}</div>
+      <div class="controls">
+        <button id="playBtn">▶ PLAY</button>
+        <button id="pauseBtn">⏸ PAUSE</button>
+        <button id="resetBtn">↺ RESET</button>
+        <div class="info">Scene: <strong id="sceneNum">1</strong> | Turn: <strong id="turnNum">0</strong>/<strong id="turnTotal">0</strong></div>
+      </div>
+    </div>
+    <div class="viewport" id="viewport"></div>
+    <div class="chat" id="chatLog"></div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script>
+    // EMBEDDED FILM DATA - BURN ID: {{BURN_ID}}
+    const EMBEDDED_DATA = {{FILM_DATA}};
+    
+    // Minimal viewer - auto-loads and plays
+    console.log('Burned film loaded:', EMBEDDED_DATA.title);
+    
+    // TODO: Copy essential viewer code here
+    // For now, just show it loaded
+    document.getElementById('chatLog').innerHTML = `
+      <div class="msg">
+        <div class="speaker">SYSTEM</div>
+        Film "${EMBEDDED_DATA.title}" loaded. Viewer code pending.
+      </div>
+    `;
+  </script>
+</body>
+</html>

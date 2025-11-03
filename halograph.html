@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HALOGRAPH - Image-Based 3D Viewer</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='80'>🖼️</text></svg>">
+  <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Courier New', monospace; background: #03180c; color: #aef3c1; overflow: hidden; }
+    .app { display: flex; flex-direction: column; height: 100vh; }
+    header { padding: 12px 16px; background: #052010; border-bottom: 1px solid #0c3a23; display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 14px; font-weight: 700; color: #56ff9f; }
+    button { background: #052010; border: 1px solid #0c3a23; color: #56ff9f; padding: 6px 12px; border-radius: 6px; cursor: pointer; font: inherit; font-size: 11px; }
+    button:hover { background: rgba(86,255,159,0.1); }
+    .viewport { flex: 1; position: relative; background: #03140d; }
+    canvas.webgl { width: 100%; height: 100%; display: block; }
+    .info { position: absolute; bottom: 12px; left: 12px; background: rgba(0,0,0,0.8); padding: 12px; border: 1px solid #0c3a23; border-radius: 8px; font-size: 11px; max-width: 300px; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="logo">🖼️ HALOGRAPH - Image Billboard Viewer</div>
+      <div>
+        <button id="loadBtn">Load JSON with imageUrl</button>
+        <button id="rotateBtn">🔄 Auto-Rotate</button>
+      </div>
+    </header>
+    <div class="viewport" id="viewport"></div>
+    <div class="info" id="info">
+      <strong>HALOGRAPH</strong><br/>
+      Load JSON data with <code>imageUrl</code> fields to display billboarded images on boxes.<br/><br/>
+      Example:<br/>
+      <code>{ "id": "entity1", "imageUrl": "https://...", "initial_grid_position": {"row": 1, "col": 1} }</code>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    const viewport = document.getElementById('viewport');
+    const info = document.getElementById('info');
+    
+    // Three.js setup
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x03140d);
+    const camera = new THREE.PerspectiveCamera(55, viewport.clientWidth / viewport.clientHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(viewport.clientWidth, viewport.clientHeight);
+    renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+    renderer.shadowMap.enabled = true;
+    viewport.appendChild(renderer.domElement);
+    
+    const controls = new (THREE.OrbitControls || THREE.OrbitControls)(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    
+    // Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    scene.add(ambientLight);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    dirLight.position.set(5, 10, 7);
+    dirLight.castShadow = true;
+    scene.add(dirLight);
+    
+    // Grid
+    const GRID_SIZE = 9;
+    const CELL_SIZE = 1;
+    const gridHelper = new THREE.GridHelper(GRID_SIZE * CELL_SIZE, GRID_SIZE, 0x0c3a23, 0x0c3a23);
+    gridHelper.material.transparent = true;
+    gridHelper.material.opacity = 0.3;
+    scene.add(gridHelper);
+    
+    const base = new THREE.Mesh(
+      new THREE.PlaneGeometry(GRID_SIZE * CELL_SIZE, GRID_SIZE * CELL_SIZE),
+      new THREE.MeshStandardMaterial({ color: 0x041a11, roughness: 1, metalness: 0 })
+    );
+    base.rotation.x = -Math.PI/2;
+    base.receiveShadow = true;
+    scene.add(base);
+    
+    camera.position.set(5, 8, 10);
+    camera.lookAt(0, 0, 0);
+    
+    const entityMeshes = [];
+    let autoRotate = false;
+    
+    // Load JSON with imageUrl fields
+    document.getElementById('loadBtn').onclick = () => {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.json';
+      input.onchange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const text = await file.text();
+        const data = JSON.parse(text);
+        loadData(data);
+      };
+      input.click();
+    };
+    
+    document.getElementById('rotateBtn').onclick = () => {
+      autoRotate = !autoRotate;
+      document.getElementById('rotateBtn').textContent = autoRotate ? '⏸ Stop Rotate' : '🔄 Auto-Rotate';
+    };
+    
+    function loadData(data) {
+      // Clear old
+      entityMeshes.forEach(m => scene.remove(m));
+      entityMeshes.length = 0;
+      
+      const elements = data.elements || data.scenes?.[0]?.elements || [];
+      info.innerHTML = `<strong>Loaded ${elements.length} entities</strong><br/>Click entities to see details.`;
+      
+      elements.forEach(el => {
+        const r = (el.initial_grid_position?.row||1)-1;
+        const c = (el.initial_grid_position?.col||1)-1;
+        const x = c * CELL_SIZE;
+        const z = r * CELL_SIZE;
+        const y = 0.5;
+        
+        // Box geometry
+        const boxGeom = new THREE.BoxGeometry(0.8, 0.8, 0.8);
+        const mat = new THREE.MeshStandardMaterial({ color: 0x56ff9f });
+        const mesh = new THREE.Mesh(boxGeom, mat);
+        mesh.position.set(x, y, z);
+        mesh.castShadow = true;
+        mesh.userData = { id: el.id, name: el.name, imageUrl: el.imageUrl };
+        scene.add(mesh);
+        entityMeshes.push(mesh);
+        
+        // If imageUrl provided, create billboard sprite
+        if (el.imageUrl) {
+          const loader = new THREE.TextureLoader();
+          loader.load(el.imageUrl, (texture) => {
+            const spriteMat = new THREE.SpriteMaterial({ map: texture, transparent: true });
+            const sprite = new THREE.Sprite(spriteMat);
+            sprite.scale.set(1.5, 1.5, 1);
+            sprite.position.set(0, 1.2, 0); // Above box
+            mesh.add(sprite);
+          }, undefined, (err) => {
+            console.warn(`Failed to load image: ${el.imageUrl}`, err);
+          });
+        }
+      });
+    }
+    
+    // Click to show info
+    renderer.domElement.addEventListener('click', (event) => {
+      const rect = renderer.domElement.getBoundingClientRect();
+      const mouse = new THREE.Vector2(
+        ((event.clientX - rect.left) / rect.width) * 2 - 1,
+        -((event.clientY - rect.top) / rect.height) * 2 + 1
+      );
+      const raycaster = new THREE.Raycaster();
+      raycaster.setFromCamera(mouse, camera);
+      const hits = raycaster.intersectObjects(entityMeshes, false);
+      if (hits.length > 0) {
+        const mesh = hits[0].object;
+        info.innerHTML = `<strong>${mesh.userData.name || mesh.userData.id}</strong><br/>
+          ID: ${mesh.userData.id}<br/>
+          Image: ${mesh.userData.imageUrl || 'None'}<br/>
+          Position: (${mesh.position.x.toFixed(1)}, ${mesh.position.z.toFixed(1)})`;
+      }
+    });
+    
+    function animate() {
+      requestAnimationFrame(animate);
+      if (autoRotate) {
+        camera.position.x = Math.cos(Date.now() * 0.0003) * 10;
+        camera.position.z = Math.sin(Date.now() * 0.0003) * 10;
+        camera.lookAt(0, 0, 0);
+      }
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+    
+    window.addEventListener('resize', () => {
+      camera.aspect = viewport.clientWidth / viewport.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(viewport.clientWidth, viewport.clientHeight);
+    });
+  })();
+  </script>
+</body>
+</html>

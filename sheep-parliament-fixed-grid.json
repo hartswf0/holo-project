@@ -1,0 +1,140 @@
+{
+  "title": "The Sheep Parliament Decides",
+  "subtitle": "A Comedy of Consent, Miscommunication, and Grass",
+  "scenes": [
+    {
+      "scene_number": 1,
+      "title": "Morning on the Hill",
+      "subtitle": "Five Sheep, One Idea, Zero Agreement",
+      "duration": 50,
+      "elements": [
+        {
+          "id": "sheep_beatrice",
+          "name": "Beatrice",
+          "type": "character",
+          "position": {"x": 3, "y": 0, "z": 4.5},
+          "color": "#56ff9f",
+          "description": "Eldest sheep, thinks she's in charge, isn't"
+        },
+        {
+          "id": "sheep_gerald",
+          "name": "Gerald",
+          "type": "character",
+          "position": {"x": 5, "y": 0, "z": 4.5},
+          "color": "#ff9f56",
+          "description": "Middle sheep, always hungry, easily distracted by grass"
+        },
+        {
+          "id": "sheep_penelope",
+          "name": "Penelope",
+          "type": "character",
+          "position": {"x": 4, "y": 0, "z": 5.5},
+          "color": "#569fff",
+          "description": "Youngest sheep, asks too many questions"
+        },
+        {
+          "id": "sheep_maurice",
+          "name": "Maurice",
+          "type": "character",
+          "position": {"x": 2.5, "y": 0, "z": 3},
+          "color": "#c78fff",
+          "description": "Philosopher sheep, overcomplicates everything"
+        },
+        {
+          "id": "sheep_dotty",
+          "name": "Dotty",
+          "type": "character",
+          "position": {"x": 5.5, "y": 0, "z": 3},
+          "color": "#f3ae56",
+          "description": "Spotted sheep, contrarian, argues for sport"
+        },
+        {
+          "id": "fence_post_1",
+          "name": "Fence Post (Left)",
+          "type": "machine",
+          "position": {"x": 1, "y": 0, "z": 1.5},
+          "color": "#8b7355",
+          "description": "Wooden fence post marking boundary"
+        },
+        {
+          "id": "fence_post_2",
+          "name": "Fence Post (Right)",
+          "type": "machine",
+          "position": {"x": 7, "y": 0, "z": 1.5},
+          "color": "#8b7355",
+          "description": "Wooden fence post marking boundary"
+        },
+        {
+          "id": "virtual_fence_node",
+          "name": "Virtual Fence Box",
+          "type": "machine",
+          "position": {"x": 4, "y": 0, "z": 1},
+          "color": "#ff5c7c",
+          "description": "Electronic box, beeps warnings, flashes lights"
+        },
+        {
+          "id": "grass_patch_premium",
+          "name": "Premium Grass (Beyond Fence)",
+          "type": "machine",
+          "position": {"x": 4, "y": 0, "z": 0},
+          "color": "#4ecdc4",
+          "description": "Lush grass everyone wants, just past fence line"
+        },
+        {
+          "id": "grass_patch_current",
+          "name": "Current Grass (Here)",
+          "type": "machine",
+          "position": {"x": 0.5, "y": 0, "z": 5},
+          "color": "#90ee90",
+          "description": "Perfectly fine grass where sheep are now"
+        },
+        {
+          "id": "water_trough",
+          "name": "Water Trough",
+          "type": "machine",
+          "position": {"x": 7.5, "y": 0, "z": 5},
+          "color": "#87ceeb",
+          "description": "Metal trough, half-full of water"
+        },
+        {
+          "id": "hay_bale_1",
+          "name": "Hay Bale",
+          "type": "machine",
+          "position": {"x": 0.5, "y": 0, "z": 3},
+          "color": "#daa520",
+          "description": "Round hay bale, sheep ignore it"
+        },
+        {
+          "id": "tree_oak",
+          "name": "Old Oak Tree",
+          "type": "machine",
+          "position": {"x": 0, "y": 0, "z": 7},
+          "color": "#8b4513",
+          "description": "Provides shade, birds nest in it"
+        },
+        {
+          "id": "shepherd_hut",
+          "name": "Shepherd's Hut",
+          "type": "machine",
+          "position": {"x": 8, "y": 0, "z": 7},
+          "color": "#cd853f",
+          "description": "Small wooden structure, Klaus lives here"
+        }
+      ],
+      "timeline": [
+        {"turn": 0, "target_element_id": "sheep_beatrice", "text": "I call this meeting to order. We need to discuss the fence situation.", "emotion": "authoritative"},
+        {"turn": 1, "target_element_id": "sheep_gerald", "text": "What fence? I'm eating.", "emotion": "distracted"},
+        {"turn": 2, "target_element_id": "virtual_fence_node", "text": "[BEEP BEEP BEEP BEEP]"},
+        {"turn": 3, "target_element_id": "sheep_beatrice", "text": "WILL YOU STOP THAT! I'm trying to LEAD here!", "emotion": "irritated"},
+        {"turn": 4, "target_element_id": "sheep_penelope", "text": "Why does Beatrice's neck make noise? Can MY neck make noise?", "emotion": "curious"},
+        {"turn": 5, "target_element_id": "sheep_maurice", "text": "The question isn't CAN your neck make noise, but SHOULD it. What is the nature of neck-noise consent?", "emotion": "philosophical"},
+        {"turn": 6, "target_element_id": "sheep_dotty", "text": "I disagree. Necks should be silent. This is a hill I'm willing to die on.", "emotion": "contrarian"},
+        {"turn": 7, "target_element_id": "grass_patch_premium", "text": "[Grass rustles temptingly in the breeze beyond the invisible fence]"},
+        {"turn": 8, "target_element_id": "sheep_gerald", "text": "Is anyone else thinking about that grass? Because I'm thinking about that grass.", "emotion": "fixated"},
+        {"turn": 9, "target_element_id": "virtual_fence_node", "text": "[PROXIMITY ALERT: beep-boop-beep]"},
+        {"turn": 10, "target_element_id": "sheep_penelope", "text": "What does beep-boop-beep MEAN? Is it saying hello? Should we beep back?", "emotion": "confused"}
+      ],
+      "power_distribution": {"sheep_beatrice": 25, "sheep_gerald": 20, "sheep_penelope": 15, "sheep_maurice": 15, "sheep_dotty": 15, "fence_post_1": 3, "virtual_fence_node": 4, "grass_patch_premium": 3}
+    }
+  ]
+}

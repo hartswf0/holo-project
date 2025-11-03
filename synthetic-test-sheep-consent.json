@@ -1,0 +1,203 @@
+{
+  "title": "Sheep Cyborg Consent Dashboard",
+  "subtitle": "Virtual Fence Ethics Lab (Germany 2025)",
+  "scenes": [
+    {
+      "scene_number": 1,
+      "title": "Dawn Consent Check",
+      "subtitle": "Welfare Thresholds",
+      "duration": 40,
+      "elements": [
+        {
+          "id": "shepherd",
+          "name": "Shepherd",
+          "type": "character",
+          "position": {"x": 0, "y": 0, "z": 0},
+          "color": "#56ff9f",
+          "description": "[green] Human operator monitoring welfare metrics"
+        },
+        {
+          "id": "flock_collective",
+          "name": "Flock (Collective)",
+          "type": "character",
+          "position": {"x": 2, "y": 0, "z": 1},
+          "color": "#569fff",
+          "description": "[amber] 45 sheep, distributed cognition via GPS collars"
+        },
+        {
+          "id": "consent_monitor",
+          "name": "Consent Dashboard",
+          "type": "machine",
+          "position": {"x": -3, "y": 0, "z": 1},
+          "color": "#f3ae56",
+          "description": "[amber] Welfare sentinel: gait variance + rumination metrics"
+        },
+        {
+          "id": "virtual_fence",
+          "name": "Virtual Fence System",
+          "type": "machine",
+          "position": {"x": 3, "y": 0, "z": -1},
+          "color": "#ff5c7c",
+          "description": "[amber] Haptic/audio cues, DE regulatory compliant 2025"
+        },
+        {
+          "id": "ethics_archive",
+          "name": "Haraway/Verbeek Reader",
+          "type": "machine",
+          "position": {"x": -3, "y": 0, "z": -2},
+          "color": "#c78fff",
+          "description": "[green] Multispecies design principles, cited texts"
+        }
+      ],
+      "timeline": [
+        {
+          "turn": 0,
+          "target_element_id": "shepherd",
+          "text": "Morning check. Requesting consent dashboard status.",
+          "emotion": "attentive"
+        },
+        {
+          "turn": 1,
+          "target_element_id": "consent_monitor",
+          "text": "[GAIT VARIANCE: 3.2% | RUMINATION: normal | THRESHOLD: 5% → PASS]",
+          "metadata": {
+            "ritual_phase": "consent_check",
+            "evidence_color": "amber",
+            "citation": "oekolandbau.de virtual fence pilots 2024"
+          }
+        },
+        {
+          "turn": 2,
+          "target_element_id": "virtual_fence",
+          "text": "[FENCE STATUS: ALLOWED to activate | Cue intensity: Level 2 (moderate)]"
+        },
+        {
+          "turn": 3,
+          "target_element_id": "flock_collective",
+          "text": "We move together. The boundary speaks softly.",
+          "emotion": "calm"
+        },
+        {
+          "turn": 4,
+          "target_element_id": "consent_monitor",
+          "text": "[UPDATE: Gait variance 2.9% → STABLE | Group cohesion 94%]"
+        },
+        {
+          "turn": 5,
+          "target_element_id": "shepherd",
+          "text": "Noted. Fence remains active. Monitoring continues.",
+          "emotion": "satisfied"
+        },
+        {
+          "turn": 6,
+          "target_element_id": "ethics_archive",
+          "text": "[PRINCIPLE: 'Technologies must be legible to animals' — Verbeek, 2011]"
+        },
+        {
+          "turn": 7,
+          "target_element_id": "flock_collective",
+          "text": "The cues are clear. We choose to stay.",
+          "emotion": "consensual"
+        }
+      ],
+      "power_distribution": {
+        "shepherd": 30,
+        "flock_collective": 40,
+        "consent_monitor": 15,
+        "virtual_fence": 10,
+        "ethics_archive": 5
+      },
+      "scene_audio": {
+        "background_music": "pastoral_ambient",
+        "intensity": 0.3
+      }
+    },
+    {
+      "scene_number": 2,
+      "title": "Threshold Breach",
+      "subtitle": "Opt-Out Protocol",
+      "duration": 35,
+      "elements": [
+        {
+          "id": "shepherd",
+          "name": "Shepherd",
+          "type": "character",
+          "position": {"x": 0, "y": 0, "z": 0},
+          "color": "#56ff9f"
+        },
+        {
+          "id": "flock_collective",
+          "name": "Flock (Collective)",
+          "type": "character",
+          "position": {"x": 2, "y": 0, "z": 2},
+          "color": "#569fff"
+        },
+        {
+          "id": "consent_monitor",
+          "name": "Consent Dashboard",
+          "type": "machine",
+          "position": {"x": -3, "y": 0, "z": 1},
+          "color": "#f3ae56"
+        },
+        {
+          "id": "virtual_fence",
+          "name": "Virtual Fence System",
+          "type": "machine",
+          "position": {"x": 3, "y": 0, "z": -1},
+          "color": "#ff5c7c"
+        }
+      ],
+      "timeline": [
+        {
+          "turn": 0,
+          "target_element_id": "consent_monitor",
+          "text": "[ALERT: Gait variance 6.8% ⚠️ | THRESHOLD EXCEEDED → welfare concern detected]"
+        },
+        {
+          "turn": 1,
+          "target_element_id": "flock_collective",
+          "text": "Something is wrong. The boundary causes distress.",
+          "emotion": "anxious"
+        },
+        {
+          "turn": 2,
+          "target_element_id": "virtual_fence",
+          "text": "[AUTO-DISABLE initiated | Cue intensity → ZERO | Human override required]"
+        },
+        {
+          "turn": 3,
+          "target_element_id": "shepherd",
+          "text": "Fence disabled. I'm coming to check on you.",
+          "emotion": "concerned"
+        },
+        {
+          "turn": 4,
+          "target_element_id": "flock_collective",
+          "text": "We opted out. The system listened.",
+          "emotion": "relieved"
+        },
+        {
+          "turn": 5,
+          "target_element_id": "consent_monitor",
+          "text": "[INCIDENT LOGGED: welfare_threshold_breach | Action: fence_disabled | Duration: 12 minutes]"
+        },
+        {
+          "turn": 6,
+          "target_element_id": "shepherd",
+          "text": "This is consent in action. Technology serves, not commands.",
+          "emotion": "reflective"
+        }
+      ],
+      "power_distribution": {
+        "shepherd": 35,
+        "flock_collective": 50,
+        "consent_monitor": 10,
+        "virtual_fence": 5
+      },
+      "scene_audio": {
+        "background_music": "tense_resolution",
+        "intensity": 0.7
+      }
+    }
+  ]
+}

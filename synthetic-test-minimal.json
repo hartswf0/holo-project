@@ -1,0 +1,47 @@
+{
+  "title": "Minimal Test: 2 Entities",
+  "scenes": [
+    {
+      "scene_number": 1,
+      "title": "First Contact",
+      "duration": 15,
+      "elements": [
+        {
+          "id": "alpha",
+          "name": "Alpha",
+          "type": "character",
+          "position": {"x": 0, "y": 0, "z": 0},
+          "color": "#56ff9f"
+        },
+        {
+          "id": "beta",
+          "name": "Beta Apparatus",
+          "type": "machine",
+          "position": {"x": 2.5, "y": 0, "z": 0},
+          "color": "#ff9f56"
+        }
+      ],
+      "timeline": [
+        {
+          "turn": 0,
+          "target_element_id": "alpha",
+          "text": "System online. Beginning observation."
+        },
+        {
+          "turn": 1,
+          "target_element_id": "beta",
+          "text": "[SCANNING... baseline signature detected]"
+        },
+        {
+          "turn": 2,
+          "target_element_id": "alpha",
+          "text": "Acknowledged. Proceed."
+        }
+      ],
+      "power_distribution": {
+        "alpha": 70,
+        "beta": 30
+      }
+    }
+  ]
+}

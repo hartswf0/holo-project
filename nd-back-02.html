@@ -1,0 +1,2796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>XANADOC - Dual View</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='%2344ff44'/></svg>">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Reduce motion for accessibility and battery life */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            /* Prevent pull-to-refresh on mobile */
+            overscroll-behavior: none;
+            /* Disable text selection for better mobile UX */
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        
+        /* Loading state */
+        body.loading {
+            opacity: 0;
+        }
+        
+        body.loaded {
+            opacity: 1;
+            transition: opacity 0.3s ease-out;
+        }
+        
+        /* Loading spinner */
+        .loading-spinner {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 0.3s ease-out;
+            pointer-events: none;
+        }
+        
+        body.loaded .loading-spinner {
+            opacity: 0;
+        }
+        
+        .spinner-ring {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(68, 204, 68, 0.2);
+            border-top-color: #44cc44;
+            border-radius: 50%;
+            animation: spinnerRotate 1s linear infinite;
+        }
+        
+        @keyframes spinnerRotate {
+            to { transform: rotate(360deg); }
+        }
+
+        /* VIEW TOGGLE */
+        .view-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 2000;
+            display: flex;
+            gap: 8px;
+            background: rgba(10,10,10,0.95);
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+
+        .view-btn {
+            padding: 10px 20px;
+            background: transparent;
+            color: #666;
+            border: 1px solid #333;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            transition: all 0.2s;
+        }
+
+        .view-btn:hover {
+            color: #999;
+            border-color: #555;
+        }
+
+        .view-btn.active {
+            background: #1a1a1a;
+            color: #fff;
+            border-color: #666;
+        }
+
+        /* SCROLL VIEW (Horizontal Columns) */
+        .scroll-view {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 1;
+            transition: opacity 0.3s;
+            pointer-events: auto;
+            z-index: 10;
+        }
+
+        .scroll-view.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .scroll-container {
+            display: flex;
+            height: 100vh;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-behavior: smooth;
+            background: #000;
+        }
+
+        .column {
+            min-width: 450px;
+            width: 450px;
+            height: 100vh;
+            border-right: 1px solid #222;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .column-header {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            border-bottom: 1px solid #222;
+            background: #0a0a0a;
+            flex-shrink: 0;
+        }
+
+        .column-title {
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            color: #888;
+            text-shadow: 0 0 10px rgba(255,255,255,0.15);
+        }
+
+        .column-marker {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: markerPulse 3s ease-in-out infinite;
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        .column[data-type="essay"] .column-marker { 
+            background: #ff4444; 
+            animation-delay: 0s;
+        }
+        .column[data-type="poem"] .column-marker { 
+            background: #44ff44;
+            animation-delay: 0.5s;
+        }
+        .column[data-type="prompt"] .column-marker { 
+            background: #4444ff;
+            animation-delay: 1s;
+        }
+        .column[data-type="image"] .column-marker { 
+            background: #ffff44;
+            animation-delay: 1.5s;
+        }
+        
+        @keyframes markerPulse {
+            0%, 100% {
+                box-shadow: 0 0 8px currentColor;
+                transform: scale(1);
+                opacity: 0.8;
+            }
+            50% {
+                box-shadow: 0 0 15px currentColor, 0 0 20px currentColor;
+                transform: scale(1.15);
+                opacity: 1;
+            }
+        }
+
+        .column-content {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 32px 24px;
+        }
+
+        .unit {
+            margin-bottom: 24px;
+            padding: 20px;
+            background: #0a0a0a;
+            border-left: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            border-radius: 40% 60% 55% 45% / 50% 60% 40% 50%;
+            filter: blur(0px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            animation: organicPulse 8s ease-in-out infinite;
+            max-width: 350px;
+        }
+        
+        .unit.particle-hit {
+            animation: polygonGlow 0.8s ease-out;
+        }
+        
+        @keyframes polygonGlow {
+            0% { box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+            50% { box-shadow: 0 0 40px currentColor, 0 0 60px currentColor, inset 0 0 20px currentColor; }
+            100% { box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+        }
+        
+        @keyframes organicPulse {
+            0%, 100% { 
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+            50% { 
+                transform: scale(1.01) rotate(0.5deg);
+                opacity: 0.98;
+            }
+        }
+
+        .unit:hover {
+            background: #1a1a1a;
+            padding-left: 24px;
+            filter: brightness(1.15) contrast(1.1);
+        }
+
+        .unit.active {
+            background: #1a1a1a;
+            padding-left: 24px;
+            filter: brightness(1.25) contrast(1.15);
+        }
+        
+        .unit.in-path {
+            background: #151515;
+            filter: brightness(1.15) contrast(1.08);
+            box-shadow: 0 6px 25px rgba(255,255,255,0.15);
+        }
+        
+        .unit.in-path .letter-particle {
+            animation: pathGlow 3s ease-in-out infinite;
+        }
+        
+        @keyframes pathGlow {
+            0%, 100% {
+                text-shadow: 0 0 5px rgba(255,255,255,0.15);
+            }
+            50% {
+                text-shadow: 0 0 8px rgba(255,255,255,0.25);
+            }
+        }
+
+        .column[data-type="essay"] .unit { background: linear-gradient(135deg, #1a0808 0%, #0a0a0a 100%); }
+        .column[data-type="essay"] .unit.active { 
+            border-left-color: #ff4444; 
+            background: linear-gradient(135deg, #2a0808 0%, #1a0808 50%, #0a0a0a 100%);
+            box-shadow: 0 8px 30px rgba(255, 68, 68, 0.3), inset 0 0 20px rgba(255, 68, 68, 0.1);
+        }
+        .column[data-type="poem"] .unit { background: linear-gradient(135deg, #081a08 0%, #0a0a0a 100%); }
+        .column[data-type="poem"] .unit.active { 
+            border-left-color: #44ff44; 
+            background: linear-gradient(135deg, #082a08 0%, #081a08 50%, #0a0a0a 100%);
+            box-shadow: 0 8px 30px rgba(68, 255, 68, 0.3), inset 0 0 20px rgba(68, 255, 68, 0.1);
+        }
+        .column[data-type="prompt"] .unit { background: linear-gradient(135deg, #08081a 0%, #0a0a0a 100%); }
+        .column[data-type="prompt"] .unit.active { 
+            border-left-color: #4444ff; 
+            background: linear-gradient(135deg, #08082a 0%, #08081a 50%, #0a0a0a 100%);
+            box-shadow: 0 8px 30px rgba(68, 68, 255, 0.3), inset 0 0 20px rgba(68, 68, 255, 0.1);
+        }
+        .column[data-type="image"] .unit { background: linear-gradient(135deg, #1a1a08 0%, #0a0a0a 100%); }
+        .column[data-type="image"] .unit.active { 
+            border-left-color: #ffff44; 
+            background: linear-gradient(135deg, #2a2a08 0%, #1a1a08 50%, #0a0a0a 100%);
+            box-shadow: 0 8px 30px rgba(255, 255, 68, 0.3), inset 0 0 20px rgba(255, 255, 68, 0.1);
+        }
+
+        .unit-id {
+            font-size: 9px;
+            color: #999;
+            margin-bottom: 12px;
+            letter-spacing: 0.1em;
+            font-weight: bold;
+            text-shadow: 0 0 6px rgba(255,255,255,0.15);
+            animation: idBreathe 10s ease-in-out infinite;
+        }
+        
+        @keyframes idBreathe {
+            0%, 100% {
+                opacity: 0.9;
+            }
+            50% {
+                opacity: 1;
+                text-shadow: 0 0 10px rgba(255,255,255,0.25);
+            }
+        }
+
+        .unit-text {
+            color: #ddd;
+            line-height: 1.9;
+            font-size: 14px;
+            text-shadow: 0 0 10px rgba(255,255,255,0.12);
+            animation: textBreathe 8s ease-in-out infinite;
+            letter-spacing: 0.3px;
+            max-width: 280px;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+
+        .unit.active .unit-text {
+            color: #fff;
+            animation: textBreatheActive 6s ease-in-out infinite;
+        }
+        
+        @keyframes textBreathe {
+            0%, 100% {
+                text-shadow: 0 0 8px rgba(255,255,255,0.08);
+            }
+            50% {
+                text-shadow: 0 0 12px rgba(255,255,255,0.15);
+            }
+        }
+        
+        @keyframes textBreatheActive {
+            0%, 100% {
+                text-shadow: 0 0 15px rgba(255,255,255,0.2);
+            }
+            50% {
+                text-shadow: 0 0 25px rgba(255,255,255,0.35);
+            }
+        }
+
+        .poem-line {
+            padding: 6px 0;
+            padding-left: 32px;
+            position: relative;
+            animation: textBreathe 9s ease-in-out infinite;
+        }
+
+        .poem-line::before {
+            content: attr(data-num);
+            position: absolute;
+            left: 0;
+            color: #666;
+            font-size: 9px;
+            width: 24px;
+            text-align: right;
+            text-shadow: 0 0 8px rgba(68, 255, 68, 0.3);
+        }
+
+        .prompt-q {
+            font-size: 10px;
+            color: #aaa;
+            margin-bottom: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            text-shadow: 0 0 8px rgba(255,255,255,0.12);
+            animation: questionBreathe 7s ease-in-out infinite;
+        }
+        
+        @keyframes questionBreathe {
+            0%, 100% { text-shadow: 0 0 8px rgba(255,255,255,0.1); }
+            50% { text-shadow: 0 0 12px rgba(255,255,255,0.18); }
+        }
+
+        .prompt-a {
+            color: #ddd;
+            text-shadow: 0 0 8px rgba(255,255,255,0.1);
+            animation: textBreathe 9s ease-in-out infinite;
+            font-size: 13px;
+            max-width: 260px;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+
+        .origin-marker {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 8px;
+            color: #888;
+            background: #000;
+            padding: 4px 8px;
+            border: 1px solid #333;
+            letter-spacing: 0.1em;
+            text-shadow: 0 0 10px rgba(255,255,255,0.2);
+            box-shadow: 0 0 10px rgba(255,255,255,0.05);
+        }
+
+        .barrel {
+            width: 100%;
+            aspect-ratio: 1;
+            background: #0a0a0a;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #222;
+        }
+
+        .barrel::before,
+        .barrel::after {
+            content: '';
+            position: absolute;
+            background: #1a1a1a;
+        }
+
+        .barrel::before {
+            width: 1px;
+            height: 100%;
+            left: 50%;
+        }
+
+        .barrel::after {
+            width: 100%;
+            height: 1px;
+            top: 50%;
+        }
+
+        .barrel-label {
+            position: relative;
+            z-index: 1;
+            font-size: 9px;
+            color: #888;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(255, 255, 68, 0.2);
+        }
+
+        .image-prompt {
+            font-size: 10px;
+            color: #aaa;
+            line-height: 1.6;
+            margin-top: 8px;
+            text-shadow: 0 0 10px rgba(255,255,255,0.1);
+            animation: textBreathe 10s ease-in-out infinite;
+        }
+
+        /* FLOW VIEW (Organic Blobs) */
+        .flow-view {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            background: #0a0a0a;
+        }
+
+        .flow-view.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .viewport {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            /* GPU acceleration for smooth pan/zoom */
+            will-change: transform;
+            transform: translate3d(0, 0, 0);
+        }
+
+        .canvas-layer {
+            position: absolute;
+            width: 8000px;
+            height: 4000px;
+            top: 50%;
+            left: 50%;
+            transform-origin: center;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+
+        .blob-node {
+            position: absolute;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: auto;
+            animation: blobFloat 6s ease-in-out infinite;
+            /* GPU acceleration for smooth mobile performance */
+            will-change: transform;
+            transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        
+        /* Type-specific glows for visual unity with ribbons */
+        .blob-node[data-type="essay"] {
+            filter: drop-shadow(0 6px 20px rgba(0,0,0,0.5)) drop-shadow(0 0 20px rgba(204, 51, 51, 0.3));
+        }
+        
+        .blob-node[data-type="poem"] {
+            filter: drop-shadow(0 6px 20px rgba(0,0,0,0.5)) drop-shadow(0 0 20px rgba(68, 204, 68, 0.3));
+        }
+        
+        .blob-node[data-type="prompt"] {
+            filter: drop-shadow(0 6px 20px rgba(0,0,0,0.5)) drop-shadow(0 0 20px rgba(68, 136, 255, 0.3));
+        }
+        
+        .blob-node[data-type="image"] {
+            filter: drop-shadow(0 6px 20px rgba(0,0,0,0.5)) drop-shadow(0 0 20px rgba(255, 255, 68, 0.3));
+        }
+        
+        @keyframes blobFloat {
+            0%, 100% {
+                transform: translate3d(0, 0, 0) scale(1);
+            }
+            33% {
+                transform: translate3d(3px, -5px, 0) scale(1.01);
+            }
+            66% {
+                transform: translate3d(-3px, 5px, 0) scale(0.99);
+            }
+        }
+
+        .blob-node:hover {
+            transform: scale(1.05) !important;
+            z-index: 50;
+            cursor: pointer;
+            filter: brightness(1.2) saturate(1.1) drop-shadow(0 10px 30px rgba(0,0,0,0.7));
+        }
+        
+        /* Enhance glow on hover while keeping type color */
+        .blob-node[data-type="essay"]:hover {
+            filter: brightness(1.2) saturate(1.1) drop-shadow(0 10px 30px rgba(0,0,0,0.7)) drop-shadow(0 0 30px rgba(204, 51, 51, 0.6));
+        }
+        
+        .blob-node[data-type="poem"]:hover {
+            filter: brightness(1.2) saturate(1.1) drop-shadow(0 10px 30px rgba(0,0,0,0.7)) drop-shadow(0 0 30px rgba(68, 204, 68, 0.6));
+        }
+        
+        .blob-node[data-type="prompt"]:hover {
+            filter: brightness(1.2) saturate(1.1) drop-shadow(0 10px 30px rgba(0,0,0,0.7)) drop-shadow(0 0 30px rgba(68, 136, 255, 0.6));
+        }
+        
+        .blob-node[data-type="image"]:hover {
+            filter: brightness(1.2) saturate(1.1) drop-shadow(0 10px 30px rgba(0,0,0,0.7)) drop-shadow(0 0 30px rgba(255, 255, 68, 0.6));
+        }
+
+        .blob-node.active {
+            z-index: 100;
+            transform: scale(1.08) !important;
+            filter: brightness(1.3) saturate(1.3) drop-shadow(0 15px 50px rgba(255,255,255,0.5));
+        }
+        
+        /* Mobile touch feedback */
+        .blob-node:active {
+            transform: scale(0.98);
+        }
+
+        .blob-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .blob-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 24px;
+            width: 85%;
+            max-height: 85%;
+            overflow: hidden;
+            text-align: center;
+            display: block !important;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .blob-title {
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            opacity: 0.7;
+        }
+
+        .blob-id {
+            font-size: 13px;
+            opacity: 1;
+            letter-spacing: 0.1em;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(0,0,0,0.9), 0 0 20px rgba(0,0,0,0.7);
+            color: currentColor;
+        }
+        
+        /* Don't wrap text in FLOW view blobs */
+        .blob-content .word-particle {
+            opacity: 1 !important;
+            color: inherit !important;
+            transform: none !important;
+        }
+
+        .blob-text {
+            display: none;
+        }
+        
+        /* Flow indicator dot in corner of each unit */
+        .flow-indicator {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+            opacity: 0;
+            box-shadow: 0 0 10px currentColor;
+            transition: opacity 0.3s;
+            z-index: 20;
+        }
+        
+        .unit.particle-hit .flow-indicator {
+            opacity: 1;
+            animation: flowPulse 1.5s ease-out;
+        }
+        
+        @keyframes flowPulse {
+            0%, 100% { opacity: 0; transform: scale(1); }
+            20%, 80% { opacity: 1; transform: scale(1.3); }
+        }
+
+        .flow-svg {
+            position: absolute;
+            width: 8000px;
+            height: 4000px;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 0;
+            transform-origin: 0 0;
+        }
+        
+        .canvas-layer {
+            z-index: 1;
+            transform-origin: 0 0;
+            position: absolute;
+            width: 8000px;
+            height: 4000px;
+            top: 0;
+            left: 0;
+        }
+        
+        /* Overlay flow network on scroll view */
+        .scroll-flow-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 1;
+            transition: opacity 0.5s;
+            display: block;
+        }
+        
+        .scroll-flow-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+            display: none;
+        }
+        
+        .scroll-flow-overlay svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .scroll-flow-line {
+            fill: none;
+            stroke-width: 3;
+            stroke-linecap: round;
+            opacity: 0.5;
+            filter: blur(2px);
+            transition: all 0.4s;
+        }
+        
+        .scroll-flow-line.active {
+            opacity: 0.9;
+            stroke-width: 5;
+            filter: blur(0px) drop-shadow(0 0 12px currentColor);
+        }
+        
+        .scroll-flow-ribbon {
+            fill-opacity: 0.25;
+            transition: all 0.5s ease-out;
+            filter: drop-shadow(0 0 5px rgba(0,0,0,0.3));
+        }
+        
+        /* Selected node's direct connections */
+        .scroll-flow-ribbon.selected-path {
+            fill-opacity: 0.7;
+            filter: drop-shadow(0 0 20px currentColor) drop-shadow(0 0 40px currentColor);
+        }
+        
+        /* Child paths (1 level down from selected) */
+        .scroll-flow-ribbon.child-path {
+            fill-opacity: 0.45;
+            filter: drop-shadow(0 0 12px currentColor);
+        }
+        
+        /* Descendant paths (2+ levels down) */
+        .scroll-flow-ribbon.descendant-path {
+            fill-opacity: 0.3;
+            filter: drop-shadow(0 0 8px currentColor);
+        }
+        
+        /* Active packet flowing through */
+        .scroll-flow-ribbon.flowing {
+            animation: ribbonFlow 1.5s ease-out;
+        }
+        
+        /* Action potential particles */
+        .flow-particle, .packet-dot, .flow-ambient-particle {
+            fill: white;
+            stroke: currentColor;
+            stroke-width: 1.5;
+            opacity: 1;
+            filter: blur(2px) drop-shadow(0 0 15px currentColor) drop-shadow(0 0 30px currentColor);
+        }
+        
+        /* Illumination effect on nearby text */
+        .unit.illuminated .unit-text {
+            animation: textIlluminate 1.5s ease-out forwards;
+        }
+        
+        @keyframes textIlluminate {
+            0% {
+                text-shadow: 0 0 8px rgba(255,255,255,0.08);
+            }
+            30% {
+                text-shadow: 0 0 30px rgba(255,255,255,0.5), 0 0 50px currentColor;
+            }
+            100% {
+                text-shadow: 0 0 8px rgba(255,255,255,0.08);
+            }
+        }
+        
+        /* Word particle illumination - more readable */
+        .word-particle {
+            display: inline;
+            transition: all 0.4s ease-out;
+            opacity: 0;
+            color: #555;
+            transform: translateY(5px);
+        }
+        
+        .word-particle.revealed {
+            opacity: 1;
+            color: inherit;
+            transform: translateY(0);
+        }
+        
+        .word-particle.lit {
+            animation: wordGlow 0.8s ease-out;
+        }
+        
+        @keyframes wordGlow {
+            0% {
+                color: inherit;
+                text-shadow: 0 0 0px transparent;
+            }
+            40% {
+                color: #fff;
+                text-shadow: 0 0 20px currentColor, 0 0 40px currentColor;
+            }
+            100% {
+                color: inherit;
+                text-shadow: 0 0 8px rgba(255,255,255,0.1);
+            }
+        }
+        
+        /* Stigmergic trail - persistent scent marks */
+        .ribbon-trail {
+            fill-opacity: 0.4 !important;
+            filter: drop-shadow(0 0 15px currentColor) !important;
+            animation: trailFade 8s ease-out forwards;
+        }
+        
+        @keyframes trailFade {
+            0% {
+                fill-opacity: 0.5;
+                filter: drop-shadow(0 0 20px currentColor);
+            }
+            100% {
+                fill-opacity: 0.15;
+                filter: drop-shadow(0 0 5px currentColor);
+            }
+        }
+        
+        @keyframes ribbonFlow {
+            0% {
+                fill-opacity: 0.5;
+                filter: drop-shadow(0 0 20px currentColor) drop-shadow(0 0 40px currentColor);
+            }
+            100% {
+                fill-opacity: 0.08;
+                filter: drop-shadow(0 0 2px rgba(0,0,0,0.2));
+            }
+        }
+        
+        @keyframes flowParticle {
+            0% {
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+        
+        @keyframes flowDash {
+            from { stroke-dashoffset: 0; }
+            to { stroke-dashoffset: 100; }
+        }
+        
+        @keyframes activationPulse {
+            0% { 
+                filter: brightness(1) drop-shadow(0 6px 20px rgba(0,0,0,0.5));
+                transform: scale(1);
+            }
+            50% { 
+                filter: brightness(2) drop-shadow(0 15px 50px rgba(255,255,255,0.8));
+                transform: scale(1.15);
+            }
+            100% { 
+                filter: brightness(1) drop-shadow(0 6px 20px rgba(0,0,0,0.5));
+                transform: scale(1);
+            }
+        }
+        
+        .flow-ribbon {
+            transition: all 0.3s;
+        }
+        
+        .flow-ribbon.active .ribbon-path {
+            opacity: 0.9 !important;
+            animation: ribbonGlow 2s ease-in-out infinite;
+        }
+        
+        .flow-ribbon.active .connection-node {
+            animation: connectionPulse 1s ease-in-out infinite;
+        }
+        
+        .ribbon-path {
+            transition: opacity 0.3s;
+            opacity: 0.65;
+        }
+        
+        .connection-node {
+            transition: all 0.3s;
+        }
+        
+        @keyframes connectionPulse {
+            0%, 100% {
+                opacity: 0.7;
+                r: 8;
+            }
+            50% {
+                opacity: 1;
+                r: 12;
+            }
+        }
+        
+        @keyframes ribbonGlow {
+            0%, 100% {
+                filter: drop-shadow(0 0 10px currentColor);
+            }
+            50% {
+                filter: drop-shadow(0 0 20px currentColor) drop-shadow(0 0 30px currentColor);
+            }
+        }
+
+        .flow-path {
+            fill: none;
+            stroke-width: 4;
+            stroke-linecap: round;
+            opacity: 0.6;
+            transition: all 0.3s;
+            filter: drop-shadow(0 0 8px currentColor);
+        }
+
+        .flow-path.active {
+            opacity: 1;
+            stroke-width: 6;
+            filter: drop-shadow(0 0 20px currentColor) drop-shadow(0 0 35px currentColor);
+        }
+        
+        /* Neural firing glow effect */
+        .dendrite-firing {
+            animation: actionPotential 0.8s ease-out;
+        }
+        
+        @keyframes actionPotential {
+            0% {
+                fill-opacity: 0.25;
+                filter: drop-shadow(0 0 5px rgba(0,0,0,0.3));
+            }
+            30% {
+                fill-opacity: 0.9;
+                filter: drop-shadow(0 0 30px currentColor) drop-shadow(0 0 50px currentColor);
+            }
+            100% {
+                fill-opacity: 0.25;
+                filter: drop-shadow(0 0 5px rgba(0,0,0,0.3));
+            }
+        }
+
+        .flow-label {
+            font-size: 9px;
+            fill: #999;
+            font-weight: bold;
+            letter-spacing: 0.05em;
+            opacity: 0.6;
+        }
+
+        /* Controls */
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            background: rgba(10,10,10,0.95);
+            padding: 12px 20px;
+            border-radius: 50px;
+            border: 1px solid #333;
+            z-index: 1000;
+        }
+
+        .control-btn {
+            width: 36px;
+            height: 36px;
+            border: 1px solid #333;
+            background: transparent;
+            color: #999;
+            border-radius: 50%;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .control-btn:hover {
+            background: #1a1a1a;
+            color: #fff;
+            border-color: #666;
+        }
+
+        .zoom-level {
+            display: flex;
+            align-items: center;
+            font-size: 11px;
+            color: #666;
+            min-width: 60px;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* Info panel */
+        .info-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.98);
+            color: white;
+            padding: 24px;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 999;
+            max-height: 50vh;
+            overflow-y: auto;
+            border-top: 1px solid #333;
+        }
+
+        .info-panel.visible {
+            transform: translateY(0);
+        }
+
+        .info-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .info-close:hover {
+            background: #2a2a2a;
+            transform: rotate(90deg);
+        }
+
+        .info-header {
+            font-size: 10px;
+            color: #666;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .info-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+
+        .info-content {
+            font-size: 13px;
+            line-height: 1.8;
+            color: #ccc;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #000;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="loading">
+    <!-- Loading Spinner -->
+    <div class="loading-spinner">
+        <div class="spinner-ring"></div>
+    </div>
+    
+    <!-- View Toggle -->
+    <div class="view-toggle">
+        <button class="view-btn active" onclick="switchView('scroll')">SCROLL</button>
+        <button class="view-btn" onclick="switchView('flow')">FLOW</button>
+    </div>
+
+    <!-- Flow Overlay for Scroll View -->
+    <div class="scroll-flow-overlay" id="scrollFlowOverlay">
+        <svg id="scrollFlowSvg"></svg>
+    </div>
+    
+    <!-- Scroll View -->
+    <div class="scroll-view" id="scrollView">
+        <div class="scroll-container" id="scrollContainer">
+            <div class="column" data-type="essay" data-index="0">
+                <div class="column-header">
+                    <div class="column-title">ESSAY</div>
+                    <div class="column-marker"></div>
+                </div>
+                <div class="column-content" id="essay-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flow View -->
+    <div class="flow-view" id="flowView">
+        <div class="viewport" id="viewport">
+            <svg class="flow-svg" id="flowSvg" width="8000" height="4000"></svg>
+            <div class="canvas-layer" id="canvasLayer"></div>
+        </div>
+    </div>
+
+    <!-- Info Panel -->
+    <div class="info-panel" id="infoPanel">
+        <button class="info-close" onclick="closeInfo()">×</button>
+        <div class="info-header" id="infoHeader"></div>
+        <div class="info-title" id="infoTitle"></div>
+        <div class="info-content" id="infoContent"></div>
+    </div>
+
+    <!-- Controls (for Flow View) -->
+    <div class="controls" id="controls" style="display: none;">
+        <button class="control-btn" onclick="zoomOut()">−</button>
+        <div class="zoom-level" id="zoomLevel">100%</div>
+        <button class="control-btn" onclick="zoomIn()">+</button>
+        <button class="control-btn" onclick="resetView()">⊙</button>
+    </div>
+
+    <script>
+        // Performance utilities for smooth mobile experience
+        const performance = {
+            lastFrameTime: 0,
+            frameSkip: 0,
+            isMobile: /Android|iPhone|iPad|iPod/i.test(navigator.userAgent),
+            
+            // Throttle function calls to avoid excessive repaints
+            throttle(fn, delay) {
+                let lastCall = 0;
+                return function(...args) {
+                    const now = Date.now();
+                    if (now - lastCall >= delay) {
+                        lastCall = now;
+                        return fn.apply(this, args);
+                    }
+                };
+            },
+            
+            // Only run if we're maintaining 30+ fps
+            shouldSkipFrame() {
+                const now = performance.now();
+                const delta = now - this.lastFrameTime;
+                this.lastFrameTime = now;
+                
+                // If frame took > 33ms (< 30fps), skip next heavy operation
+                if (delta > 33) {
+                    this.frameSkip = Math.min(this.frameSkip + 1, 3);
+                    return this.frameSkip > 0;
+                } else {
+                    this.frameSkip = Math.max(this.frameSkip - 1, 0);
+                    return false;
+                }
+            }
+        };
+        
+        const state = {
+            view: 'scroll',
+            columns: ['essay'],
+            activeSelections: {},
+            columnIndex: 0,
+            zoom: 0.3,
+            panX: -1500,
+            panY: -800,
+            isDragging: false,
+            nodes: []
+        };
+
+        const corpus = {
+            essay: [
+                {
+                    id: 'E21',
+                    text: 'The earliest examples of ekphrastic poetry are not principally focused on painting, but on utilitarian objects that happen to have ornamental or symbolic visual representations attached to them.'
+                },
+                {
+                    id: 'E22',
+                    text: 'I\'d like to begin with Wallace Stevens\'s "Anecdote of a Jar" - a very late and pure example of ekphrastic poetry.'
+                },
+                {
+                    id: 'E23',
+                    text: 'Stevens\'s poem provides an allegory and a critique of its own generic identity and might almost be seen as a parody of the classical ekphrastic object.'
+                },
+                {
+                    id: 'E24',
+                    text: 'The jar is no "mere" object, but a highly charged form - a kind of idol or fetish that has appropriated human consciousness.'
+                }
+            ],
+            poem: [
+                { id: 'L01', num: 1, text: 'I placed a jar in Tennessee,' },
+                { id: 'L02', num: 2, text: 'And round it was, upon a hill.' },
+                { id: 'L03', num: 3, text: 'It made the slovenly wilderness' },
+                { id: 'L04', num: 4, text: 'Surround that hill.' },
+                { id: 'L05', num: 5, text: 'The wilderness rose up to it,' },
+                { id: 'L06', num: 6, text: 'And sprawled around, no longer wild.' },
+                { id: 'L07', num: 7, text: 'The jar was round upon the ground' },
+                { id: 'L08', num: 8, text: 'And tall and of a port in air.' }
+            ]
+        };
+
+        function generatePrompts(lineId) {
+            return [
+                {
+                    id: `P${lineId}A`,
+                    origin: lineId,
+                    q: 'syntactic ambiguity',
+                    a: 'Round it was: is the jar round, or does "round it" mean around it? Form equals content in the grammatical structure itself.'
+                },
+                {
+                    id: `P${lineId}B`,
+                    origin: lineId,
+                    q: 'human agency vanishing',
+                    a: 'I placed: the human agent appears only once then vanishes. Placing is a colonial gesture—claiming territory through artifact.'
+                }
+            ];
+        }
+
+        function generateImages(promptId) {
+            return [
+                {
+                    id: `I${promptId}1`,
+                    origin: promptId,
+                    prompt: 'gray stoneware jar on Tennessee hilltop, stark afternoon light, minimal composition, documentary photography'
+                },
+                {
+                    id: `I${promptId}2`,
+                    origin: promptId,
+                    prompt: 'abstract geometric circles dominating organic landscape, order versus chaos, suprematist composition'
+                }
+            ];
+        }
+
+        // SCROLL VIEW FUNCTIONS
+        function initEssay() {
+            const container = document.getElementById('essay-content');
+            corpus.essay.forEach(item => {
+                const unit = createUnit(item.id, `
+                    <div class="unit-id">${item.id}</div>
+                    <div class="unit-text">${item.text}</div>
+                `);
+                unit.addEventListener('click', () => selectEssay(item.id));
+                container.appendChild(unit);
+            });
+            
+            // Don't pre-reveal - let orbs bring the text to life
+        }
+
+        function createUnit(id, innerHTML) {
+            const div = document.createElement('div');
+            div.className = 'unit';
+            div.dataset.id = id;
+            div.innerHTML = innerHTML;
+            
+            // Add flow indicator dot
+            const indicator = document.createElement('div');
+            indicator.className = 'flow-indicator';
+            div.appendChild(indicator);
+            
+            // Wrap text content in WORD spans for better readability
+            setTimeout(() => {
+                const textElements = div.querySelectorAll('.unit-text, .prompt-a, .poem-line');
+                textElements.forEach(el => {
+                    if (el.childNodes.length === 1 && el.childNodes[0].nodeType === 3) {
+                        const text = el.textContent;
+                        el.innerHTML = '';
+                        // Wrap each WORD in a span for elegant reveal
+                        const words = text.split(/\s+/);
+                        words.forEach((word, i) => {
+                            if (word) {
+                                const span = document.createElement('span');
+                                span.className = 'word-particle';
+                                span.textContent = word;
+                                el.appendChild(span);
+                                
+                                // Add space after word (except last)
+                                if (i < words.length - 1) {
+                                    el.appendChild(document.createTextNode(' '));
+                                }
+                            }
+                        });
+                    }
+                });
+            }, 0);
+            
+            // Stochastic organic variation - each blob is unique
+            const r1 = 35 + Math.random() * 20;
+            const r2 = 55 + Math.random() * 20;
+            const r3 = 45 + Math.random() * 20;
+            const r4 = 40 + Math.random() * 20;
+            const r5 = 45 + Math.random() * 15;
+            const r6 = 55 + Math.random() * 15;
+            const r7 = 40 + Math.random() * 15;
+            const r8 = 50 + Math.random() * 15;
+            
+            div.style.borderRadius = `${r1}% ${r2}% ${r3}% ${r4}% / ${r5}% ${r6}% ${r7}% ${r8}%`;
+            
+            // Subtle blur for organic fuzzy feel
+            const blurAmount = Math.random() * 0.3;
+            div.style.filter = `blur(${blurAmount}px)`;
+            
+            // Slight rotation for Voronoi-like irregularity
+            const rotation = (Math.random() - 0.5) * 2;
+            div.style.transform = `rotate(${rotation}deg)`;
+            
+            // Staggered animation for living ecosystem
+            const animDelay = Math.random() * 8;
+            const animDuration = 7 + Math.random() * 4;
+            div.style.animationDelay = `${animDelay}s`;
+            div.style.animationDuration = `${animDuration}s`;
+            
+            // Stagger text breathing within the unit (Brian Eno ambient effect)
+            setTimeout(() => {
+                const textElements = div.querySelectorAll('.unit-text, .prompt-a, .poem-line, .image-prompt');
+                textElements.forEach((el, i) => {
+                    const breathDelay = i * 0.3 + Math.random() * 2;
+                    el.style.animationDelay = `${breathDelay}s`;
+                });
+                
+                const idEl = div.querySelector('.unit-id');
+                if (idEl) {
+                    idEl.style.animationDelay = `${Math.random() * 3}s`;
+                }
+            }, 0);
+            
+            return div;
+        }
+
+        function selectEssay(id) {
+            initAudio(); // Initialize on first click
+            
+            // Clear all path highlighting
+            document.querySelectorAll('.unit.in-path').forEach(u => u.classList.remove('in-path'));
+            
+            setActive('essay', id);
+            state.activeSelections.essay = id;
+            
+            // Highlight this essay in the path
+            const essay = document.querySelector(`[data-type="essay"] [data-id="${id}"]`);
+            if (essay) {
+                essay.classList.add('in-path');
+                
+                // Reveal this essay's text so user can read what they clicked
+                essay.querySelectorAll('.word-particle').forEach((word, i) => {
+                    setTimeout(() => {
+                        word.classList.add('revealed');
+                    }, i * 30); // Fast cascade for readability
+                });
+            }
+            
+            setTimeout(() => updateScrollFlowOverlay(), 150);
+            
+            // Auto-trigger packet flow
+            setTimeout(() => {
+                updateRibbonHierarchy(id);
+                triggerPacketFlow(id);
+            }, 200);
+            
+            if (!state.columns.includes('poem')) {
+                addColumn('poem', 'POEM', corpus.poem.map(line => 
+                    createUnit(line.id, `
+                        <div class="unit-id">${line.id}</div>
+                        <div class="poem-line" data-num="${line.num}">${line.text}</div>
+                    `)
+                ));
+                
+                document.querySelectorAll('[data-type="poem"] .unit').forEach(unit => {
+                    unit.addEventListener('click', () => selectPoem(unit.dataset.id));
+                });
+            }
+        }
+
+        function selectPoem(id) {
+            setActive('poem', id);
+            state.activeSelections.poem = id;
+            
+            // Keep essay highlighted in path
+            const poem = document.querySelector(`[data-type="poem"] [data-id="${id}"]`);
+            if (poem) poem.classList.add('in-path');
+            
+            setTimeout(() => updateScrollFlowOverlay(), 150);
+            
+            // Auto-trigger packet flow
+            setTimeout(() => {
+                updateRibbonHierarchy(id);
+                triggerPacketFlow(id);
+            }, 200);
+            
+            const prompts = generatePrompts(id);
+            removeColumnsAfter('poem');
+            
+            addColumn('prompt', 'PROMPT', prompts.map(p =>
+                createUnit(p.id, `
+                    <div class="unit-id">${p.id}</div>
+                    <div class="origin-marker">← ${p.origin}</div>
+                    <div class="prompt-q">${p.q}</div>
+                    <div class="prompt-a">${p.a}</div>
+                `)
+            ));
+            
+            document.querySelectorAll('[data-type="prompt"] .unit').forEach(unit => {
+                unit.addEventListener('click', () => selectPrompt(unit.dataset.id));
+            });
+        }
+
+        function selectPrompt(id) {
+            setActive('prompt', id);
+            state.activeSelections.prompt = id;
+            
+            // Keep poem highlighted in path
+            const prompt = document.querySelector(`[data-type="prompt"] [data-id="${id}"]`);
+            if (prompt) prompt.classList.add('in-path');
+            
+            setTimeout(() => updateScrollFlowOverlay(), 150);
+            
+            // Auto-trigger packet flow
+            setTimeout(() => {
+                updateRibbonHierarchy(id);
+                triggerPacketFlow(id);
+            }, 200);
+            
+            const images = generateImages(id);
+            removeColumnsAfter('prompt');
+            
+            addColumn('image', 'IMAGE', images.map(img =>
+                createUnit(img.id, `
+                    <div class="unit-id">${img.id}</div>
+                    <div class="origin-marker">← ${img.origin}</div>
+                    <div class="barrel">
+                        <div class="barrel-label">IMAGE<br>${img.id}</div>
+                    </div>
+                    <div class="image-prompt">${img.prompt}</div>
+                `)
+            ));
+            
+            document.querySelectorAll('[data-type="image"] .unit').forEach(unit => {
+                unit.addEventListener('click', () => selectImage(unit.dataset.id));
+            });
+        }
+
+        function selectImage(id) {
+            setActive('image', id);
+            state.activeSelections.image = id;
+            
+            // Keep prompt highlighted in path
+            const image = document.querySelector(`[data-type="image"] [data-id="${id}"]`);
+            if (image) image.classList.add('in-path');
+            
+            setTimeout(() => updateScrollFlowOverlay(), 150);
+        }
+        
+        // Update flow overlay for scroll view
+        function updateScrollFlowOverlay() {
+            const overlay = document.getElementById('scrollFlowOverlay');
+            const svg = document.getElementById('scrollFlowSvg');
+            
+            if (state.columns.length <= 1) {
+                overlay.classList.add('hidden');
+                return;
+            }
+            
+            overlay.classList.remove('hidden');
+            svg.innerHTML = '';
+            
+            // Create defs for gradients
+            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+            svg.appendChild(defs);
+            
+            // Draw thick Sankey ribbons between ALL units in adjacent columns
+            for (let i = 0; i < state.columns.length - 1; i++) {
+                const fromType = state.columns[i];
+                const toType = state.columns[i + 1];
+                
+                const fromUnits = document.querySelectorAll(`[data-type="${fromType}"] .unit`);
+                const toUnits = document.querySelectorAll(`[data-type="${toType}"] .unit`);
+                
+                fromUnits.forEach((fromUnit, fromIdx) => {
+                    const fromRect = fromUnit.getBoundingClientRect();
+                    const fromActive = fromUnit.classList.contains('active');
+                    const fromId = fromUnit.dataset.id;
+                    
+                    toUnits.forEach((toUnit, toIdx) => {
+                        const toRect = toUnit.getBoundingClientRect();
+                        const toActive = toUnit.classList.contains('active');
+                        const toId = toUnit.dataset.id;
+                        
+                        // Calculate connection points
+                        const x1 = fromRect.right - 10;
+                        const y1 = fromRect.top + fromRect.height / 2;
+                        const x2 = toRect.left + 10;
+                        const y2 = toRect.top + toRect.height / 2;
+                        
+                        const dx = x2 - x1;
+                        const curve = Math.abs(dx) * 0.5;
+                        
+                        // Ribbon width (thicker for active connections)
+                        const ribbonWidth = (fromActive || toActive) ? 20 : 8;
+                        
+                        // Create gradient
+                        const gradId = `scroll-grad-${fromId}-${toId}`;
+                        const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+                        gradient.setAttribute('id', gradId);
+                        gradient.setAttribute('x1', '0%');
+                        gradient.setAttribute('x2', '100%');
+                        
+                        const fromColor = typeColors[fromType].color;
+                        const toColor = typeColors[toType].color;
+                        
+                        const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+                        stop1.setAttribute('offset', '0%');
+                        stop1.setAttribute('stop-color', fromColor);
+                        stop1.setAttribute('stop-opacity', '0.6');
+                        
+                        const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+                        stop2.setAttribute('offset', '100%');
+                        stop2.setAttribute('stop-color', toColor);
+                        stop2.setAttribute('stop-opacity', '0.6');
+                        
+                        gradient.appendChild(stop1);
+                        gradient.appendChild(stop2);
+                        defs.appendChild(gradient);
+                        
+                        // Create thick ribbon shape
+                        const topPath = `M ${x1} ${y1 - ribbonWidth/2} C ${x1 + curve} ${y1 - ribbonWidth/2}, ${x2 - curve} ${y2 - ribbonWidth/2}, ${x2} ${y2 - ribbonWidth/2}`;
+                        const bottomPath = `L ${x2} ${y2 + ribbonWidth/2} C ${x2 - curve} ${y2 + ribbonWidth/2}, ${x1 + curve} ${y1 + ribbonWidth/2}, ${x1} ${y1 + ribbonWidth/2} Z`;
+                        
+                        const ribbon = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        ribbon.setAttribute('class', 'scroll-flow-ribbon');
+                        ribbon.setAttribute('d', topPath + bottomPath);
+                        ribbon.setAttribute('fill', `url(#${gradId})`);
+                        
+                        // Store ribbon data for selection tracking
+                        ribbon.dataset.fromId = fromId;
+                        ribbon.dataset.toId = toId;
+                        ribbon.dataset.fromType = fromType;
+                        ribbon.dataset.toType = toType;
+                        
+                        svg.appendChild(ribbon);
+                        
+                        // Only spawn packets on user interaction, not constantly
+                        // (Will be triggered by setActive function)
+                    });
+                });
+            }
+        }
+
+        // Create packet dot that travels along path
+        function createPacketDot(svg, x1, y1, x2, y2, curve, color, ribbon, destType = 'poem') {
+            const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            dot.setAttribute('class', 'packet-dot');
+            dot.setAttribute('r', '5');
+            dot.setAttribute('fill', 'white');
+            dot.setAttribute('stroke', color);
+            dot.setAttribute('stroke-width', '2');
+            dot.style.filter = `blur(2px) drop-shadow(0 0 15px ${color}) drop-shadow(0 0 30px ${color})`;
+            
+            // Spawn sound with destination node tone
+            playSpawnSound(destType);
+            
+            // Neurotransmitter behavior:
+            // 25% chance of reuptake (particle returns to source)
+            // 20% chance of hesitation (loops mid-path)  
+            // 55% direct transmission
+            const rand = Math.random();
+            const shouldReuptake = rand < 0.25;
+            const shouldLoop = rand >= 0.25 && rand < 0.45;
+            const duration = shouldReuptake ? 2000 : (shouldLoop ? 2400 : 1200);
+            const startTime = Date.now();
+            
+            function animateDot() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                if (progress < 1) {
+                    let t = progress;
+                    
+                    // Neurotransmitter reuptake: travel 60% then return to source
+                    if (shouldReuptake) {
+                        if (progress < 0.5) {
+                            t = progress * 1.2; // 0 → 0.6
+                        } else {
+                            t = 0.6 - (progress - 0.5) * 1.2; // 0.6 → 0
+                        }
+                    }
+                    // Hesitation loop: go forward, pause, continue
+                    else if (shouldLoop) {
+                        if (progress < 0.4) {
+                            t = progress * 1.75; // 0-0.7
+                        } else if (progress < 0.6) {
+                            t = 0.7 - (progress - 0.4) * 1.5; // 0.7 back to 0.4
+                        } else {
+                            t = 0.4 + (progress - 0.6) * 1.5; // 0.4 to 1.0
+                        }
+                    }
+                    
+                    // Cubic bezier calculation
+                    const mt = 1 - t;
+                    const cx1 = x1 + curve;
+                    const cx2 = x2 - curve;
+                    
+                    const x = mt * mt * mt * x1 + 3 * mt * mt * t * cx1 + 3 * mt * t * t * cx2 + t * t * t * x2;
+                    const y = mt * mt * mt * y1 + 3 * mt * mt * t * y1 + 3 * mt * t * t * y2 + t * t * t * y2;
+                    
+                    dot.setAttribute('cx', x);
+                    dot.setAttribute('cy', y);
+                    
+                    // Smooth fade
+                    let opacity;
+                    if (progress < 0.1) {
+                        opacity = progress * 10;
+                    } else if (progress > 0.9) {
+                        opacity = (1 - progress) * 10;
+                    } else {
+                        opacity = 1;
+                    }
+                    dot.setAttribute('opacity', opacity);
+                    
+                    // Illuminate nearby text
+                    illuminateNearbyUnits(x, y, color);
+                    
+                    requestAnimationFrame(animateDot);
+                } else {
+                    if (svg && svg.contains(dot)) {
+                        svg.removeChild(dot);
+                    }
+                }
+            }
+            
+            svg.appendChild(dot);
+            animateDot();
+        }
+        
+        function createFlowingParticle(svg, x1, y1, x2, y2, curve, color, pathId) {
+            const particle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            particle.setAttribute('class', 'flow-particle');
+            particle.setAttribute('r', '8');
+            particle.setAttribute('fill', color);
+            particle.style.filter = `blur(6px) drop-shadow(0 0 25px ${color}) drop-shadow(0 0 45px ${color})`;
+            
+            // Animate along path
+            const duration = 3000 + Math.random() * 1500;
+            const delay = Math.random() * 3000;
+            
+            function animateParticle() {
+                const startTime = Date.now() + delay;
+                
+                function update() {
+                    const elapsed = Date.now() - startTime;
+                    const progress = (elapsed % duration) / duration;
+                    
+                    if (progress >= 0 && progress <= 1) {
+                        // Cubic bezier position calculation
+                        const t = progress;
+                        const mt = 1 - t;
+                        
+                        const cx1 = x1 + curve;
+                        const cx2 = x2 - curve;
+                        
+                        const x = mt * mt * mt * x1 + 3 * mt * mt * t * cx1 + 3 * mt * t * t * cx2 + t * t * t * x2;
+                        const y = mt * mt * mt * y1 + 3 * mt * mt * t * y1 + 3 * mt * t * t * y2 + t * t * t * y2;
+                        
+                        particle.setAttribute('cx', x);
+                        particle.setAttribute('cy', y);
+                        
+                        // Fade in/out with smooth curves
+                        let opacity;
+                        if (progress < 0.15) {
+                            opacity = Math.sin((progress / 0.15) * Math.PI / 2);
+                        } else if (progress > 0.85) {
+                            opacity = Math.sin(((1 - progress) / 0.15) * Math.PI / 2);
+                        } else {
+                            opacity = 0.95;
+                        }
+                        particle.setAttribute('opacity', opacity);
+                        
+                        // Illuminate nearby units
+                        illuminateNearbyUnits(x, y, color);
+                    }
+                    
+                    requestAnimationFrame(update);
+                }
+                
+                update();
+            }
+            
+            svg.appendChild(particle);
+            animateParticle();
+        }
+        
+        // Ambient audio for neural ticks
+        let audioContext;
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+        
+        function playNeuralTick(pitch = 800, duration = 0.05, volume = 0.015) {
+            if (!audioContext) return;
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.type = 'sine';
+            oscillator.frequency.value = pitch;
+            
+            // Very quiet and polite - like a gentle chime
+            gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + duration);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+        
+        // 3-tone system: spawn, flow, receive
+        // Distinct tones per node type - call and response pattern
+        const nodeTones = {
+            essay: 440,    // A4 - warm foundation
+            poem: 523.25,  // C5 - bright response  
+            prompt: 659.25, // E5 - higher question
+            image: 783.99  // G5 - resolution
+        };
+        
+        function playNodeTone(nodeType, duration = 0.025, volume = 0.006) {
+            // Subtle cricket/morse code tick
+            if (!audioContext) return;
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.type = 'sine';
+            oscillator.frequency.value = nodeTones[nodeType] || 440;
+            
+            // Very short, crisp click like morse code
+            gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + duration);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+        
+        function playSpawnSound(nodeType = 'essay') {
+            playNodeTone(nodeType, 0.03, 0.005); // Send
+        }
+        
+        function playFlowSound(nodeType = 'poem') {
+            playNodeTone(nodeType, 0.02, 0.004); // Travel
+        }
+        
+        function playReceiveSound(nodeType = 'poem') {
+            playNodeTone(nodeType, 0.025, 0.006); // Receive
+        }
+        
+        // Illuminate words elegantly as orb passes
+        function illuminateNearbyUnits(particleX, particleY, color) {
+            const units = document.querySelectorAll('.unit');
+            let hitUnit = null;
+            
+            units.forEach(unit => {
+                const rect = unit.getBoundingClientRect();
+                
+                // Check if particle is near this unit
+                const unitDistance = Math.sqrt(
+                    Math.pow(particleX - (rect.left + rect.width/2), 2) + 
+                    Math.pow(particleY - (rect.top + rect.height/2), 2)
+                );
+                
+                if (unitDistance < 150 && !hitUnit) {
+                    hitUnit = unit;
+                }
+                
+                // Find all word particles in this unit
+                const words = unit.querySelectorAll('.word-particle');
+                words.forEach((word, index) => {
+                    const wordRect = word.getBoundingClientRect();
+                    const wordX = wordRect.left + wordRect.width / 2;
+                    const wordY = wordRect.top + wordRect.height / 2;
+                    
+                    const distance = Math.sqrt(
+                        Math.pow(particleX - wordX, 2) + 
+                        Math.pow(particleY - wordY, 2)
+                    );
+                    
+                    // Reveal words in elegant cascade as orb approaches
+                    if (distance < 80 && !word.classList.contains('revealed')) {
+                        // Stagger reveal for smooth wave effect
+                        setTimeout(() => {
+                            word.classList.add('revealed');
+                            
+                            // Light up word with glow
+                            word.classList.add('lit');
+                            setTimeout(() => word.classList.remove('lit'), 800);
+                            
+                            // Subtle receive sound with node-specific tone
+                            if (Math.random() < 0.2) { // Only 20% of words make sound
+                                const nodeType = unit.closest('[data-type]')?.dataset.type || 'poem';
+                                playReceiveSound(nodeType);
+                            }
+                        }, index * 40); // 40ms stagger between words
+                    }
+                });
+            });
+            
+            // Make polygon glow when particle hits it
+            if (hitUnit && !hitUnit.classList.contains('particle-hit')) {
+                hitUnit.classList.add('particle-hit');
+                setTimeout(() => hitUnit.classList.remove('particle-hit'), 800);
+            }
+        }
+        
+        function setActive(type, id) {
+            document.querySelectorAll(`[data-type="${type}"] .unit`).forEach(u => {
+                u.classList.remove('active');
+            });
+            const unit = document.querySelector(`[data-type="${type}"] [data-id="${id}"]`);
+            if (unit) {
+                unit.classList.add('active');
+                // Update ribbon hierarchy and trigger packet flow
+                updateRibbonHierarchy(id);
+                triggerPacketFlow(id);
+            }
+        }
+        
+        // Update visual hierarchy based on selection
+        function updateRibbonHierarchy(selectedId) {
+            const ribbons = document.querySelectorAll('.scroll-flow-ribbon');
+            
+            // Reset all ribbons to base state
+            ribbons.forEach(r => {
+                r.classList.remove('selected-path', 'child-path', 'descendant-path');
+            });
+            
+            // Find direct children (paths FROM selected node)
+            const directPaths = document.querySelectorAll(`.scroll-flow-ribbon[data-from-id="${selectedId}"]`);
+            const childIds = new Set();
+            directPaths.forEach(path => {
+                path.classList.add('selected-path');
+                childIds.add(path.dataset.toId);
+            });
+            
+            // Find grandchildren (paths FROM children)
+            const grandchildIds = [];
+            childIds.forEach(childId => {
+                const paths = document.querySelectorAll(`.scroll-flow-ribbon[data-from-id="${childId}"]`);
+                paths.forEach(path => {
+                    path.classList.add('child-path');
+                    grandchildIds.push(path.dataset.toId);
+                });
+            });
+            
+            // Find great-grandchildren (descendant paths)
+            grandchildIds.forEach(grandchildId => {
+                const paths = document.querySelectorAll(`.scroll-flow-ribbon[data-from-id="${grandchildId}"]`);
+                paths.forEach(path => {
+                    path.classList.add('descendant-path');
+                });
+            });
+        }
+        
+        // Trigger packet flow animation along selected paths
+        function triggerPacketFlow(selectedId) {
+            const directPaths = document.querySelectorAll(`.scroll-flow-ribbon[data-from-id="${selectedId}"]`);
+            
+            directPaths.forEach((ribbon, i) => {
+                setTimeout(() => {
+                    const fromId = ribbon.dataset.fromId;
+                    const toId = ribbon.dataset.toId;
+                    const color = typeColors[ribbon.dataset.toType].color;
+                    
+                    // Find ribbon geometry
+                    const fromUnit = document.querySelector(`.unit[data-id="${fromId}"]`);
+                    const toUnit = document.querySelector(`.unit[data-id="${toId}"]`);
+                    
+                    if (fromUnit && toUnit) {
+                        const fromRect = fromUnit.getBoundingClientRect();
+                        const toRect = toUnit.getBoundingClientRect();
+                        
+                        const x1 = fromRect.right - 10;
+                        const y1 = fromRect.top + fromRect.height / 2;
+                        const x2 = toRect.left + 10;
+                        const y2 = toRect.top + toRect.height / 2;
+                        const curve = Math.abs(x2 - x1) * 0.5;
+                        
+                        // Animate ribbon itself
+                        ribbon.classList.add('flowing');
+                        setTimeout(() => ribbon.classList.remove('flowing'), 1500);
+                        
+                        // Leave stigmergic trail - persistent scent mark
+                        ribbon.classList.add('ribbon-trail');
+                        // Trail fades over 8 seconds but stays partially visible
+                        
+                        // Create packet dot with destination type for correct tone
+                        const destType = ribbon.dataset.toType;
+                        createPacketDot(document.getElementById('scrollFlowSvg'), x1, y1, x2, y2, curve, color, ribbon, destType);
+                        
+                        // Recursively trigger child flows
+                        setTimeout(() => {
+                            triggerPacketFlow(toId);
+                        }, 800);
+                    }
+                }, i * 200);
+            });
+        }
+
+        function addColumn(type, title, units) {
+            state.columnIndex++;
+            state.columns.push(type);
+            
+            const col = document.createElement('div');
+            col.className = 'column';
+            col.dataset.type = type;
+            col.dataset.index = state.columnIndex;
+            
+            col.innerHTML = `
+                <div class="column-header">
+                    <div class="column-title">${title}</div>
+                    <div class="column-marker"></div>
+                </div>
+                <div class="column-content"></div>
+            `;
+            
+            const content = col.querySelector('.column-content');
+            units.forEach(unit => content.appendChild(unit));
+            
+            const container = document.getElementById('scrollContainer');
+            container.appendChild(col);
+            
+            setTimeout(() => {
+                container.scrollLeft = container.scrollWidth;
+                updateScrollFlowOverlay();
+            }, 50);
+        }
+
+        function removeColumnsAfter(type) {
+            const typeIndex = state.columns.indexOf(type);
+            const toRemove = state.columns.slice(typeIndex + 1);
+            
+            toRemove.forEach(t => {
+                const col = document.querySelector(`[data-type="${t}"]`);
+                if (col) col.remove();
+            });
+            
+            state.columns = state.columns.slice(0, typeIndex + 1);
+        }
+
+        // FLOW VIEW FUNCTIONS
+        function generateBlobPath(width, height, points = 8) {
+            const cx = width / 2;
+            const cy = height / 2;
+            const radiusX = width / 2 * 0.9;
+            const radiusY = height / 2 * 0.9;
+            
+            // Generate polygon vertices with controlled randomness
+            const vertices = [];
+            const angleStep = (Math.PI * 2) / points;
+            
+            for (let i = 0; i < points; i++) {
+                const angle = i * angleStep + (Math.random() - 0.5) * angleStep * 0.3;
+                const randomness = 0.85 + Math.random() * 0.3;
+                
+                const x = cx + Math.cos(angle) * radiusX * randomness;
+                const y = cy + Math.sin(angle) * radiusY * randomness;
+                vertices.push({ x, y });
+            }
+            
+            // Create smooth path through vertices using cubic bezier curves
+            let path = `M ${vertices[0].x} ${vertices[0].y}`;
+            
+            for (let i = 0; i < vertices.length; i++) {
+                const current = vertices[i];
+                const next = vertices[(i + 1) % vertices.length];
+                const nextNext = vertices[(i + 2) % vertices.length];
+                
+                // Calculate control points for smooth curve
+                const tension = 0.3;
+                const cp1x = current.x + (next.x - vertices[(i - 1 + vertices.length) % vertices.length].x) * tension;
+                const cp1y = current.y + (next.y - vertices[(i - 1 + vertices.length) % vertices.length].y) * tension;
+                const cp2x = next.x - (nextNext.x - current.x) * tension;
+                const cp2y = next.y - (nextNext.y - current.y) * tension;
+                
+                path += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${next.x} ${next.y}`;
+            }
+            
+            path += ' Z';
+            return path;
+        }
+
+        const typeColors = {
+            essay: { color: '#ff4444', bg: '#1a0808', text: '#ff8888' },
+            poem: { color: '#44ff44', bg: '#081a08', text: '#88ff88' },
+            prompt: { color: '#4444ff', bg: '#08081a', text: '#8888ff' },
+            image: { color: '#ffff44', bg: '#1a1a08', text: '#ffff88' }
+        };
+
+        function createBlobNode(type, id, x, y, width, height, content) {
+            const node = document.createElement('div');
+            node.className = 'blob-node';
+            node.dataset.id = id;
+            node.dataset.type = type;
+            node.style.left = x + 'px';
+            node.style.top = y + 'px';
+            node.style.width = width + 'px';
+            node.style.height = height + 'px';
+            
+            // Stagger float animation for organic variation
+            const floatDelay = Math.random() * 6;
+            const floatDuration = 5 + Math.random() * 4;
+            node.style.animationDelay = `${floatDelay}s`;
+            node.style.animationDuration = `${floatDuration}s`;
+            
+            const colors = typeColors[type];
+            const blobPath = generateBlobPath(width, height, 16);
+            
+            node.innerHTML = `
+                <svg class="blob-svg" viewBox="0 0 ${width} ${height}">
+                    <defs>
+                        <linearGradient id="grad-${id}" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:${colors.bg};stop-opacity:0.95" />
+                            <stop offset="100%" style="stop-color:${colors.color};stop-opacity:0.25" />
+                        </linearGradient>
+                    </defs>
+                    <path d="${blobPath}" fill="url(#grad-${id})" stroke="${colors.color}" stroke-width="3" />
+                    <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" 
+                          fill="${colors.text}" font-size="14" font-weight="bold" 
+                          letter-spacing="0.1em" opacity="0.9">${id}</text>
+                </svg>
+                <div class="blob-content">
+                    <div class="blob-id" style="color: ${colors.text};">${id}</div>
+                    <div class="blob-title" style="color: ${colors.text};">${type.toUpperCase()}</div>
+                </div>
+            `;
+            
+            node.addEventListener('click', (e) => {
+                e.stopPropagation();
+                selectNode(id, type, content);
+            });
+            
+            return node;
+        }
+
+        function createFlowRibbon(fromId, toId, type) {
+            const fromNode = state.nodes.find(n => n.id === fromId);
+            const toNode = state.nodes.find(n => n.id === toId);
+            
+            if (!fromNode || !toNode) return;
+            
+            // Calculate connection points - extend slightly into blobs for integration
+            const x1 = fromNode.x + fromNode.width - 15;  // Start 15px into source blob
+            const y1 = fromNode.y + fromNode.height / 2;
+            const x2 = toNode.x + 15;  // End 15px into target blob
+            const y2 = toNode.y + toNode.height / 2;
+            
+            const dx = x2 - x1;
+            const curve = Math.min(Math.abs(dx) * 0.5, 300);
+            
+            // Ribbon width based on connection strength
+            const ribbonWidth = 30 + Math.random() * 20;
+            
+            const svg = document.getElementById('flowSvg');
+            const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            g.setAttribute('class', 'flow-ribbon');
+            g.dataset.from = fromId;
+            g.dataset.to = toId;
+            
+            // Create gradient for ribbon
+            const gradId = `grad-${fromId}-${toId}`;
+            const defs = svg.querySelector('defs') || svg.insertBefore(
+                document.createElementNS('http://www.w3.org/2000/svg', 'defs'),
+                svg.firstChild
+            );
+            
+            const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+            gradient.setAttribute('id', gradId);
+            gradient.setAttribute('x1', '0%');
+            gradient.setAttribute('x2', '100%');
+            
+            const fromColor = typeColors[fromNode.type].color;
+            const toColor = typeColors[type].color;
+            
+            const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+            stop1.setAttribute('offset', '0%');
+            stop1.setAttribute('stop-color', fromColor);
+            stop1.setAttribute('stop-opacity', '0.75');
+            
+            const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+            stop2.setAttribute('offset', '100%');
+            stop2.setAttribute('stop-color', toColor);
+            stop2.setAttribute('stop-opacity', '0.75');
+            
+            gradient.appendChild(stop1);
+            gradient.appendChild(stop2);
+            defs.appendChild(gradient);
+            
+            // Create thick ribbon path (top and bottom curves)
+            const topPath = `M ${x1} ${y1 - ribbonWidth/2} C ${x1 + curve} ${y1 - ribbonWidth/2}, ${x2 - curve} ${y2 - ribbonWidth/2}, ${x2} ${y2 - ribbonWidth/2}`;
+            const bottomPath = `L ${x2} ${y2 + ribbonWidth/2} C ${x2 - curve} ${y2 + ribbonWidth/2}, ${x1 + curve} ${y1 + ribbonWidth/2}, ${x1} ${y1 + ribbonWidth/2} Z`;
+            
+            const ribbon = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            ribbon.setAttribute('d', topPath + bottomPath);
+            ribbon.setAttribute('fill', `url(#${gradId})`);
+            ribbon.setAttribute('opacity', '0.4');
+            ribbon.setAttribute('class', 'ribbon-path');
+            ribbon.style.filter = 'blur(1px)';
+            
+            // Add activation flow overlay
+            const flowOverlay = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            flowOverlay.setAttribute('d', `M ${x1} ${y1} C ${x1 + curve} ${y1}, ${x2 - curve} ${y2}, ${x2} ${y2}`);
+            flowOverlay.setAttribute('stroke', toColor);
+            flowOverlay.setAttribute('stroke-width', ribbonWidth);
+            flowOverlay.setAttribute('fill', 'none');
+            flowOverlay.setAttribute('opacity', '0');
+            flowOverlay.setAttribute('class', 'flow-overlay');
+            flowOverlay.setAttribute('stroke-linecap', 'round');
+            flowOverlay.style.filter = 'blur(8px)';
+            
+            g.appendChild(ribbon);
+            g.appendChild(flowOverlay);
+            
+            // Add connection nodes where ribbons meet blobs (visual anchors)
+            const sourceNode = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            sourceNode.setAttribute('cx', x1);
+            sourceNode.setAttribute('cy', y1);
+            sourceNode.setAttribute('r', '8');
+            sourceNode.setAttribute('fill', fromColor);
+            sourceNode.setAttribute('opacity', '0.7');
+            sourceNode.setAttribute('class', 'connection-node');
+            sourceNode.style.filter = `drop-shadow(0 0 8px ${fromColor})`;
+            
+            const targetNode = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            targetNode.setAttribute('cx', x2);
+            targetNode.setAttribute('cy', y2);
+            targetNode.setAttribute('r', '8');
+            targetNode.setAttribute('fill', toColor);
+            targetNode.setAttribute('opacity', '0.7');
+            targetNode.setAttribute('class', 'connection-node');
+            targetNode.style.filter = `drop-shadow(0 0 8px ${toColor})`;
+            
+            g.appendChild(sourceNode);
+            g.appendChild(targetNode);
+            svg.appendChild(g);
+        }
+
+        // Activation state
+        const activationState = {
+            activeNode: null,
+            flowingPaths: new Set(),
+            animationFrame: 0
+        };
+        
+        function initFlowView() {
+            const layer = document.getElementById('canvasLayer');
+            layer.innerHTML = '';
+            state.nodes = [];
+            const svg = document.getElementById('flowSvg');
+            svg.innerHTML = '';
+            svg.setAttribute('viewBox', '0 0 8000 4000');
+            
+            let essayX = 400;
+            let y = 500;
+            
+            corpus.essay.forEach((item, i) => {
+                const width = 350 + Math.random() * 100;
+                const height = 300 + Math.random() * 80;
+                const node = createBlobNode('essay', item.id, essayX, y, width, height, item.text);
+                layer.appendChild(node);
+                state.nodes.push({ id: item.id, type: 'essay', x: essayX, y, width, height });
+                y += height + 100 + Math.random() * 50;
+            });
+            
+            // Position poems in a flowing pattern to the right
+            let poemX = 1200;
+            let poemY = 400;
+            corpus.poem.forEach((item, i) => {
+                const width = 280 + Math.random() * 60;
+                const height = 200 + Math.random() * 50;
+                const node = createBlobNode('poem', item.id, poemX, poemY, width, height, `Line ${item.num}: ${item.text}`);
+                layer.appendChild(node);
+                state.nodes.push({ id: item.id, type: 'poem', x: poemX, y: poemY, width, height });
+                
+                // Create connections from essays to poems
+                corpus.essay.forEach(essay => {
+                    createFlowRibbon(essay.id, item.id, 'poem');
+                });
+                
+                poemY += height + 60 + Math.random() * 40;
+                if (i % 3 === 2) {
+                    poemX += 400;
+                    poemY = 400 + Math.random() * 100;
+                }
+            });
+            
+            // Position prompts in clusters
+            let promptX = 2400;
+            let promptY = 300;
+            corpus.poem.forEach(line => {
+                const prompts = generatePrompts(line.id);
+                prompts.forEach((prompt, i) => {
+                    const width = 240 + Math.random() * 40;
+                    const height = 180 + Math.random() * 40;
+                    const node = createBlobNode('prompt', prompt.id, promptX, promptY, width, height, `${prompt.q}: ${prompt.a}`);
+                    layer.appendChild(node);
+                    state.nodes.push({ id: prompt.id, type: 'prompt', x: promptX, y: promptY, width, height });
+                    
+                    createFlowRibbon(line.id, prompt.id, 'prompt');
+                    
+                    promptY += height + 50;
+                });
+                promptX += 350;
+                promptY = 300 + Math.random() * 150;
+            });
+            
+            // Position images at the end
+            let imageX = 4200;
+            let imageY = 200;
+            state.nodes.filter(n => n.type === 'prompt').forEach(promptNode => {
+                const promptId = promptNode.id;
+                const images = generateImages(promptId);
+                images.forEach((img, i) => {
+                    const width = 200 + Math.random() * 30;
+                    const height = 200 + Math.random() * 30;
+                    const node = createBlobNode('image', img.id, imageX, imageY, width, height, img.prompt);
+                    layer.appendChild(node);
+                    state.nodes.push({ id: img.id, type: 'image', x: imageX, y: imageY, width, height });
+                    
+                    createFlowRibbon(promptId, img.id, 'image');
+                    
+                    imageY += height + 40;
+                    if (imageY > 3200) {
+                        imageX += 280;
+                        imageY = 200;
+                    }
+                });
+            });
+            
+            updateTransform();
+            
+            // Start constant ambient particle flow
+            startAmbientParticleFlow();
+        }
+        
+        // Neural firing pattern - directional action potentials
+        let neuralFiringInterval;
+        let firingSequenceIndex = 0;
+        
+        function startAmbientParticleFlow() {
+            // Clear any existing interval
+            if (neuralFiringInterval) clearInterval(neuralFiringInterval);
+            
+            // Adaptive interval based on device performance
+            // Mobile/low-power: longer intervals for battery life
+            const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+            const isLowPower = navigator.hardwareConcurrency <= 4;
+            const interval = (isMobile || isLowPower) ? 2500 : 1500;
+            
+            // Fire sequential action potentials
+            neuralFiringInterval = setInterval(() => {
+                if (state.view !== 'flow' || state.nodes.length === 0) return;
+                
+                // Skip frame if browser is busy (requestAnimationFrame callback)
+                requestAnimationFrame(() => {
+                    fireActionPotentialSequence();
+                });
+            }, interval);
+        }
+        
+        function fireActionPotentialSequence() {
+            // Initialize audio on first interaction
+            initAudio();
+            
+            // Get nodes by type
+            const essays = state.nodes.filter(n => n.type === 'essay');
+            const poems = state.nodes.filter(n => n.type === 'poem');
+            const prompts = state.nodes.filter(n => n.type === 'prompt');
+            const images = state.nodes.filter(n => n.type === 'image');
+            
+            // Pick a source essay (cycle through them)
+            const sourceEssay = essays[firingSequenceIndex % essays.length];
+            firingSequenceIndex++;
+            
+            // Stochastic selection - pick only 1-2 best poems (not all)
+            const selectedPoems = [];
+            const numPoems = Math.min(1 + Math.floor(Math.random() * 2), poems.length);
+            for (let i = 0; i < numPoems; i++) {
+                const poemIndex = Math.floor(Math.random() * poems.length);
+                if (!selectedPoems.includes(poems[poemIndex])) {
+                    selectedPoems.push(poems[poemIndex]);
+                }
+            }
+            
+            // Fire to selected poems only
+            selectedPoems.forEach((poem, i) => {
+                setTimeout(() => {
+                    fireNeuralConnection(sourceEssay, poem, () => {
+                        // Pick 1-2 best prompts for this poem
+                        const selectedPrompts = [];
+                        const numPrompts = Math.min(1 + Math.floor(Math.random() * 2), prompts.length);
+                        for (let j = 0; j < numPrompts; j++) {
+                            const promptIndex = Math.floor(Math.random() * prompts.length);
+                            if (!selectedPrompts.includes(prompts[promptIndex])) {
+                                selectedPrompts.push(prompts[promptIndex]);
+                            }
+                        }
+                        
+                        selectedPrompts.forEach((prompt, j) => {
+                            setTimeout(() => {
+                                fireNeuralConnection(poem, prompt, () => {
+                                    // Pick 1-2 images for this prompt
+                                    const selectedImages = [];
+                                    const numImages = Math.min(1 + Math.floor(Math.random() * 2), images.length);
+                                    for (let k = 0; k < numImages; k++) {
+                                        const imageIndex = Math.floor(Math.random() * images.length);
+                                        if (!selectedImages.includes(images[imageIndex])) {
+                                            selectedImages.push(images[imageIndex]);
+                                        }
+                                    }
+                                    
+                                    selectedImages.forEach((image, k) => {
+                                        setTimeout(() => {
+                                            fireNeuralConnection(prompt, image);
+                                        }, k * 150);
+                                    });
+                                });
+                            }, j * 250);
+                        });
+                    });
+                }, i * 400);
+            });
+        }
+        
+        function fireNeuralConnection(fromNode, toNode, callback) {
+            const x1 = fromNode.x + fromNode.width;
+            const y1 = fromNode.y + fromNode.height / 2;
+            const x2 = toNode.x;
+            const y2 = toNode.y + toNode.height / 2;
+            const curve = Math.min(Math.abs(x2 - x1) * 0.5, 300);
+            const color = typeColors[toNode.type].color;
+            
+            // Find and flash the dendrite (ribbon)
+            const svg = document.getElementById('flowSvg');
+            const ribbons = svg.querySelectorAll('.flow-ribbon');
+            ribbons.forEach(ribbon => {
+                const ribbonPath = ribbon.querySelector('path');
+                if (ribbonPath) {
+                    ribbonPath.classList.add('dendrite-firing');
+                    setTimeout(() => ribbonPath.classList.remove('dendrite-firing'), 800);
+                }
+            });
+            
+            // Fire action potential particle
+            createFlowAmbientParticle(x1, y1, x2, y2, curve, color, toNode);
+            
+            // Callback when particle arrives
+            if (callback) {
+                setTimeout(callback, 1000);
+            }
+        }
+        
+        function shouldHaveRibbon(fromNode, toNode) {
+            // Essays connect to poems
+            if (fromNode.type === 'essay' && toNode.type === 'poem') return true;
+            // Poems connect to prompts
+            if (fromNode.type === 'poem' && toNode.type === 'prompt') return true;
+            // Prompts connect to images
+            if (fromNode.type === 'prompt' && toNode.type === 'image') return true;
+            return false;
+        }
+        
+        function createFlowAmbientParticle(x1, y1, x2, y2, curve, color, toNode = null) {
+            const svg = document.getElementById('flowSvg');
+            if (!svg) return;
+            
+            const particle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            particle.setAttribute('class', 'flow-ambient-particle');
+            particle.setAttribute('r', '6');
+            particle.setAttribute('fill', 'white');
+            particle.setAttribute('stroke', color);
+            particle.setAttribute('stroke-width', '2');
+            particle.style.filter = `blur(2px) drop-shadow(0 0 15px ${color}) drop-shadow(0 0 30px ${color})`;
+            
+            // Spawn sound with node tone (use toNode type from FLOW view)
+            const nodeType = toNode?.type || 'poem';
+            playSpawnSound(nodeType);
+            
+            const duration = 1000;
+            const startTime = Date.now();
+            let flowSoundPlayed = false;
+            
+            function animate() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                if (progress < 1 && state.view === 'flow') {
+                    const t = progress;
+                    const mt = 1 - t;
+                    const cx1 = x1 + curve;
+                    const cx2 = x2 - curve;
+                    
+                    const x = mt * mt * mt * x1 + 3 * mt * mt * t * cx1 + 3 * mt * t * t * cx2 + t * t * t * x2;
+                    const y = mt * mt * mt * y1 + 3 * mt * mt * t * y1 + 3 * mt * t * t * y2 + t * t * t * y2;
+                    
+                    particle.setAttribute('cx', x);
+                    particle.setAttribute('cy', y);
+                    
+                    // Flow sound at midpoint
+                    if (progress > 0.5 && !flowSoundPlayed) {
+                        playFlowSound();
+                        flowSoundPlayed = true;
+                    }
+                    
+                    // Smooth fade with brighter peak
+                    let opacity;
+                    if (progress < 0.1) {
+                        opacity = progress * 10;
+                    } else if (progress > 0.9) {
+                        opacity = (1 - progress) * 10;
+                    } else {
+                        opacity = 1;
+                    }
+                    particle.setAttribute('opacity', opacity);
+                    
+                    requestAnimationFrame(animate);
+                } else {
+                    try {
+                        if (svg && svg.contains(particle)) {
+                            svg.removeChild(particle);
+                        }
+                    } catch (e) {
+                        // Particle already removed
+                    }
+                }
+            }
+            
+            svg.appendChild(particle);
+            animate();
+        }
+
+        function selectNode(id, type, content) {
+            // Deselect all
+            document.querySelectorAll('.blob-node').forEach(n => n.classList.remove('active'));
+            document.querySelectorAll('.flow-ribbon').forEach(r => r.classList.remove('active'));
+            
+            // Select clicked node
+            const node = document.querySelector(`.blob-node[data-id="${id}"]`);
+            if (node) node.classList.add('active');
+            
+            // Trigger activation flow
+            activationState.activeNode = id;
+            triggerActivationFlow(id);
+            
+            // Show info panel
+            const panel = document.getElementById('infoPanel');
+            document.getElementById('infoHeader').textContent = type.toUpperCase();
+            document.getElementById('infoTitle').textContent = id;
+            document.getElementById('infoContent').textContent = content;
+            panel.classList.add('visible');
+        }
+        
+        function triggerActivationFlow(startId) {
+            // Find all downstream paths
+            const downstreamPaths = [];
+            const toActivate = [{ id: startId, depth: 0 }];
+            const visited = new Set();
+            
+            while (toActivate.length > 0) {
+                const current = toActivate.shift();
+                if (visited.has(current.id)) continue;
+                visited.add(current.id);
+                
+                // Find all ribbons from this node
+                document.querySelectorAll(`.flow-ribbon[data-from="${current.id}"]`).forEach(ribbon => {
+                    const toId = ribbon.dataset.to;
+                    downstreamPaths.push({ ribbon, depth: current.depth });
+                    toActivate.push({ id: toId, depth: current.depth + 1 });
+                });
+            }
+            
+            // Animate activations in sequence
+            downstreamPaths.forEach((item, i) => {
+                setTimeout(() => {
+                    animateRibbonFlow(item.ribbon);
+                    // Pulse destination node
+                    const toId = item.ribbon.dataset.to;
+                    const toNode = document.querySelector(`.blob-node[data-id="${toId}"]`);
+                    if (toNode) {
+                        toNode.style.animation = 'none';
+                        setTimeout(() => {
+                            toNode.style.animation = 'activationPulse 0.8s ease-out';
+                        }, 10);
+                    }
+                }, i * 400);
+            });
+        }
+        
+        function animateRibbonFlow(ribbon) {
+            const overlay = ribbon.querySelector('.flow-overlay');
+            if (!overlay) return;
+            
+            // Animate the glow
+            overlay.style.transition = 'none';
+            overlay.setAttribute('opacity', '0');
+            overlay.setAttribute('stroke-dasharray', '100 1000');
+            overlay.setAttribute('stroke-dashoffset', '0');
+            
+            setTimeout(() => {
+                overlay.style.transition = 'all 1.2s ease-out';
+                overlay.setAttribute('opacity', '0.9');
+                overlay.setAttribute('stroke-dashoffset', '1100');
+                
+                setTimeout(() => {
+                    overlay.style.transition = 'opacity 0.5s';
+                    overlay.setAttribute('opacity', '0');
+                }, 1200);
+            }, 50);
+        }
+
+        function closeInfo() {
+            document.getElementById('infoPanel').classList.remove('visible');
+        }
+
+        // VIEW SWITCHING
+        function switchView(view) {
+            state.view = view;
+            
+            document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const overlay = document.getElementById('scrollFlowOverlay');
+            
+            if (view === 'scroll') {
+                // Stop neural firing
+                if (neuralFiringInterval) {
+                    clearInterval(neuralFiringInterval);
+                    neuralFiringInterval = null;
+                }
+                
+                document.getElementById('scrollView').classList.remove('hidden');
+                document.getElementById('flowView').classList.remove('active');
+                document.getElementById('controls').style.display = 'none';
+                // Show overlay for scroll view
+                if (state.columns.length > 1) {
+                    overlay.style.display = 'block';
+                    overlay.classList.remove('hidden');
+                    setTimeout(() => updateScrollFlowOverlay(), 50);
+                }
+            } else {
+                document.getElementById('scrollView').classList.add('hidden');
+                document.getElementById('flowView').classList.add('active');
+                document.getElementById('controls').style.display = 'flex';
+                // Hide overlay in flow view - important for visibility
+                overlay.classList.add('hidden');
+                overlay.style.display = 'none';
+                if (state.nodes.length === 0) {
+                    initFlowView();
+                } else {
+                    // Restart ambient particles for existing flow view
+                    startAmbientParticleFlow();
+                }
+            }
+        }
+        
+        // Update ribbons on scroll
+        const scrollContainer = document.getElementById('scrollContainer');
+        let scrollTimeout;
+        scrollContainer.addEventListener('scroll', () => {
+            if (state.view === 'scroll' && state.columns.length > 1) {
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    updateScrollFlowOverlay();
+                }, 50);
+            }
+        });
+
+        // PAN & ZOOM
+        let isDragging = false;
+        let dragStartX = 0;
+        let dragStartY = 0;
+
+        const viewport = document.getElementById('viewport');
+        
+        viewport.addEventListener('mousedown', (e) => {
+            if (e.target.classList.contains('blob-node') || e.target.closest('.blob-node')) return;
+            isDragging = true;
+            dragStartX = e.clientX - state.panX;
+            dragStartY = e.clientY - state.panY;
+            viewport.style.cursor = 'grabbing';
+        });
+
+        viewport.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            state.panX = e.clientX - dragStartX;
+            state.panY = e.clientY - dragStartY;
+            updateTransform();
+        });
+
+        viewport.addEventListener('mouseup', () => {
+            isDragging = false;
+            viewport.style.cursor = 'grab';
+        });
+
+        viewport.addEventListener('mouseleave', () => {
+            isDragging = false;
+            viewport.style.cursor = 'grab';
+        });
+
+        // Touch support
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        viewport.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                const touch = e.touches[0];
+                touchStartX = touch.clientX - state.panX;
+                touchStartY = touch.clientY - state.panY;
+            }
+        }, { passive: true });
+
+        viewport.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 1) {
+                const touch = e.touches[0];
+                state.panX = touch.clientX - touchStartX;
+                state.panY = touch.clientY - touchStartY;
+                updateTransform();
+            }
+        }, { passive: true });
+
+        // Zoom with wheel
+        viewport.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const delta = e.deltaY > 0 ? -0.05 : 0.05;
+            state.zoom = Math.max(0.1, Math.min(1, state.zoom + delta));
+            updateTransform();
+            updateZoomDisplay();
+        }, { passive: false });
+
+        function updateTransform() {
+            const layer = document.getElementById('canvasLayer');
+            const svg = document.getElementById('flowSvg');
+            const transform = `translate(${state.panX}px, ${state.panY}px) scale(${state.zoom})`;
+            layer.style.transform = transform;
+            svg.style.transform = transform;
+        }
+
+        function updateZoomDisplay() {
+            document.getElementById('zoomLevel').textContent = Math.round(state.zoom * 100) + '%';
+        }
+
+        function zoomIn() {
+            state.zoom = Math.min(1, state.zoom + 0.1);
+            updateTransform();
+            updateZoomDisplay();
+        }
+
+        function zoomOut() {
+            state.zoom = Math.max(0.1, state.zoom - 0.1);
+            updateTransform();
+            updateZoomDisplay();
+        }
+
+        function resetView() {
+            state.zoom = 0.3;
+            state.panX = -1500;
+            state.panY = -800;
+            updateTransform();
+            updateZoomDisplay();
+        }
+
+        // Window resize handler
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            if (state.view === 'scroll' && state.columns.length > 1) {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    updateScrollFlowOverlay();
+                }, 100);
+            }
+        });
+        
+        // Progressive loading for smooth mobile experience
+        function initializeApp() {
+            // Mark body as loading
+            document.body.classList.add('loading');
+            
+            // Use requestIdleCallback for non-critical init (or setTimeout fallback)
+            const scheduleInit = window.requestIdleCallback || ((cb) => setTimeout(cb, 1));
+            
+            // Critical path: Initialize scroll view first (visible on load)
+            requestAnimationFrame(() => {
+                initEssay();
+                updateZoomDisplay();
+                
+                // Mark as loaded after initial render
+                setTimeout(() => {
+                    document.body.classList.remove('loading');
+                    document.body.classList.add('loaded');
+                }, 100);
+                
+                // Initialize scroll flow overlay as hidden
+                document.getElementById('scrollFlowOverlay').classList.add('hidden');
+                
+                // Defer FLOW view initialization until needed
+                // (will be lazy-loaded on first FLOW button click)
+            });
+        }
+        
+        // Wait for DOM ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeApp);
+        } else {
+            initializeApp();
+        }
+        
+        // Pause animations when tab is hidden (battery savings)
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                // Stop ambient particle flow
+                if (neuralFiringInterval) {
+                    clearInterval(neuralFiringInterval);
+                }
+                console.log('⏸ Paused (tab hidden - saving battery)');
+            } else {
+                // Resume ambient particles if in flow view
+                if (state.view === 'flow' && state.nodes.length > 0) {
+                    startAmbientParticleFlow();
+                    console.log('▶️ Resumed (tab visible)');
+                }
+            }
+        });
+
+        console.log('XANADOC DUAL VIEW - Stigmergic Thinking Trails');
+        console.log('═════════════════════════════════════════════════');
+        console.log('SCROLL: Elegant orb-driven text revelation');
+        console.log('  • WORD-LEVEL REVEAL: Text wrapped by word (readable!)');
+        console.log('  • ELEGANT CASCADE: 40ms stagger, rise from below');
+        console.log('  • ORB BRINGS TEXT: Hidden until orb within 80px');
+        console.log('  • CLICK TO READ: Clicked essay reveals (30ms/word)');
+        console.log('  • STIGMERGIC TRAILS: Ribbons glow after orb passes');
+        console.log('    - 8-second fade: 50% → 15% (persistent scent marks)');
+        console.log('  • NEUROTRANSMITTER: 55% direct, 25% reuptake, 20% hesitation');
+        console.log('');
+        console.log('CALL & RESPONSE AUDIO (cricket/morse code style):');
+        console.log('  • Essay: 440Hz (A4) - warm foundation');
+        console.log('  • Poem: 523Hz (C5) - bright response');
+        console.log('  • Prompt: 659Hz (E5) - higher question');
+        console.log('  • Image: 784Hz (G5) - resolution');
+        console.log('  • Duration: 25-30ms, Volume: 0.004-0.006 (very subtle)');
+        console.log('  • Only 20% of words make sound (not overwhelming)');
+        console.log('');
+        console.log('FLOW: Unified organism (blobs + ribbons as one)');
+        console.log('  • Connection nodes: 8px circles at ribbon endpoints');
+        console.log('  • Ribbons extend INTO blobs (15px overlap)');
+        console.log('  • Type-specific glows: essays red, poems green, prompts blue, images yellow');
+        console.log('  • Connection nodes pulse when active (8px → 12px)');
+        console.log('  • Ribbon opacity: 65% base, 75% gradient, 90% when active');
+        console.log('  • Visual continuity: matching colors, glows, and filters');
+        console.log('');
+        console.log('MOBILE OPTIMIZATIONS:');
+        console.log('  • Progressive loading: Scroll view first, Flow lazy-loaded');
+        console.log('  • GPU acceleration: will-change, translate3d, backface-visibility');
+        console.log('  • Adaptive intervals: 2.5s mobile, 1.5s desktop (battery life)');
+        console.log('  • Loading spinner: smooth perceived performance');
+        console.log('  • Touch optimizations: passive listeners, no user-select');
+        console.log('  • Reduced motion: respects prefers-reduced-motion');
+        console.log('  • Performance throttling: skips frames if < 30fps');
+        console.log('  • No pull-to-refresh: overscroll-behavior: none');
+    </script>
+</body>
+</html>

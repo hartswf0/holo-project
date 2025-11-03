@@ -1,0 +1,783 @@
+{
+  "title": "The Sheep Parliament Decides",
+  "subtitle": "A Comedy of Consent, Miscommunication, and Grass",
+  "scenes": [
+    {
+      "scene_number": 1,
+      "title": "Morning on the Hill",
+      "subtitle": "Five Sheep, One Idea, Zero Agreement",
+      "duration": 50,
+      "elements": [
+        {
+          "id": "sheep_beatrice",
+          "name": "Beatrice",
+          "type": "character",
+          "position": {"x": -1, "y": 0, "z": 0.5},
+          "color": "#56ff9f",
+          "description": "Eldest sheep, thinks she's in charge, isn't"
+        },
+        {
+          "id": "sheep_gerald",
+          "name": "Gerald",
+          "type": "character",
+          "position": {"x": 1, "y": 0, "z": 0.5},
+          "color": "#ff9f56",
+          "description": "Middle sheep, always hungry, easily distracted by grass"
+        },
+        {
+          "id": "sheep_penelope",
+          "name": "Penelope",
+          "type": "character",
+          "position": {"x": 0, "y": 0, "z": 1.5},
+          "color": "#569fff",
+          "description": "Youngest sheep, asks too many questions"
+        },
+        {
+          "id": "sheep_maurice",
+          "name": "Maurice",
+          "type": "character",
+          "position": {"x": -1.5, "y": 0, "z": -1},
+          "color": "#c78fff",
+          "description": "Philosopher sheep, overcomplicates everything"
+        },
+        {
+          "id": "sheep_dotty",
+          "name": "Dotty",
+          "type": "character",
+          "position": {"x": 1.5, "y": 0, "z": -1},
+          "color": "#f3ae56",
+          "description": "Spotted sheep, contrarian, argues for sport"
+        },
+        {
+          "id": "fence_post_1",
+          "name": "Fence Post (Left)",
+          "type": "machine",
+          "position": {"x": -3, "y": 0, "z": -2.5},
+          "color": "#8b7355",
+          "description": "Wooden fence post marking boundary"
+        },
+        {
+          "id": "fence_post_2",
+          "name": "Fence Post (Right)",
+          "type": "machine",
+          "position": {"x": 3, "y": 0, "z": -2.5},
+          "color": "#8b7355",
+          "description": "Wooden fence post marking boundary"
+        },
+        {
+          "id": "virtual_fence_node",
+          "name": "Virtual Fence Box",
+          "type": "machine",
+          "position": {"x": 0, "y": 0, "z": -3},
+          "color": "#ff5c7c",
+          "description": "Electronic box, beeps warnings, flashes lights"
+        },
+        {
+          "id": "grass_patch_premium",
+          "name": "Premium Grass (Beyond Fence)",
+          "type": "machine",
+          "position": {"x": 0, "y": 0, "z": -4.5},
+          "color": "#4ecdc4",
+          "description": "Lush grass everyone wants, just past fence line"
+        },
+        {
+          "id": "grass_patch_current",
+          "name": "Current Grass (Here)",
+          "type": "machine",
+          "position": {"x": -3.5, "y": 0, "z": 1},
+          "color": "#90ee90",
+          "description": "Perfectly fine grass where sheep are now"
+        },
+        {
+          "id": "water_trough",
+          "name": "Water Trough",
+          "type": "machine",
+          "position": {"x": 3.5, "y": 0, "z": 1},
+          "color": "#87ceeb",
+          "description": "Metal trough, half-full of water"
+        },
+        {
+          "id": "hay_bale_1",
+          "name": "Hay Bale",
+          "type": "machine",
+          "position": {"x": -3.5, "y": 0, "z": -1},
+          "color": "#daa520",
+          "description": "Round hay bale, sheep ignore it"
+        },
+        {
+          "id": "tree_oak",
+          "name": "Old Oak Tree",
+          "type": "machine",
+          "position": {"x": -4, "y": 0, "z": 3},
+          "color": "#8b4513",
+          "description": "Provides shade, birds nest in it"
+        },
+        {
+          "id": "shepherd_hut",
+          "name": "Shepherd's Hut",
+          "type": "machine",
+          "position": {"x": 4, "y": 0, "z": 3},
+          "color": "#cd853f",
+          "description": "Small wooden structure, Klaus lives here"
+        }
+      ],
+      "timeline": [
+        {
+          "turn": 0,
+          "target_element_id": "sheep_beatrice",
+          "text": "I call this meeting to order. We need to discuss the fence situation.",
+          "emotion": "authoritative"
+        },
+        {
+          "turn": 1,
+          "target_element_id": "sheep_gerald",
+          "text": "What fence? I'm eating.",
+          "emotion": "distracted"
+        },
+        {
+          "turn": 2,
+          "target_element_id": "collar_beatrice",
+          "text": "[BEEP BEEP BEEP BEEP]"
+        },
+        {
+          "turn": 3,
+          "target_element_id": "sheep_beatrice",
+          "text": "WILL YOU STOP THAT! I'm trying to LEAD here!",
+          "emotion": "irritated"
+        },
+        {
+          "turn": 4,
+          "target_element_id": "sheep_penelope",
+          "text": "Why does Beatrice's neck make noise? Can MY neck make noise?",
+          "emotion": "curious"
+        },
+        {
+          "turn": 5,
+          "target_element_id": "sheep_maurice",
+          "text": "The question isn't CAN your neck make noise, but SHOULD it. What is the nature of neck-noise consent?",
+          "emotion": "philosophical"
+        },
+        {
+          "turn": 6,
+          "target_element_id": "sheep_dotty",
+          "text": "I disagree. Necks should be silent. This is a hill I'm willing to die on.",
+          "emotion": "contrarian"
+        },
+        {
+          "turn": 7,
+          "target_element_id": "grass_patch_premium",
+          "text": "[Grass rustles temptingly in the breeze beyond the invisible fence]"
+        },
+        {
+          "turn": 8,
+          "target_element_id": "sheep_gerald",
+          "text": "Is anyone else thinking about that grass? Because I'm thinking about that grass.",
+          "emotion": "fixated"
+        },
+        {
+          "turn": 9,
+          "target_element_id": "virtual_fence_node",
+          "text": "[PROXIMITY ALERT: beep-boop-beep]"
+        },
+        {
+          "turn": 10,
+          "target_element_id": "sheep_penelope",
+          "text": "What does beep-boop-beep MEAN? Is it saying hello? Should we beep back?",
+          "emotion": "confused"
+        }
+      ],
+      "power_distribution": {
+        "sheep_beatrice": 25,
+        "sheep_gerald": 20,
+        "sheep_penelope": 15,
+        "sheep_maurice": 15,
+        "sheep_dotty": 15,
+        "collar_beatrice": 5,
+        "grass_patch_premium": 3,
+        "virtual_fence_node": 2
+      },
+      "scene_audio": {
+        "background_music": "pastoral_chaos",
+        "intensity": 0.4
+      }
+    },
+    {
+      "scene_number": 2,
+      "title": "The Fence Explains Itself (Badly)",
+      "subtitle": "Technology Meets Sheep Intelligence",
+      "duration": 55,
+      "elements": [
+        {
+          "id": "sheep_beatrice",
+          "name": "Beatrice",
+          "position": {"x": -1, "y": 0, "z": 0},
+          "color": "#56ff9f"
+        },
+        {
+          "id": "sheep_gerald",
+          "name": "Gerald",
+          "position": {"x": 1, "y": 0, "z": 0},
+          "color": "#ff9f56"
+        },
+        {
+          "id": "sheep_penelope",
+          "name": "Penelope",
+          "position": {"x": 0, "y": 0, "z": 1},
+          "color": "#569fff"
+        },
+        {
+          "id": "sheep_maurice",
+          "name": "Maurice",
+          "position": {"x": -1.5, "y": 0, "z": -1},
+          "color": "#c78fff"
+        },
+        {
+          "id": "sheep_dotty",
+          "name": "Dotty",
+          "position": {"x": 1.5, "y": 0, "z": -1},
+          "color": "#f3ae56"
+        },
+        {
+          "id": "shepherd_klaus",
+          "name": "Shepherd Klaus",
+          "type": "character",
+          "position": {"x": 0, "y": 0, "z": -2.5},
+          "color": "#4ecdc4",
+          "description": "German shepherd, trying very hard to explain consent protocols to sheep"
+        },
+        {
+          "id": "translator_box",
+          "name": "Sheep-Human Translator",
+          "type": "machine",
+          "position": {"x": -3, "y": 0, "z": -0.5},
+          "color": "#ff5c7c",
+          "description": "Experimental device, translates badly, adds random words"
+        },
+        {
+          "id": "fence_post_1",
+          "name": "Fence Post (Left)",
+          "type": "machine",
+          "position": {"x": -3, "y": 0, "z": -3},
+          "color": "#8b7355"
+        },
+        {
+          "id": "fence_post_2",
+          "name": "Fence Post (Right)",
+          "type": "machine",
+          "position": {"x": 3, "y": 0, "z": -3},
+          "color": "#8b7355"
+        },
+        {
+          "id": "virtual_fence_node",
+          "name": "Virtual Fence Box",
+          "type": "machine",
+          "position": {"x": 0, "y": 0, "z": -3.5},
+          "color": "#95e1d3"
+        },
+        {
+          "id": "grass_patch_premium",
+          "name": "Premium Grass (Beyond)",
+          "type": "machine",
+          "position": {"x": 0, "y": 0, "z": -4.5},
+          "color": "#4ecdc4"
+        },
+        {
+          "id": "grass_patch_current",
+          "name": "Current Grass",
+          "type": "machine",
+          "position": {"x": -3.5, "y": 0, "z": 1},
+          "color": "#90ee90"
+        },
+        {
+          "id": "water_trough",
+          "name": "Water Trough",
+          "type": "machine",
+          "position": {"x": 3.5, "y": 0, "z": 1},
+          "color": "#87ceeb"
+        },
+        {
+          "id": "hay_bale",
+          "name": "Hay Bale",
+          "type": "machine",
+          "position": {"x": 3, "y": 0, "z": 2.5},
+          "color": "#daa520"
+        },
+        {
+          "id": "shepherd_hut",
+          "name": "Shepherd's Hut",
+          "type": "machine",
+          "position": {"x": 4, "y": 0, "z": -1},
+          "color": "#cd853f"
+        }
+      ],
+      "timeline": [
+        {
+          "turn": 0,
+          "target_element_id": "shepherd_klaus",
+          "text": "Good morning! I need to explain how the virtual fence works for your safety and autonomy.",
+          "emotion": "patient"
+        },
+        {
+          "turn": 1,
+          "target_element_id": "translator_box",
+          "text": "[TRANSLATING: 'Morning! Fence...safety...SAUSAGES...autonomy']"
+        },
+        {
+          "turn": 2,
+          "target_element_id": "sheep_gerald",
+          "text": "Did he say SAUSAGES? I'm interested now.",
+          "emotion": "excited"
+        },
+        {
+          "turn": 3,
+          "target_element_id": "shepherd_klaus",
+          "text": "No, I— The fence beeps when you get too close to the boundary. It's a warning, not a command.",
+          "emotion": "clarifying"
+        },
+        {
+          "turn": 4,
+          "target_element_id": "translator_box",
+          "text": "[TRANSLATING: 'Beeps...boundary...DISCO...not command']"
+        },
+        {
+          "turn": 5,
+          "target_element_id": "sheep_dotty",
+          "text": "Wait, there's a DISCO? No one tells me anything!",
+          "emotion": "indignant"
+        },
+        {
+          "turn": 6,
+          "target_element_id": "sheep_maurice",
+          "text": "If a fence beeps in a field and no sheep understands it, does it make a warning?",
+          "emotion": "pondering"
+        },
+        {
+          "turn": 7,
+          "target_element_id": "sheep_penelope",
+          "text": "Klaus, can we just...go to the good grass? It's RIGHT THERE.",
+          "emotion": "pleading"
+        },
+        {
+          "turn": 8,
+          "target_element_id": "shepherd_klaus",
+          "text": "That's outside the safe zone! The fence is there to protect you from—",
+          "emotion": "concerned"
+        },
+        {
+          "turn": 9,
+          "target_element_id": "sheep_beatrice",
+          "text": "Protect us from GRASS? The grass is the THREAT now?",
+          "emotion": "incredulous"
+        },
+        {
+          "turn": 10,
+          "target_element_id": "translator_box",
+          "text": "[TRANSLATING: 'Grass...threat...WEDNESDAY...']"
+        },
+        {
+          "turn": 11,
+          "target_element_id": "sheep_gerald",
+          "text": "I have no idea what's happening but I'm still thinking about sausages.",
+          "emotion": "confused"
+        }
+      ],
+      "power_distribution": {
+        "shepherd_klaus": 30,
+        "translator_box": 10,
+        "sheep_beatrice": 15,
+        "sheep_gerald": 12,
+        "sheep_penelope": 10,
+        "sheep_maurice": 10,
+        "sheep_dotty": 10,
+        "grass_patch_premium": 3
+      }
+    },
+    {
+      "scene_number": 3,
+      "title": "The Great Grass Debate",
+      "subtitle": "Democracy is Messy",
+      "duration": 60,
+      "elements": [
+        {
+          "id": "sheep_beatrice",
+          "name": "Beatrice",
+          "position": {"x": -0.5, "y": 0, "z": 0.5},
+          "color": "#56ff9f"
+        },
+        {
+          "id": "sheep_gerald",
+          "name": "Gerald",
+          "position": {"x": 0.5, "y": 0, "z": 0.5},
+          "color": "#ff9f56"
+        },
+        {
+          "id": "sheep_penelope",
+          "name": "Penelope",
+          "position": {"x": 0, "y": 0, "z": 1.5},
+          "color": "#569fff"
+        },
+        {
+          "id": "sheep_maurice",
+          "name": "Maurice",
+          "position": {"x": -1.5, "y": 0, "z": -0.5},
+          "color": "#c78fff"
+        },
+        {
+          "id": "sheep_dotty",
+          "name": "Dotty",
+          "position": {"x": 1.5, "y": 0, "z": -0.5},
+          "color": "#f3ae56"
+        },
+        {
+          "id": "voting_apparatus",
+          "name": "Democratic Vote Counter",
+          "type": "machine",
+          "position": {"x": 0, "y": 0, "z": -2.5},
+          "color": "#ff5c7c",
+          "description": "Counts bleats, somehow"
+        },
+        {
+          "id": "fence_post_1",
+          "name": "Fence Post (Left)",
+          "type": "machine",
+          "position": {"x": -3, "y": 0, "z": -3},
+          "color": "#8b7355"
+        },
+        {
+          "id": "fence_post_2",
+          "name": "Fence Post (Right)",
+          "type": "machine",
+          "position": {"x": 3, "y": 0, "z": -3},
+          "color": "#8b7355"
+        },
+        {
+          "id": "virtual_fence_node",
+          "name": "Virtual Fence Box",
+          "type": "machine",
+          "position": {"x": 0, "y": 0, "z": -3.5},
+          "color": "#95e1d3"
+        },
+        {
+          "id": "grass_patch_premium",
+          "name": "Premium Grass (Beyond)",
+          "type": "machine",
+          "position": {"x": 0, "y": 0, "z": -4.5},
+          "color": "#4ecdc4"
+        },
+        {
+          "id": "grass_patch_current",
+          "name": "Current Grass (Here)",
+          "type": "machine",
+          "position": {"x": -3.5, "y": 0, "z": 1},
+          "color": "#90ee90",
+          "description": "Perfectly fine grass, but not THE grass"
+        },
+        {
+          "id": "water_trough",
+          "name": "Water Trough",
+          "type": "machine",
+          "position": {"x": 3.5, "y": 0, "z": 1},
+          "color": "#87ceeb"
+        },
+        {
+          "id": "hay_bale",
+          "name": "Hay Bale",
+          "type": "machine",
+          "position": {"x": -3.5, "y": 0, "z": -1.5},
+          "color": "#daa520"
+        },
+        {
+          "id": "tree_oak",
+          "name": "Old Oak Tree",
+          "type": "machine",
+          "position": {"x": -4, "y": 0, "z": 2.5},
+          "color": "#8b4513"
+        },
+        {
+          "id": "shepherd_hut",
+          "name": "Shepherd's Hut",
+          "type": "machine",
+          "position": {"x": 4, "y": 0, "z": 2.5},
+          "color": "#cd853f"
+        }
+      ],
+      "timeline": [
+        {
+          "turn": 0,
+          "target_element_id": "sheep_beatrice",
+          "text": "All in favor of crossing the fence to get the good grass, say 'baaaa.'",
+          "emotion": "formal"
+        },
+        {
+          "turn": 1,
+          "target_element_id": "sheep_gerald",
+          "text": "BAAAA!",
+          "emotion": "enthusiastic"
+        },
+        {
+          "turn": 2,
+          "target_element_id": "sheep_penelope",
+          "text": "Baaaa! But also, what if the fence is right?",
+          "emotion": "conflicted"
+        },
+        {
+          "turn": 3,
+          "target_element_id": "sheep_maurice",
+          "text": "I abstain. The question presupposes grass is a monolithic category when in fact—",
+          "emotion": "pedantic"
+        },
+        {
+          "turn": 4,
+          "target_element_id": "sheep_dotty",
+          "text": "I vote NO on principle. Gerald wants it too much.",
+          "emotion": "spiteful"
+        },
+        {
+          "turn": 5,
+          "target_element_id": "voting_apparatus",
+          "text": "[COUNTING: 2 yes, 1 abstain, 1 no, 1 conditional yes | RESULT: unclear]"
+        },
+        {
+          "turn": 6,
+          "target_element_id": "grass_patch_current",
+          "text": "[The grass right here rustles] I'm...I'm RIGHT here. I'm fine grass.",
+          "emotion": "hurt"
+        },
+        {
+          "turn": 7,
+          "target_element_id": "sheep_gerald",
+          "text": "You're FINE grass. But that's PREMIUM grass. Can't you see the difference?",
+          "emotion": "explaining"
+        },
+        {
+          "turn": 8,
+          "target_element_id": "grass_patch_current",
+          "text": "We're the same species! This is grassism!",
+          "emotion": "offended"
+        },
+        {
+          "turn": 9,
+          "target_element_id": "sheep_penelope",
+          "text": "Oh no, we made the grass cry. I didn't know grass had feelings!",
+          "emotion": "guilty"
+        },
+        {
+          "turn": 10,
+          "target_element_id": "sheep_maurice",
+          "text": "Does grass have feelings or are we projecting our desire onto vegetal substrate?",
+          "emotion": "philosophical"
+        },
+        {
+          "turn": 11,
+          "target_element_id": "sheep_dotty",
+          "text": "I STILL vote no but now for different reasons!",
+          "emotion": "defiant"
+        },
+        {
+          "turn": 12,
+          "target_element_id": "sheep_beatrice",
+          "text": "This is chaos. CHAOS! We need a tiebreaker sheep!",
+          "emotion": "exasperated"
+        }
+      ],
+      "power_distribution": {
+        "sheep_beatrice": 20,
+        "sheep_gerald": 18,
+        "sheep_maurice": 15,
+        "sheep_dotty": 15,
+        "sheep_penelope": 12,
+        "voting_apparatus": 8,
+        "grass_patch_premium": 7,
+        "grass_patch_current": 5
+      }
+    },
+    {
+      "scene_number": 4,
+      "title": "The Grass Speaks",
+      "subtitle": "An Unexpected Alliance",
+      "duration": 50,
+      "elements": [
+        {
+          "id": "sheep_beatrice",
+          "name": "Beatrice",
+          "position": {"x": -1, "y": 0, "z": 0},
+          "color": "#56ff9f"
+        },
+        {
+          "id": "sheep_gerald",
+          "name": "Gerald",
+          "position": {"x": 1, "y": 0, "z": 0},
+          "color": "#ff9f56"
+        },
+        {
+          "id": "sheep_penelope",
+          "name": "Penelope",
+          "position": {"x": 0, "y": 0, "z": 1},
+          "color": "#569fff"
+        },
+        {
+          "id": "sheep_maurice",
+          "name": "Maurice",
+          "position": {"x": -1.5, "y": 0, "z": -1},
+          "color": "#c78fff"
+        },
+        {
+          "id": "sheep_dotty",
+          "name": "Dotty",
+          "position": {"x": 1.5, "y": 0, "z": -1},
+          "color": "#f3ae56"
+        },
+        {
+          "id": "grass_patch_current",
+          "name": "Current Grass (Speaker)",
+          "type": "character",
+          "position": {"x": -3, "y": 0, "z": 1.5},
+          "color": "#90ee90",
+          "description": "Local grass, feeling underappreciated, has a PLAN"
+        },
+        {
+          "id": "grass_patch_premium",
+          "name": "Premium Grass (Speaker)",
+          "type": "character",
+          "position": {"x": 3, "y": 0, "z": 1.5},
+          "color": "#4ecdc4",
+          "description": "Premium grass, actually kind of vain"
+        },
+        {
+          "id": "mycorrhizal_network",
+          "name": "Fungal Network",
+          "type": "machine",
+          "position": {"x": 0, "y": 0, "z": -3},
+          "color": "#ff5c7c",
+          "description": "Connects all grass via roots, gossips constantly"
+        },
+        {
+          "id": "fence_post_1",
+          "name": "Fence Post",
+          "type": "machine",
+          "position": {"x": -3, "y": 0, "z": -3},
+          "color": "#8b7355"
+        },
+        {
+          "id": "fence_post_2",
+          "name": "Fence Post",
+          "type": "machine",
+          "position": {"x": 3, "y": 0, "z": -3},
+          "color": "#8b7355"
+        },
+        {
+          "id": "cliff_warning_sign",
+          "name": "Cliff Warning Sign",
+          "type": "machine",
+          "position": {"x": 0, "y": 0, "z": -4},
+          "color": "#ff6b6b",
+          "description": "Red sign with skull, was there all along"
+        },
+        {
+          "id": "water_trough",
+          "name": "Water Trough",
+          "type": "machine",
+          "position": {"x": 3.5, "y": 0, "z": 0},
+          "color": "#87ceeb"
+        },
+        {
+          "id": "hay_bale",
+          "name": "Hay Bale",
+          "type": "machine",
+          "position": {"x": -3.5, "y": 0, "z": 0},
+          "color": "#daa520"
+        },
+        {
+          "id": "tree_oak",
+          "name": "Oak Tree",
+          "type": "machine",
+          "position": {"x": -4, "y": 0, "z": 3},
+          "color": "#8b4513"
+        },
+        {
+          "id": "shepherd_hut",
+          "name": "Shepherd's Hut",
+          "type": "machine",
+          "position": {"x": 4, "y": 0, "z": 3},
+          "color": "#cd853f"
+        }
+      ],
+      "timeline": [
+        {
+          "turn": 0,
+          "target_element_id": "grass_patch_current",
+          "text": "You know what? I've had ENOUGH. Premium Grass, tell them the truth!",
+          "emotion": "fed up"
+        },
+        {
+          "turn": 1,
+          "target_element_id": "grass_patch_premium",
+          "text": "Ugh, fine. I'm not even that good. The lighting makes me LOOK greener.",
+          "emotion": "confessing"
+        },
+        {
+          "turn": 2,
+          "target_element_id": "sheep_gerald",
+          "text": "WHAT. My entire worldview is collapsing.",
+          "emotion": "devastated"
+        },
+        {
+          "turn": 3,
+          "target_element_id": "mycorrhizal_network",
+          "text": "[UNDERGROUND GOSSIP: We're literally the same grass species connected by roots. You've been arguing about clones.]"
+        },
+        {
+          "turn": 4,
+          "target_element_id": "sheep_maurice",
+          "text": "So the fence...was protecting us from...ourselves?",
+          "emotion": "mind-blown"
+        },
+        {
+          "turn": 5,
+          "target_element_id": "grass_patch_premium",
+          "text": "Also there's a cliff on my side. Klaus was trying to save you from falling off a cliff.",
+          "emotion": "apologetic"
+        },
+        {
+          "turn": 6,
+          "target_element_id": "sheep_penelope",
+          "text": "A CLIFF?! Why didn't anyone just SAY 'cliff'?!",
+          "emotion": "shocked"
+        },
+        {
+          "turn": 7,
+          "target_element_id": "sheep_dotty",
+          "text": "I maintain my NO vote but acknowledge the cliff information would have been helpful earlier.",
+          "emotion": "stubborn"
+        },
+        {
+          "turn": 8,
+          "target_element_id": "grass_patch_current",
+          "text": "So...am I forgiven? Will you eat me now?",
+          "emotion": "hopeful"
+        },
+        {
+          "turn": 9,
+          "target_element_id": "sheep_beatrice",
+          "text": "This has been the weirdest day. Yes, let's eat the local grass and appreciate it.",
+          "emotion": "resigned"
+        },
+        {
+          "turn": 10,
+          "target_element_id": "mycorrhizal_network",
+          "text": "[NETWORK UPDATE: Sheep learned consent AND grass politics in one day. Impressive for mammals.]"
+        }
+      ],
+      "power_distribution": {
+        "grass_patch_current": 25,
+        "grass_patch_premium": 20,
+        "mycorrhizal_network": 15,
+        "sheep_beatrice": 12,
+        "sheep_gerald": 10,
+        "sheep_penelope": 8,
+        "sheep_maurice": 5,
+        "sheep_dotty": 5
+      }
+    }
+  ]
+}

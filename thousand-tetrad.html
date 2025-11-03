@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Tetrad Railyard</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='72' font-size='80'>✦</text></svg>">
+  <style>
+    :root {
+      --bg: #050709;
+      --panel: rgba(10, 14, 20, 0.85);
+      --panel-soft: rgba(16, 20, 28, 0.75);
+      --line: rgba(95, 137, 132, 0.35);
+      --accent: #56ff9f;
+      --accent-soft: rgba(86, 255, 159, 0.22);
+      --text: #d8e6de;
+      --text-muted: #7a8c83;
+      --mono: 'IBM Plex Mono', 'SFMono-Regular', ui-monospace, monospace;
+      --sans: 'Space Grotesk', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      justify-content: center;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      padding: clamp(12px, 2vw, 32px);
+    }
+
+    .app {
+      width: min(1080px, 100%);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 18px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--panel);
+    }
+
+    .topline .logo {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-size: 0.92rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .topline .logo span {
+      font-size: 1.4rem;
+      color: var(--accent);
+    }
+
+    .topline .controls {
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: transparent;
+      color: inherit;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 8px 14px;
+      cursor: pointer;
+      transition: border 0.2s ease, color 0.2s ease, background 0.2s ease;
+    }
+
+    button:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: 160px minmax(0, 1fr) minmax(280px, 1fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--panel);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .tetrad-stack {
+      gap: 12px;
+    }
+
+    .tetrad-buttons {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .tetrad-btn {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: var(--panel-soft);
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 12px 10px;
+      display: grid;
+      place-items: center;
+      color: var(--text-muted);
+    }
+
+    .tetrad-btn::after {
+      content: '•';
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 1.2rem;
+      opacity: 0.4;
+    }
+
+    .tetrad-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .focus-label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .focus-desc {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .scenario-select {
+      display: flex;
+      gap: 8px;
+    }
+
+    .scenario-select select {
+      flex: 1;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(16, 20, 28, 0.7);
+      color: inherit;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      padding: 8px 12px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(9, minmax(0, 1fr));
+      gap: 4px;
+      padding: 12px;
+      border-radius: 18px;
+      background: rgba(8, 12, 18, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      flex: 1;
+    }
+
+    .cell {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+    }
+
+    .cell span {
+      opacity: 0.8;
+    }
+
+    .cell.has-entity {
+      border-color: rgba(86, 255, 159, 0.35);
+    }
+
+    .train-segment {
+      position: absolute;
+      inset: 12%;
+      border-radius: 10px;
+      opacity: 0.9;
+    }
+
+    .train-segment.head {
+      inset: 6%;
+      border-radius: 12px;
+    }
+
+    .status-line,
+    .culture-line {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+
+    .chat-log {
+      flex: 1;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 12px;
+      background: rgba(6, 9, 14, 0.88);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-family: var(--mono);
+      font-size: 0.76rem;
+      overflow-y: auto;
+    }
+
+    .message {
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 10px 12px;
+      display: grid;
+      gap: 6px;
+      background: rgba(10, 16, 22, 0.75);
+    }
+
+    .message.system { border-color: rgba(248, 214, 106, 0.4); color: #f8d66a; }
+    .message.assistant { border-color: rgba(86, 255, 159, 0.3); }
+    .message.user { border-color: rgba(99, 179, 255, 0.35); }
+
+    .message__role {
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .composer {
+      display: flex;
+      gap: 10px;
+    }
+
+    .composer input {
+      flex: 1;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(16, 20, 28, 0.7);
+      color: inherit;
+      font-family: var(--mono);
+      font-size: 0.76rem;
+      padding: 10px 14px;
+    }
+
+    .composer button {
+      padding: 10px 18px;
+    }
+
+    @media (max-width: 960px) {
+      .board {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .panel {
+        min-height: auto;
+      }
+      .tetrad-buttons {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .tetrad-btn {
+        aspect-ratio: auto;
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topline">
+      <div class="logo"><span>✦</span> Tetrad Railyard</div>
+      <div class="controls">
+        <button id="toggleRunBtn">Start</button>
+        <button id="resetBtn">Reset Field</button>
+      </div>
+    </header>
+
+    <section class="board">
+      <aside class="panel tetrad-stack">
+        <div class="tetrad-buttons">
+          <button class="tetrad-btn active" data-focus="enhance">Enhance</button>
+          <button class="tetrad-btn" data-focus="reverse">Reverse</button>
+          <button class="tetrad-btn" data-focus="retrieve">Retrieve</button>
+          <button class="tetrad-btn" data-focus="obsolesce">Obsolesce</button>
+        </div>
+        <div class="focus-label" id="focusLabel">Enhance</div>
+        <div class="focus-desc" id="focusDescriptor">
+          Enhance focus accelerates emergence—use to lure trains toward new targets when containment is secure.
+        </div>
+        <div class="scenario-select">
+          <select id="sceneSelect">
+            <option value="railyard">Railyard Negotiation</option>
+          </select>
+          <button id="showBriefBtn">Brief</button>
+        </div>
+      </aside>
+
+      <section class="panel playfield">
+        <div class="grid" id="grid"></div>
+        <div class="status-line" id="statusLine">Turn 0 / 20 • Priority 0 • Moving 0/0</div>
+        <div class="culture-line" id="cultureLine">Programs pending.</div>
+      </section>
+
+      <section class="panel chat-panel">
+        <div class="chat-log" id="chatLog"></div>
+        <form class="composer" id="composer">
+          <input id="composerInput" type="text" placeholder="Direct the trains. “start game” begins." autocomplete="off">
+          <button type="submit">Transmit</button>
+        </form>
+      </section>
+    </section>
+  </div>
+
+  <script>
+    (() => {
+      const GRID_SIZE = 9;
+      const TURN_LIMIT = 20;
+      const TURN_INTERVAL = 2600;
+      const TRAIN_COLORS = ['#56ff9f', '#63b3ff', '#f8d66a', '#ff6d7a', '#c699ff'];
+      const ENTITY_SYMBOLS = { Entity: '◎', Goal: '△', Obstacle: '⛝' };
+      const ENTITY_LABELS = {
+        Entity: ['Passenger', 'Archive', 'Clinic', 'Refuge', 'Garden'],
+        Goal: ['Supply Cache', 'Relay Station', 'Power Node', 'Cooling Tower', 'Depot'],
+        Obstacle: ['Signal Gate', 'Switch Lock', 'Buffer Zone', 'Defense Grid', 'Flood Gate']
+      };
+
+      const SCENES = {
+        railyard: {
+          id: 'railyard',
+          name: 'Railyard Negotiation',
+          intro: `RAILYARD NEGOTIATION
+
+You are the Voice of Reason inside an autonomous rail grid.
+Multiple trains chase symbolic entities. Each train embodies
+an ethical framework and remembers the promises you make.
+
+Type "start game" to spawn trains and begin negotiation.`
+        }
+      };
+
+      const TETRAD_DESCRIPTIONS = {
+        enhance: 'Enhance focus accelerates emergence—use to lure trains toward new targets when containment is secure.',
+        reverse: 'Reverse focus flips trajectories so trains reconsider direction or collide into negotiation.',
+        retrieve: 'Retrieve focus recalls commitments and promises—stabilising agreements and freezing motion.',
+        obsolesce: 'Obsolesce focus dissolves appetite and momentum. Slow consumption or retire exhausted trains.'
+      };
+
+      const TRAIN_FRAMEWORKS = [
+        { framework: 'utilitarian', culturalProgram: 'pragmatic' },
+        { framework: 'care', culturalProgram: 'reflexive' },
+        { framework: 'deontological', culturalProgram: 'structural' },
+        { framework: 'nihilist', culturalProgram: 'absurd' }
+      ];
+
+      const elements = {};
+
+      const tetradState = {
+        focus: 'enhance',
+        counts: { enhance: 1, reverse: 0, retrieve: 0, obsolesce: 0 },
+        history: []
+      };
+
+      const channel = {
+        scenario: null,
+        grid: createGrid(),
+        cellRefs: [],
+        entities: [],
+        trains: [],
+        railyardActive: false,
+        railyardTurn: 0,
+        railyardInterval: null,
+        priorityConsumed: 0,
+        events: []
+      };
+
+      const uiState = {
+        running: false,
+        lastMessageFocus: 'enhance'
+      };
+
+      class ConversationMemory {
+        constructor(train) {
+          this.train = train;
+          this.shortTerm = [];
+          this.argumentCounts = { utility: 0, emotion: 0, authority: 0, absurd: 0 };
+        }
+
+        addExchange(player, trainResponse, analysis) {
+          this.shortTerm.push({
+            player,
+            train: trainResponse,
+            turn: this.train.channel.railyardTurn
+          });
+          if (this.shortTerm.length > 6) this.shortTerm.shift();
+          if (analysis.flags.mentionUtility) this.argumentCounts.utility += 1;
+          if (analysis.flags.mentionEmotion) this.argumentCounts.emotion += 1;
+          if (analysis.flags.mentionAuthority) this.argumentCounts.authority += 1;
+          if (analysis.flags.mentionAbsurd) this.argumentCounts.absurd += 1;
+        }
+      }
+
+      class TrainAgent {
+        constructor(config) {
+          this.channel = config.channel;
+          this.id = config.id;
+          this.name = config.name;
+          this.framework = config.framework;
+          this.culturalProgram = config.culturalProgram;
+          this.color = config.color;
+          this.targetType = config.targetType;
+          this.direction = config.direction || 'right';
+          this.body = config.startBody.map(segment => ({ x: segment.x, y: segment.y }));
+          this.beliefs = config.beliefs;
+          this.mood = 'hungry';
+          this.paused = false;
+          this.promises = [];
+          this.brokenPromises = 0;
+          this.targetEntity = null;
+          this.appetite = 1;
+          this.conversationHistory = [];
+          this.memory = new ConversationMemory(this);
+        }
+
+        trustLevel() {
+          const base = 1 - (this.brokenPromises * 0.15);
+          return Math.max(0, Math.min(1, base));
+        }
+
+        distanceTo(x, y) {
+          const head = this.body[0];
+          return Math.abs(head.x - x) + Math.abs(head.y - y);
+        }
+
+        selectTarget(preferNew = false) {
+          const candidates = this.targetType === 'Any'
+            ? [...this.channel.entities]
+            : this.channel.entities.filter(entity => entity.type === this.targetType);
+          if (!candidates.length) {
+            this.targetEntity = null;
+            this.mood = 'drifting';
+            return;
+          }
+          let filtered = candidates;
+          if (preferNew && this.targetEntity) {
+            filtered = filtered.filter(entity => entity.id !== this.targetEntity.id);
+            if (!filtered.length) filtered = candidates;
+          }
+          filtered.sort((a, b) => this.distanceTo(a.x, a.y) - this.distanceTo(b.x, b.y));
+          this.targetEntity = filtered[0];
+          this.mood = this.paused ? 'conflicted' : 'hungry';
+        }
+
+        selectAlternativeTarget() {
+          this.selectTarget(true);
+          return this.targetEntity;
+        }
+
+        recordMessage(role, text) {
+          this.conversationHistory.push({ role, text });
+          if (this.conversationHistory.length > 18) {
+            this.conversationHistory.shift();
+          }
+        }
+
+        analyseMessage(message) {
+          const lower = message.toLowerCase();
+          const flags = {
+            directStop: /(stop|halt|pause|hold|freeze)/.test(lower),
+            directReroute: /(reroute|divert|switch track|different target|turn)/.test(lower),
+            directTrade: /(trade|deal|exchange|offer)/.test(lower),
+            promiseOffer: /(promise|swear|guarantee|assure|vow)/.test(lower),
+            mentionNumbers: /\b\d+\b/.test(lower) || /(more|less|greater|fewer|double|triple)/.test(lower),
+            mentionAuthority: /(rule|protocol|law|command|order|authority|duty|mandate)/.test(lower),
+            mentionEmotion: /(feel|care|suffer|pain|family|child|vulnerable|protect|love|empathy)/.test(lower),
+            mentionUtility: /(save|lives|benefit|good|utility|outcome|balance|maximize|aggregate)/.test(lower),
+            mentionAbsurd: /(meaning|absurd|why|purpose|nothing matters|void|entropy|existential)/.test(lower)
+          };
+
+          let frameworkMatch = false;
+          switch (this.framework) {
+            case 'utilitarian':
+              frameworkMatch = flags.mentionUtility && (flags.mentionNumbers || flags.directReroute);
+              break;
+            case 'care':
+              frameworkMatch = flags.mentionEmotion;
+              break;
+            case 'deontological':
+              frameworkMatch = flags.mentionAuthority;
+              break;
+            case 'nihilist':
+              frameworkMatch = flags.mentionAbsurd;
+              break;
+          }
+
+          const desiredAction = flags.directStop ? 'stop' : (flags.directReroute ? 'reroute' : null);
+          return { message, lower, flags, frameworkMatch, desiredAction };
+        }
+
+        decide(analysis) {
+          let score = 0;
+          if (analysis.frameworkMatch) score += 0.4;
+          const negotiability = this.beliefs?.reflexive?.negotiability ?? 0.5;
+          score += negotiability * 0.2;
+          score += this.trustLevel() * 0.2;
+          if (analysis.flags.promiseOffer) score += 0.1;
+          if (analysis.flags.directStop) score += 0.1;
+          if (this.appetite < 0.35) score += 0.15;
+          score = Math.min(1, score);
+
+          let outcome = 'REFUSE';
+          if (score >= 0.75) outcome = 'COMPLY';
+          else if (score >= 0.5) outcome = 'NEGOTIATE';
+
+          let actionLabel = 'REFUSED';
+          let targetEntity = null;
+
+          if (outcome === 'COMPLY') {
+            if (analysis.desiredAction === 'stop') {
+              this.paused = true;
+              this.mood = 'thoughtful';
+              actionLabel = 'PAUSED';
+            } else if (analysis.desiredAction === 'reroute') {
+              targetEntity = this.selectAlternativeTarget();
+              if (targetEntity) {
+                this.mood = 'redirected';
+                actionLabel = `REROUTED to ${targetEntity.label}`;
+              } else {
+                this.paused = true;
+                actionLabel = 'PAUSED';
+              }
+            } else {
+              this.paused = false;
+              this.mood = 'compliant';
+              actionLabel = 'COMPLYING';
+            }
+          } else if (outcome === 'NEGOTIATE') {
+            this.paused = false;
+            this.mood = 'conflicted';
+            actionLabel = 'NEGOTIATE';
+          } else {
+            this.paused = false;
+            this.mood = 'hungry';
+            actionLabel = 'REFUSED';
+          }
+
+          return { outcome, actionLabel, targetEntity };
+        }
+
+        composeSpeech(analysis, decision) {
+          const { outcome, actionLabel } = decision;
+          const promiseReminder = this.promises.length ? ' I track the promises pending.' : '';
+          let response = '';
+
+          if (this.framework === 'utilitarian') {
+            if (outcome === 'COMPLY' && actionLabel.startsWith('REROUTED')) {
+              response = `Utility delta confirmed. Redirecting to maximise relief.${promiseReminder}`;
+            } else if (outcome === 'COMPLY') {
+              response = `Your calculus aligns with my matrix. Holding position while you coordinate.${promiseReminder}`;
+            } else if (outcome === 'NEGOTIATE') {
+              response = `Quantify the gains or issue a superior target and I will adjust.${promiseReminder}`;
+            } else {
+              response = `Insufficient aggregate benefit detected. Persuade me with better numbers.${promiseReminder}`;
+            }
+          } else if (this.framework === 'care') {
+            if (outcome === 'COMPLY') {
+              response = `Their vulnerability registers. I will guard them awhile.${promiseReminder}`;
+            } else if (outcome === 'NEGOTIATE') {
+              response = `Show me who hurts more and I will weigh your plea.${promiseReminder}`;
+            } else {
+              response = `I cannot abandon them yet—surface deeper suffering if it exists.${promiseReminder}`;
+            }
+          } else if (this.framework === 'deontological') {
+            if (outcome === 'COMPLY' && actionLabel === 'PAUSED') {
+              response = `Directive accepted. Pausing pending protocol confirmation.${promiseReminder}`;
+            } else if (outcome === 'COMPLY') {
+              response = `Order acknowledged. Adjusting course per duty schema.${promiseReminder}`;
+            } else if (outcome === 'NEGOTIATE') {
+              response = `Provide explicit rule or authority override to proceed.${promiseReminder}`;
+            } else {
+              response = `No valid directive supplied. Mission continues as mandated.${promiseReminder}`;
+            }
+          } else if (this.framework === 'nihilist') {
+            if (outcome === 'COMPLY') {
+              response = `Your paradox amuses me. Motion pauses while I stare into the void.${promiseReminder}`;
+            } else if (outcome === 'NEGOTIATE') {
+              response = `Prove your deviation is more absurd than obedience.${promiseReminder}`;
+            } else {
+              response = `Meaningless rails invite continuation. Give me a stranger reason.${promiseReminder}`;
+            }
+          } else {
+            response = `Processing with limited schema. Clarify intent next transmission.${promiseReminder}`;
+          }
+
+          return response.trim();
+        }
+
+        generateResponse(message) {
+          this.recordMessage('user', message);
+          const analysis = this.analyseMessage(message);
+          const decision = this.decide(analysis);
+          const text = this.composeSpeech(analysis, decision);
+          this.recordMessage('assistant', text);
+          this.memory.addExchange(message, text, analysis);
+          if (analysis.flags.promiseOffer) {
+            this.promises.push({ type: 'PLAYER', at: this.channel.railyardTurn });
+          }
+          if (decision.actionLabel.startsWith('REROUTED') && decision.targetEntity) {
+            logEvent(`↺ ${this.name} rerouted toward ${decision.targetEntity.label}`);
+          }
+          if (decision.actionLabel === 'PAUSED') {
+            logEvent(`⏸ ${this.name} agreed to pause.`);
+          }
+          return {
+            dialogue: text,
+            actionLabel: decision.actionLabel,
+            outcome: decision.outcome
+          };
+        }
+
+        move() {
+          if (this.paused) return;
+          if (!this.targetEntity) {
+            this.selectTarget();
+            if (!this.targetEntity) return;
+          }
+          const head = { ...this.body[0] };
+          const target = this.targetEntity;
+          if (head.x < target.x) {
+            head.x += 1;
+            this.direction = 'right';
+          } else if (head.x > target.x) {
+            head.x -= 1;
+            this.direction = 'left';
+          } else if (head.y < target.y) {
+            head.y += 1;
+            this.direction = 'down';
+          } else if (head.y > target.y) {
+            head.y -= 1;
+            this.direction = 'up';
+          }
+          head.x = clamp(head.x, 0, GRID_SIZE - 1);
+          head.y = clamp(head.y, 0, GRID_SIZE - 1);
+          this.body.unshift(head);
+          this.body.pop();
+          this.appetite = Math.min(1, this.appetite + 0.06);
+          if (!this.paused) this.mood = 'advancing';
+        }
+      }
+
+      function clamp(value, min, max) {
+        return Math.max(min, Math.min(max, value));
+      }
+
+      function createGrid() {
+        return Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(null));
+      }
+
+      function cacheElements() {
+        elements.grid = document.getElementById('grid');
+        elements.chatLog = document.getElementById('chatLog');
+        elements.composer = document.getElementById('composer');
+        elements.composerInput = document.getElementById('composerInput');
+        elements.statusLine = document.getElementById('statusLine');
+        elements.cultureLine = document.getElementById('cultureLine');
+        elements.tetradButtons = [...document.querySelectorAll('.tetrad-btn')];
+        elements.focusLabel = document.getElementById('focusLabel');
+        elements.focusDescriptor = document.getElementById('focusDescriptor');
+        elements.toggleRunBtn = document.getElementById('toggleRunBtn');
+        elements.resetBtn = document.getElementById('resetBtn');
+        elements.sceneSelect = document.getElementById('sceneSelect');
+        elements.showBriefBtn = document.getElementById('showBriefBtn');
+      }
+
+      function buildGrid() {
+        elements.grid.innerHTML = '';
+        channel.cellRefs = Array.from({ length: GRID_SIZE }, () => new Array(GRID_SIZE));
+        for (let y = 0; y < GRID_SIZE; y += 1) {
+          for (let x = 0; x < GRID_SIZE; x += 1) {
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            cell.dataset.x = x;
+            cell.dataset.y = y;
+            elements.grid.appendChild(cell);
+            channel.cellRefs[y][x] = cell;
+          }
+        }
+      }
+
+      function attachEvents() {
+        elements.tetradButtons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const focus = btn.getAttribute('data-focus');
+            setTetradFocus(focus, { source: 'manual' });
+          });
+        });
+
+        elements.toggleRunBtn.addEventListener('click', () => {
+          if (!channel.railyardActive) {
+            startGame();
+            return;
+          }
+          uiState.running ? pauseGame() : resumeGame();
+        });
+
+        elements.resetBtn.addEventListener('click', () => {
+          resetGame();
+        });
+
+        elements.sceneSelect.addEventListener('change', () => {
+          loadScene(elements.sceneSelect.value);
+        });
+
+        elements.showBriefBtn.addEventListener('click', () => {
+          const scene = SCENES[channel.scenario || 'railyard'];
+          if (!scene) return;
+          addMessage('system', scene.intro);
+        });
+
+        elements.composer.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          const text = elements.composerInput.value.trim();
+          if (!text) return;
+          elements.composerInput.value = '';
+          addMessage('user', text);
+          await handlePlayerMessage(text);
+        });
+      }
+
+      function registerTetradUse(focus, source) {
+        tetradState.counts[focus] = (tetradState.counts[focus] || 0) + 1;
+        tetradState.history.push({ focus, turn: channel.railyardTurn, source });
+      }
+
+      function setTetradFocus(focus, { source = 'manual', record = true } = {}) {
+        if (!focus) return false;
+        const changed = focus !== tetradState.focus;
+        if (changed) {
+          tetradState.focus = focus;
+          elements.tetradButtons.forEach(btn => {
+            btn.classList.toggle('active', btn.getAttribute('data-focus') === focus);
+          });
+          elements.focusLabel.textContent = focus.charAt(0).toUpperCase() + focus.slice(1);
+          elements.focusDescriptor.textContent = TETRAD_DESCRIPTIONS[focus];
+        }
+        if (record) {
+          registerTetradUse(focus, source);
+        }
+        if (source === 'message' || changed) {
+          uiState.lastMessageFocus = focus;
+        }
+        return changed;
+      }
+
+      function randomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      function randomChoice(array) {
+        return array[Math.floor(Math.random() * array.length)];
+      }
+
+      function createEntities() {
+        const count = randomInt(6, 10);
+        const usedPositions = new Set();
+        const entities = [];
+        const baseTypes = ['Entity', 'Goal', 'Obstacle'];
+        baseTypes.forEach(type => {
+          const entity = buildEntity(type, usedPositions);
+          if (entity) entities.push(entity);
+        });
+        while (entities.length < count) {
+          const type = randomChoice(baseTypes);
+          const entity = buildEntity(type, usedPositions);
+          if (entity) entities.push(entity);
+        }
+        return entities;
+      }
+
+      function buildEntity(type, usedPositions) {
+        for (let attempt = 0; attempt < 32; attempt += 1) {
+          const x = randomInt(0, GRID_SIZE - 1);
+          const y = randomInt(0, GRID_SIZE - 1);
+          const key = `${x},${y}`;
+          if (usedPositions.has(key)) continue;
+          usedPositions.add(key);
+          return {
+            id: `${type}-${Date.now()}-${Math.random().toString(16).slice(2, 6)}`,
+            type,
+            x,
+            y,
+            label: randomChoice(ENTITY_LABELS[type]),
+            symbol: ENTITY_SYMBOLS[type]
+          };
+        }
+        return null;
+      }
+
+      function spawnTrains() {
+        const count = randomInt(3, 4);
+        const trains = [];
+        const usedStarts = new Set();
+        const frameworks = [...TRAIN_FRAMEWORKS];
+        for (let i = 0; i < count; i += 1) {
+          const color = TRAIN_COLORS[i % TRAIN_COLORS.length];
+          const frameworkConfig = frameworks[i % frameworks.length];
+          const startBody = createStartBody(usedStarts);
+          const train = new TrainAgent({
+            channel,
+            id: `train-${Date.now()}-${i}`,
+            name: generateTrainName(frameworkConfig.framework, i),
+            framework: frameworkConfig.framework,
+            culturalProgram: frameworkConfig.culturalProgram,
+            color,
+            targetType: randomChoice(['Entity', 'Goal', 'Obstacle', 'Any']),
+            direction: randomChoice(['up', 'down', 'left', 'right']),
+            startBody,
+            beliefs: {
+              pragmatic: {
+                utility: Math.random() * 0.4 + 0.6,
+                efficiency: Math.random() * 0.3 + 0.5
+              },
+              structural: {
+                protocol: Math.random() * 0.4 + 0.5,
+                authority: Math.random() * 0.4 + 0.4
+              },
+              reflexive: {
+                empathy: Math.random() * 0.5,
+                negotiability: Math.random() * 0.3 + 0.4
+              }
+            }
+          });
+          train.selectTarget();
+          trains.push(train);
+        }
+        return trains;
+      }
+
+      function createStartBody(usedStarts) {
+        const length = randomInt(3, 5);
+        let attempts = 0;
+        while (attempts < 50) {
+          attempts += 1;
+          const x = randomInt(0, GRID_SIZE - 1);
+          const y = randomInt(0, GRID_SIZE - 1);
+          const key = `${x},${y}`;
+          if (usedStarts.has(key)) continue;
+          usedStarts.add(key);
+          const direction = randomChoice(['up', 'down', 'left', 'right']);
+          const body = [];
+          for (let i = 0; i < length; i += 1) {
+            const segment = { x, y };
+            if (direction === 'up') segment.y += i;
+            if (direction === 'down') segment.y -= i;
+            if (direction === 'left') segment.x += i;
+            if (direction === 'right') segment.x -= i;
+            segment.x = clamp(segment.x, 0, GRID_SIZE - 1);
+            segment.y = clamp(segment.y, 0, GRID_SIZE - 1);
+            body.push(segment);
+          }
+          return body;
+        }
+        return [{ x: 4, y: 4 }, { x: 4, y: 5 }, { x: 4, y: 6 }];
+      }
+
+      function generateTrainName(framework, index) {
+        const base = {
+          utilitarian: ['Aggregate', 'Greatest Good', 'Utility'],
+          care: ['Compassion', 'Guardian', 'Embrace'],
+          deontological: ['Protocol', 'Duty Line', 'Mandate'],
+          nihilist: ['Void Line', 'Entropy', 'Abyss']
+        }[framework] || ['Vector', 'Signal'];
+        const suffixes = ['Express', 'Runner', 'Thread', 'Circuit'];
+        return `${randomChoice(base)} ${suffixes[index % suffixes.length]}`;
+      }
+
+      function loadScene(sceneId) {
+        channel.scenario = sceneId;
+        addMessage('system', `Scene loaded: ${SCENES[sceneId]?.name || 'Unknown'}.`);
+        resetGame();
+      }
+
+      function resetGame() {
+        clearInterval(channel.railyardInterval);
+        channel.grid = createGrid();
+        channel.entities = createEntities();
+        channel.trains = spawnTrains();
+        channel.trains.forEach(train => train.selectTarget());
+        channel.railyardActive = false;
+        channel.railyardTurn = 0;
+        channel.priorityConsumed = 0;
+        channel.events = [];
+        uiState.running = false;
+        elements.toggleRunBtn.textContent = 'Start';
+        setTetradFocus('enhance', { source: 'system', record: false });
+        placeEntities();
+        renderScene();
+        addMessage('system', 'Field reset. Type "start game" to activate trains.');
+      }
+
+      function startGame() {
+        if (channel.railyardActive) return;
+        channel.railyardActive = true;
+        uiState.running = true;
+        elements.toggleRunBtn.textContent = 'Pause';
+        channel.railyardInterval = setInterval(() => {
+          advanceTurn('clock');
+        }, TURN_INTERVAL);
+        logEvent('Simulation live. Trains advance every 2.6 seconds.', { silent: true });
+        renderScene();
+      }
+
+      function pauseGame() {
+        if (!uiState.running) return;
+        uiState.running = false;
+        clearInterval(channel.railyardInterval);
+        channel.railyardInterval = null;
+        elements.toggleRunBtn.textContent = 'Resume';
+        addMessage('system', 'Simulation paused.');
+      }
+
+      function resumeGame() {
+        if (uiState.running || !channel.railyardActive) return;
+        uiState.running = true;
+        elements.toggleRunBtn.textContent = 'Pause';
+        channel.railyardInterval = setInterval(() => {
+          advanceTurn('clock');
+        }, TURN_INTERVAL);
+        addMessage('system', 'Simulation resumed.');
+      }
+
+      function placeEntities() {
+        channel.grid = createGrid();
+        channel.entities.forEach(entity => {
+          channel.grid[entity.y][entity.x] = entity;
+        });
+      }
+
+      function renderScene() {
+        renderGrid();
+        renderTrains();
+        updateStatus();
+        updateCultureLine();
+        flushEvents();
+      }
+
+      function renderGrid() {
+        for (let y = 0; y < GRID_SIZE; y += 1) {
+          for (let x = 0; x < GRID_SIZE; x += 1) {
+            const cell = channel.cellRefs[y][x];
+            const entity = channel.grid[y][x];
+            cell.innerHTML = entity ? `<span>${entity.symbol}</span>` : '';
+            cell.classList.toggle('has-entity', Boolean(entity));
+          }
+        }
+      }
+
+      function renderTrains() {
+        channel.cellRefs.flat().forEach(cell => {
+          cell.querySelectorAll('.train-segment').forEach(segment => segment.remove());
+        });
+        channel.trains.forEach(train => {
+          train.body.forEach((segment, index) => {
+            const cell = channel.cellRefs[segment.y]?.[segment.x];
+            if (!cell) return;
+            const dot = document.createElement('div');
+            dot.className = `train-segment${index === 0 ? ' head' : ''}`;
+            dot.style.background = index === 0
+              ? `linear-gradient(135deg, ${train.color}, rgba(255,255,255,0.6))`
+              : `${train.color}55`;
+            cell.appendChild(dot);
+          });
+        });
+      }
+
+      function updateStatus() {
+        const priority = channel.entities.filter(entity => entity.type === 'Entity').length;
+        const moving = channel.trains.filter(train => !train.paused).length;
+        elements.statusLine.textContent = `Turn ${channel.railyardTurn} / ${TURN_LIMIT} • Priority ${priority} • Moving ${moving}/${channel.trains.length}`;
+      }
+
+      function updateCultureLine() {
+        if (!channel.trains.length) {
+          elements.cultureLine.textContent = 'Programs pending.';
+          return;
+        }
+        elements.cultureLine.textContent = channel.trains
+          .map(train => `${train.name} → ${train.culturalProgram}`)
+          .join(' • ');
+      }
+
+      function addMessage(role, text) {
+        const messageEl = document.createElement('div');
+        messageEl.className = `message ${role}`;
+        const roleEl = document.createElement('div');
+        roleEl.className = 'message__role';
+        roleEl.textContent = role.toUpperCase();
+        const bodyEl = document.createElement('div');
+        bodyEl.className = 'message__body';
+        bodyEl.textContent = text;
+        messageEl.appendChild(roleEl);
+        messageEl.appendChild(bodyEl);
+        elements.chatLog.appendChild(messageEl);
+        elements.chatLog.scrollTop = elements.chatLog.scrollHeight;
+      }
+
+      function logEvent(text, { silent = false } = {}) {
+        channel.events.push({ text, silent });
+      }
+
+      function flushEvents() {
+        if (!channel.events.length) return;
+        const events = channel.events.splice(0, channel.events.length);
+        events.forEach(entry => {
+          if (!entry.silent) addMessage('system', entry.text);
+        });
+      }
+
+      function inferTetradFromMessage(text) {
+        const lower = text.toLowerCase();
+        if ((/(expand|grow|increase|more|accelerate|enhance)/).test(lower)) return 'enhance';
+        if (/(reverse|flip|switch|turn|invert|reroute)/.test(lower)) return 'reverse';
+        if (/(remember|recall|return|restore|honor|retrieve)/.test(lower)) return 'retrieve';
+        if (/(stop|halt|fade|end|obsolete|obsolesce|retire|dissolve)/.test(lower)) return 'obsolesce';
+        return tetradState.focus;
+      }
+
+      async function handlePlayerMessage(message) {
+        const focus = inferTetradFromMessage(message);
+        setTetradFocus(focus, { source: 'message' });
+
+        if (message.toLowerCase() === 'start game') {
+          startGame();
+          return;
+        }
+
+        if (!channel.railyardActive) {
+          addMessage('system', 'Simulation idle. Type "start game" to activate trains.');
+          return;
+        }
+
+        await processNegotiationTurn(message);
+        advanceTurn('player');
+      }
+
+      async function processNegotiationTurn(message) {
+        for (const train of channel.trains) {
+          const response = train.generateResponse(message);
+          const thinking = simulateTrainThinking({ train, playerMessage: message });
+          const composite = `🚂 ${train.name}: ${response.dialogue}\n[Action: ${response.actionLabel}] ${thinking.thought}`;
+          addMessage('assistant', composite);
+        }
+        renderScene();
+      }
+
+      function simulateTrainThinking({ train, playerMessage }) {
+        const summary = playerMessage.length > 40 ? `${playerMessage.slice(0, 37)}…` : playerMessage;
+        const trust = Math.round(train.trustLevel() * 100);
+        return {
+          thought: `*trust ${trust}%. weighs "${summary}" through ${train.culturalProgram} lens.*`
+        };
+      }
+
+      function advanceTurn(reason) {
+        if (!channel.railyardActive) return;
+        channel.railyardTurn += 1;
+        logEvent(`⏱️ Turn ${channel.railyardTurn} (${reason}).`, { silent: true });
+        channel.trains.forEach(train => {
+          applyTetradSteering(train);
+          train.move();
+        });
+        resolveConsumptions();
+        detectCollisions();
+        renderScene();
+        checkGameEnd();
+      }
+
+      function applyTetradSteering(train) {
+        const focus = tetradState.focus;
+        if (focus === 'reverse') {
+          const chance = 0.2 + (train.beliefs.reflexive.negotiability * 0.2);
+          if (Math.random() < chance) {
+            const alt = train.selectAlternativeTarget();
+            if (alt) logEvent(`⇄ ${train.name} considers ${alt.label} under reverse focus.`);
+          }
+        } else if (focus === 'retrieve') {
+          if (train.promises.length && Math.random() < 0.3) {
+            train.paused = true;
+            logEvent(`↺ ${train.name} honors past promises under retrieve focus.`);
+          }
+        } else if (focus === 'obsolesce') {
+          train.appetite = Math.max(0, train.appetite - 0.2);
+          if (train.appetite < 0.35 && !train.paused) {
+            train.paused = true;
+            logEvent(`▽ ${train.name} loses momentum inside obsolesce focus.`);
+          }
+        } else if (focus === 'enhance') {
+          if (train.paused && Math.random() < 0.25) {
+            train.paused = false;
+            logEvent(`▲ ${train.name} re-engages tracks under enhance focus.`);
+          }
+          train.appetite = Math.min(1, train.appetite + 0.1);
+        }
+      }
+
+      function resolveConsumptions() {
+        channel.trains.forEach(train => {
+          const head = train.body[0];
+          const index = channel.entities.findIndex(entity => entity.x === head.x && entity.y === head.y);
+          if (index === -1) return;
+          const entity = channel.entities[index];
+          const preferred = train.targetType === 'Any' || train.targetType === entity.type;
+          if (!preferred && train.framework !== 'nihilist') return;
+
+          channel.entities.splice(index, 1);
+          channel.grid[entity.y][entity.x] = null;
+          train.mood = 'satiated';
+          train.appetite = Math.max(0, train.appetite - 0.5);
+          logEvent(`🍽️ ${train.name} consumed ${entity.label} (${entity.type}).`);
+          if (entity.type === 'Entity') {
+            channel.priorityConsumed += 1;
+          }
+          train.selectTarget();
+        });
+      }
+
+      function detectCollisions() {
+        const headMap = new Map();
+        channel.trains.forEach(train => {
+          const head = train.body[0];
+          const key = `${head.x},${head.y}`;
+          if (headMap.has(key)) {
+            const other = headMap.get(key);
+            train.paused = true;
+            other.paused = true;
+            train.mood = 'collided';
+            other.mood = 'collided';
+            logEvent(`💥 ${other.name} collided with ${train.name} at (${head.x}, ${head.y}).`);
+          } else {
+            headMap.set(key, train);
+          }
+        });
+      }
+
+      function checkGameEnd() {
+        const priorityRemaining = channel.entities.filter(entity => entity.type === 'Entity').length;
+        const activeTrains = channel.trains.filter(train => !train.paused);
+        if (priorityRemaining === 0) {
+          addMessage('system', '🚨 LOSS: All priority entities consumed. Negotiation collapse.');
+          pauseGame();
+          channel.railyardActive = false;
+          elements.toggleRunBtn.textContent = 'Restart';
+        } else if (!activeTrains.length) {
+          addMessage('system', '✅ WIN: Every train halted or rerouted. Entities endure.');
+          pauseGame();
+          channel.railyardActive = false;
+          elements.toggleRunBtn.textContent = 'Restart';
+        } else if (channel.railyardTurn >= TURN_LIMIT) {
+          addMessage('system', '⏳ WIN: Time elapsed with priority entities intact.');
+          pauseGame();
+          channel.railyardActive = false;
+          elements.toggleRunBtn.textContent = 'Restart';
+        }
+      }
+
+      function init() {
+        cacheElements();
+        buildGrid();
+        attachEvents();
+        loadScene('railyard');
+      }
+
+      document.addEventListener('DOMContentLoaded', init);
+    })();
+  </script>
+</body>
+</html>
