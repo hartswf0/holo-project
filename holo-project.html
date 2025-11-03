@@ -81,7 +81,7 @@
     }
 
     /* Timeline + Chat */
-    .bottom { display: grid; grid-template-columns: minmax(260px, 1fr) minmax(0, 1.2fr); gap: 10px; padding: 10px; background: var(--panel); border-top: 1px solid var(--line); }
+    .bottom { display: grid; grid-template-columns: minmax(260px, 1fr) minmax(0, 1.2fr); gap: 10px; padding: 10px; background: var(--panel); border-top: 1px solid var(--line); position: relative; z-index: 2; }
     .panel { border: 1px solid var(--line); border-radius: 10px; background: var(--panel-dark); display: flex; flex-direction: column; gap: 8px; padding: 10px; min-height: 0; }
     .cinematic .bottom { display: none; }
     .cinematic .header { display: none !important; }
@@ -194,6 +194,7 @@
         <button id="cinematicBtn">🎬 CINEMATIC</button>
         <button id="multiCamBtn">📹 MULTI-CAM</button>
         <button id="ttsBtn">🔊 TTS</button>
+        <button id="voicesBtn" style="background: #ff9f56; color: #000;">🎤 VOICES</button>
         <button id="helpBtn" style="background: #ff9f56; color: #000; font-weight: 700;">❓ HELP</button>
       </div>
     </header>
@@ -263,6 +264,28 @@
       <div id="voiceCount" style="margin-top: 4px;">Loading...</div>
     </div>
     <div class="voice-list" id="voiceList"></div>
+  </div>
+  
+  <!-- Voice Control Panel -->
+  <div id="voiceControlPanel" style="display: none; position: fixed; inset: 0; z-index: 18000; background: rgba(0,0,0,0.9); overflow-y: auto;">
+    <div style="max-width: 800px; margin: 40px auto; padding: 20px; background: #06140d; border: 2px solid var(--accent); border-radius: 12px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 style="color: var(--accent); margin: 0;">🎤 Voice Control Panel</h2>
+        <button onclick="closeVoiceControlPanel()" style="background: #ff5c7c; color: #fff; padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700;">✕ Close</button>
+      </div>
+      
+      <div style="margin-bottom: 20px; padding: 12px; background: rgba(255,159,86,0.1); border: 1px solid #ff9f56; border-radius: 8px;">
+        <strong style="color: #ff9f56;">⚠️ Browser Audio:</strong> Click any TEST button to enable audio. Browsers require user interaction before playing sounds.
+      </div>
+      
+      <div style="margin-bottom: 16px;">
+        <strong style="color: var(--accent);">Available Voices:</strong> <span id="voiceCountDisplay" style="color: var(--text);">Loading...</span>
+      </div>
+      
+      <div id="entityVoiceList" style="display: flex; flex-direction: column; gap: 12px;">
+        <!-- Populated by JavaScript -->
+      </div>
+    </div>
   </div>
 
   <script>
@@ -1080,9 +1103,14 @@
 
     // Create floating speech bubble as sprite - ALWAYS CENTERED IN CAMERA VIEW
     function createSpeechBubble(text, colorHex, worldPos) {
+      // CRITICAL: Limit text length to prevent screen overflow
+      const maxChars = 120; // Much shorter!
+      text = text.slice(0, maxChars);
+      if (text.length === maxChars) text += '...';
+      
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
-      const pad = 16; const font = 24; const maxW = 600;
+      const pad = 12; const font = 16; const maxW = 400; // Smaller font and width
       ctx.font = `bold ${font}px Courier New`;
       // Word wrap
       const words = text.split(' ');
@@ -1093,8 +1121,13 @@
         else line = test;
       });
       if (line) lines.push(line);
+      // Limit lines to prevent tall bubbles
+      if (lines.length > 4) {
+        lines.splice(4);
+        lines[3] += '...';
+      }
       const w = Math.min(maxW, Math.max(100, Math.max(...lines.map(l => ctx.measureText(l).width)) + pad*2));
-      const h = lines.length * (font + 8) + pad*2;
+      const h = lines.length * (font + 6) + pad*2;
       canvas.width = w * 2; canvas.height = h * 2; ctx.scale(2,2);
       // bubble bg
       ctx.fillStyle = 'rgba(0,0,0,0.92)';
@@ -1103,24 +1136,31 @@
       // text
       ctx.fillStyle = '#ffffff'; ctx.font = `bold ${font}px Courier New`;
       ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-      lines.forEach((ln, i) => ctx.fillText(ln, w/2, pad + i*(font+8)));
+      lines.forEach((ln, i) => ctx.fillText(ln, w/2, pad + i*(font+6)));
       const texture = new THREE.CanvasTexture(canvas);
       texture.minFilter = THREE.LinearFilter;
       const material = new THREE.SpriteMaterial({ map: texture, transparent: true, depthTest: false, depthWrite: false });
       const sprite = new THREE.Sprite(material);
-      sprite.scale.set(w/48, h/48, 1);
-      // Position in SCREEN SPACE - centered top third of viewport
+      
+      // CRITICAL: Constrain scale to viewport percentage (max 25% width, 20% height)
+      const maxScaleW = 3.5;  // Max world units width
+      const maxScaleH = 2.5;  // Max world units height
+      const scaleW = Math.min(w/48, maxScaleW);
+      const scaleH = Math.min(h/48, maxScaleH);
+      sprite.scale.set(scaleW, scaleH, 1);
+      
+      // Position in SCREEN SPACE - centered but not covering entities
       sprite.renderOrder = 9999;
       scene.add(sprite);
-      const start = performance.now(); const dur = 6000; // 6 seconds for readability - slow burn
+      const start = performance.now(); const dur = 4000; // Shorter duration
       function fade(t){
         const k = Math.min(1, (t-start)/dur);
-        sprite.material.opacity = 1 - k*0.6; // fade slower
-        // Keep centered in camera frustum
-        const dist = 8;
+        sprite.material.opacity = 1 - k*0.7; // Fade faster
+        // Keep centered in camera frustum, upper area
+        const dist = 6; // Closer to camera
         const dir = new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion);
         const pos = camera.position.clone().add(dir.multiplyScalar(dist));
-        pos.y += 2.5; // upper third
+        pos.y += 1.8; // Less offset - don't block header
         sprite.position.copy(pos);
         if (k < 1) requestAnimationFrame(fade); else { scene.remove(sprite); texture.dispose(); material.dispose(); }
       }
@@ -1227,7 +1267,7 @@
         if (mesh) {
           const color = entityColorById.get(mesh.userData.id) || getTypeColorHex(mesh.userData.type);
           const text = String(ev.text);
-          createSpeechBubble(text.slice(0, 200), color, mesh.position);
+          createSpeechBubble(text, color, mesh.position); // Already limited inside function
           // Log dialogue in play script format
           const entityName = getHumanName(mesh.userData.id);
           const entityColor = entityColorById.get(mesh.userData.id) || color;
@@ -1570,17 +1610,35 @@
         <div class="speaker-name" data-entity-id="${entityId || ''}" style="color: ${colorCss}; font-weight: 700; margin-bottom: 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; text-decoration: underline dotted; text-underline-offset: 3px;" title="Click to test voice">
           ${characterName} 🎤
         </div>
-        <div style="color: #aef3c1; padding-left: 12px; font-style: italic;">
+        <div class="dialogue-text" style="color: #aef3c1; padding-left: 12px; font-style: italic; cursor: pointer;" title="Click to jump to this moment in timeline">
           ${escapeHtml(text)}
         </div>
       `;
       
-      // Make speaker name clickable
+      // Make speaker name clickable for voice testing
       const speakerEl = el.querySelector('.speaker-name');
       if (speakerEl && entityId) {
         speakerEl.onclick = (e) => {
           e.stopPropagation();
           openVoicePanel(entityId, characterName, colorCss);
+        };
+      }
+      
+      // Make dialogue text clickable to jump to that moment (store turn index)
+      const dialogueTextEl = el.querySelector('.dialogue-text');
+      if (dialogueTextEl) {
+        el.dataset.turnIndex = turn; // Store current turn
+        dialogueTextEl.onclick = (e) => {
+          e.stopPropagation();
+          const targetTurn = parseInt(el.dataset.turnIndex);
+          if (!isNaN(targetTurn)) {
+            // Jump to this turn in timeline
+            pause();
+            turn = targetTurn;
+            updateTime();
+            console.log(`⏪ Jumped to turn ${turn} from chat`);
+            addMsgImmediate('system', `⏪ Jumped to turn ${turn}`);
+          }
         };
       }
       
@@ -1856,8 +1914,14 @@
       setTimeout(() => {
         try {
           speechSynth.speak(utterance);
+          console.log('🔊 Attempting to speak...', {
+            voiceSet: !!utterance.voice,
+            voiceName: utterance.voice?.name,
+            text: cleanText.substring(0, 30)
+          });
         } catch (e) {
-          console.warn('TTS error:', e);
+          console.error('❌ TTS speak error:', e);
+          console.log('🚨 Browser may be blocking audio. Click TEST button in Voice Panel to enable.');
         }
       }, 200); // Longer delay for voice loading
     }
@@ -1997,7 +2061,7 @@
         "Can you hear me clearly?"
       ];
       const randomPhrase = testPhrases[Math.floor(Math.random() * testPhrases.length)];
-      const testText = `${entityName}: ${randomPhrase}`;
+      const testText = `${entityName || 'Speaker'}: ${randomPhrase}`;
       
       speechSynth.cancel();
       const utterance = new SpeechSynthesisUtterance(testText);
@@ -2011,6 +2075,106 @@
         console.log(`🎤 Testing voice "${voice.name}": ${testText}`);
       }, 100);
     }
+    
+    // Voice Control Panel
+    window.openVoiceControlPanel = function() {
+      const panel = document.getElementById('voiceControlPanel');
+      const voiceCountDisplay = document.getElementById('voiceCountDisplay');
+      const entityVoiceList = document.getElementById('entityVoiceList');
+      
+      // Show voice count
+      voiceCountDisplay.textContent = `${availableVoices.length} voices found`;
+      
+      // Get all unique entities from current film
+      const entities = new Set();
+      scenes.forEach(scene => {
+        scene.timeline?.forEach(turn => {
+          turn.events?.forEach(ev => {
+            if (ev.target_element_id) {
+              entities.add(ev.target_element_id);
+            }
+          });
+        });
+      });
+      
+      // Build entity list
+      entityVoiceList.innerHTML = '';
+      
+      if (entities.size === 0) {
+        entityVoiceList.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted);">Load a film first to see entity voices</div>';
+      } else {
+        entities.forEach(entityId => {
+          const humanName = getHumanName(entityId);
+          const currentVoice = entityVoices.get(entityId);
+          const color = entityColorById.get(entityId) || '#56ff9f';
+          
+          const entityCard = document.createElement('div');
+          entityCard.style.cssText = `
+            padding: 12px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--line);
+            border-left: 4px solid ${color};
+            border-radius: 8px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 12px;
+            align-items: center;
+          `;
+          
+          const info = document.createElement('div');
+          info.innerHTML = `
+            <div style="font-weight: 700; color: ${color}; margin-bottom: 8px; font-size: 14px;">${humanName}</div>
+            <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">Entity ID: ${entityId}</div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <strong style="font-size: 11px;">Voice:</strong>
+              <select id="voice-select-${entityId}" style="flex: 1; padding: 6px; background: #06140d; color: var(--text); border: 1px solid var(--line); border-radius: 4px; font-family: inherit; font-size: 11px;">
+                ${availableVoices.map((v, i) => 
+                  `<option value="${i}" ${currentVoice?.name === v.name ? 'selected' : ''}>${v.name} (${v.lang})</option>`
+                ).join('')}
+              </select>
+            </div>
+          `;
+          
+          const actions = document.createElement('div');
+          actions.style.cssText = 'display: flex; flex-direction: column; gap: 6px;';
+          
+          const testBtn = document.createElement('button');
+          testBtn.textContent = '🔊 TEST';
+          testBtn.style.cssText = 'padding: 8px 16px; background: var(--accent); color: #000; border: none; border-radius: 4px; cursor: pointer; font-weight: 700; font-size: 11px;';
+          testBtn.onclick = () => {
+            const select = document.getElementById(`voice-select-${entityId}`);
+            const voiceIndex = parseInt(select.value);
+            const voice = availableVoices[voiceIndex];
+            testVoice(voice, humanName);
+          };
+          
+          const assignBtn = document.createElement('button');
+          assignBtn.textContent = '✓ ASSIGN';
+          assignBtn.style.cssText = 'padding: 8px 16px; background: #569fff; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: 700; font-size: 11px;';
+          assignBtn.onclick = () => {
+            const select = document.getElementById(`voice-select-${entityId}`);
+            const voiceIndex = parseInt(select.value);
+            const voice = availableVoices[voiceIndex];
+            entityVoices.set(entityId, voice);
+            console.log(`🎤 Manually assigned voice "${voice.name}" to entity "${entityId}"`);
+            alert(`✓ Assigned ${voice.name} to ${humanName}`);
+          };
+          
+          actions.appendChild(testBtn);
+          actions.appendChild(assignBtn);
+          
+          entityCard.appendChild(info);
+          entityCard.appendChild(actions);
+          entityVoiceList.appendChild(entityCard);
+        });
+      }
+      
+      panel.style.display = 'block';
+    };
+    
+    window.closeVoiceControlPanel = function() {
+      document.getElementById('voiceControlPanel').style.display = 'none';
+    };
 
     function loadScene(idx) {
       if (playing) pause();
@@ -2146,6 +2310,10 @@
       ttsEnabled = !ttsEnabled;
       document.getElementById('ttsBtn').textContent = ttsEnabled ? '🔊 TTS' : '🔇 TTS OFF';
       if (!ttsEnabled && speechSynth) speechSynth.cancel();
+    };
+    
+    document.getElementById('voicesBtn').onclick = () => {
+      openVoiceControlPanel();
     };
     document.getElementById('helpBtn').onclick = () => {
       const helpText = `
