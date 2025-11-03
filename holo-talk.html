@@ -327,6 +327,7 @@
     let communicationRipples = []; // Visual waves showing message broadcast
     let nameParticles = []; // Floating name letters when speaking
     let elementsLegend = {}; // Descriptions from disc-data
+    let entityVoiceHints = new Map(); // Voice hints from disc-data (voice_name or voice_index)
     let currentSceneAudio = null; // Active scene audio context
     let powerMeters = []; // Visual power distribution indicators
     let chatMessageQueue = []; // Queue for spaced-out chat delivery
@@ -1300,8 +1301,11 @@
           const entityName = getHumanName(mesh.userData.id);
           const entityColor = entityColorById.get(mesh.userData.id) || color;
           addDialogue(entityName, text, entityColor, ev.target_element_id);
-          // Text-to-speech with entity-specific voice
-          if (ttsEnabled) speakText(text, ev.target_element_id);
+          // Text-to-speech with entity-specific voice (pass voice hint if available)
+          if (ttsEnabled) {
+            const voiceHint = entityVoiceHints.get(ev.target_element_id);
+            speakText(text, ev.target_element_id, voiceHint);
+          }
           // Show directional arrow if speaking to another entity
           showDirectionalArrow(mesh, ev);
           // Laser eyes pointing to conversation target
@@ -1858,6 +1862,20 @@
       if (parsed.global_elements_legend) {
         elementsLegend = parsed.global_elements_legend;
       }
+      // Extract voice hints from all scenes' elements
+      entityVoiceHints.clear();
+      if (parsed.scenes) {
+        parsed.scenes.forEach(scene => {
+          if (scene.elements_in_scene) {
+            scene.elements_in_scene.forEach(el => {
+              if (el.id && (el.voice_name || el.voice_index !== undefined)) {
+                entityVoiceHints.set(el.id, el.voice_name || el.voice_index);
+                console.log(`🎤 Voice hint for "${el.id}": ${el.voice_name || `index ${el.voice_index}`}`);
+              }
+            });
+          }
+        });
+      }
       if (data.title) {
         addMsg('system', `📀 Loading: "${data.title}"`);
       }
@@ -1910,7 +1928,7 @@
       }
     }
 
-    function speakText(text, entityId = 'system') {
+    function speakText(text, entityId = 'system', voiceHint = null) {
       if (!ttsEnabled || !speechSynth) return;
       if (!text || String(text).trim().length < 2) return;
 
@@ -1928,8 +1946,15 @@
       
       if (!cleanText) return;
 
-      // Assign unique voice if entity specified
-      const v = getVoiceForEntity(entityId) || availableVoices?.[0] || null;
+      // Assign unique voice if entity specified - NO FALLBACK TO INDEX 0!
+      const v = getVoiceForEntity(entityId, voiceHint);
+      if (!v && !voicesLoaded) {
+        // Voices not ready yet, queue for later
+        console.log(`⏸️ Deferring speech for "${entityId}" until voices load...`);
+        setTimeout(() => speakText(text, entityId), 500);
+        return;
+      }
+      if (!v) return; // Still no voice, skip
 
       const utterance = new SpeechSynthesisUtterance(cleanText);
       if (v) utterance.voice = v;
@@ -1970,6 +1995,7 @@
           console.log(`  ${i}: ${v.name} (${v.lang})`);
         });
         console.log('💡 TIP: Click speaker names (🎤) in chat to test/change voices!');
+        console.log('💡 You can specify voices in disc-data.json using "voice_name" or "voice_index"');
       }
     }
     if (speechSynth) {
@@ -1981,7 +2007,7 @@
     }
     
     // Assign unique voice to entity
-    function getVoiceForEntity(entityId) {
+    function getVoiceForEntity(entityId, voiceHint = null) {
       if (!entityId) return null;
       
       // Check if already assigned
@@ -1989,22 +2015,40 @@
         return entityVoices.get(entityId);
       }
       
-      // No voices available yet
-      if (availableVoices.length === 0) return null;
-      
-      // Wait for voices if not loaded yet
-      if (!voicesLoaded) {
+      // No voices available yet - WAIT instead of defaulting to Samantha
+      if (availableVoices.length === 0 || !voicesLoaded) {
         console.log(`⏳ Waiting for voices to load for entity "${entityId}"...`);
         setTimeout(() => loadVoices(), 100);
-        return null;
+        return null; // Don't assign anything yet
       }
       
-      // Assign new voice randomly for variety
-      const voiceIndex = Math.floor(Math.random() * availableVoices.length);
-      const voice = availableVoices[voiceIndex];
-      entityVoices.set(entityId, voice);
+      let voice = null;
       
-      console.log(`🎤 Assigned random voice #${voiceIndex} "${voice.name}" to entity "${entityId}"`);
+      // Check if voice was specified in disc-data.json
+      if (voiceHint) {
+        if (typeof voiceHint === 'number') {
+          // Voice index specified
+          voice = availableVoices[voiceHint % availableVoices.length];
+          console.log(`🎤 Using disc-data voice index ${voiceHint}: "${voice.name}" for "${entityId}"`);
+        } else if (typeof voiceHint === 'string') {
+          // Voice name specified
+          voice = availableVoices.find(v => v.name.toLowerCase().includes(voiceHint.toLowerCase()));
+          if (voice) {
+            console.log(`🎤 Using disc-data voice name "${voiceHint}": "${voice.name}" for "${entityId}"`);
+          } else {
+            console.warn(`⚠️ Voice "${voiceHint}" not found for "${entityId}", using random`);
+          }
+        }
+      }
+      
+      // If no voice hint or not found, assign randomly
+      if (!voice) {
+        const voiceIndex = Math.floor(Math.random() * availableVoices.length);
+        voice = availableVoices[voiceIndex];
+        console.log(`🎤 Assigned random voice #${voiceIndex} "${voice.name}" to entity "${entityId}"`);
+      }
+      
+      entityVoices.set(entityId, voice);
       return voice;
     }
     

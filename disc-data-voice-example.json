@@ -1,0 +1,83 @@
+{
+  "story_id": "voice_control_example",
+  "story_title": "VOICE CONTROL EXAMPLE",
+  "overall_description": "Example showing how to control entity voices in holo-talk.html",
+  "global_settings": {
+    "grid_dimensions": { "rows": 9, "cols": 9 }
+  },
+  "scenes": [
+    {
+      "scene_id": "scene_01",
+      "scene_number": 1,
+      "title": "Voice Control Demo",
+      "elements_in_scene": [
+        {
+          "id": "officer_main",
+          "type": "Entity",
+          "grid_symbol": "OF",
+          "initial_grid_position": { "row": 5, "col": 5 },
+          "voice_name": "Daniel",
+          "comment": "Use voice_name to specify a voice by name (case-insensitive partial match)"
+        },
+        {
+          "id": "clancy_main",
+          "type": "Entity",
+          "grid_symbol": "CL",
+          "initial_grid_position": { "row": 7, "col": 5 },
+          "voice_index": 15,
+          "comment": "Use voice_index to specify by number (0-46). Check browser console for list."
+        },
+        {
+          "id": "apparatus_main",
+          "type": "Location",
+          "grid_symbol": "APP",
+          "initial_grid_position": { "row": 4, "col": 5 },
+          "voice_name": "Fred",
+          "comment": "Fred is a fun robotic voice - great for apparatus!"
+        },
+        {
+          "id": "scholar_1",
+          "type": "Entity",
+          "grid_symbol": "SC",
+          "initial_grid_position": { "row": 3, "col": 3 },
+          "voice_name": "Moira",
+          "comment": "Moira has an Irish accent"
+        },
+        {
+          "id": "guest_main",
+          "type": "Entity",
+          "grid_symbol": "GB",
+          "initial_grid_position": { "row": 7, "col": 3 },
+          "comment": "No voice specified - will get random voice"
+        }
+      ],
+      "animation_timeline": [
+        {
+          "delay_seconds": 0.5,
+          "target_element_id": "officer_main",
+          "text": "I speak with Daniel's voice from the UK."
+        },
+        {
+          "delay_seconds": 2.0,
+          "target_element_id": "clancy_main",
+          "text": "I use voice index 15, whatever that is!"
+        },
+        {
+          "delay_seconds": 4.0,
+          "target_element_id": "apparatus_main",
+          "text": "Fred here. I sound robotic and fun."
+        },
+        {
+          "delay_seconds": 6.0,
+          "target_element_id": "scholar_1",
+          "text": "Hello from Ireland!"
+        },
+        {
+          "delay_seconds": 8.0,
+          "target_element_id": "guest_main",
+          "text": "I got a random voice - could be anyone!"
+        }
+      ]
+    }
+  ]
+}
