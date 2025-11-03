@@ -248,6 +248,22 @@
     </section>
   </div>
 
+  <!-- Voice Testing Panel -->
+  <div id="voicePanel">
+    <button class="close-btn" onclick="closeVoicePanel()">✕</button>
+    <div class="entity-name" id="voicePanelTitle">Entity Name</div>
+    <div class="voice-info">
+      <strong>Current Voice:</strong>
+      <div id="currentVoice" style="margin-top: 4px; color: var(--accent);">Not assigned yet</div>
+    </div>
+    <button class="test-btn" onclick="testCurrentVoice()">🎤 Test Current Voice</button>
+    <div style="margin-top: 16px; font-size: 11px; opacity: 0.7; border-top: 1px solid var(--line); padding-top: 8px;">
+      <strong>All Available Voices:</strong>
+      <div id="voiceCount" style="margin-top: 4px;">Loading...</div>
+    </div>
+    <div class="voice-list" id="voiceList"></div>
+  </div>
+
   <script>
   (() => {
     // --- State ---
@@ -1549,13 +1565,23 @@
         background: rgba(0,0,0,0.3); font-size: 12px; line-height: 1.5;
       `;
       el.innerHTML = `
-        <div style="color: ${colorCss}; font-weight: 700; margin-bottom: 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">
-          ${characterName}
+        <div class="speaker-name" data-entity-id="${entityId || ''}" style="color: ${colorCss}; font-weight: 700; margin-bottom: 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; text-decoration: underline dotted; text-underline-offset: 3px;" title="Click to test voice">
+          ${characterName} 🎤
         </div>
         <div style="color: #aef3c1; padding-left: 12px; font-style: italic;">
           ${escapeHtml(text)}
         </div>
       `;
+      
+      // Make speaker name clickable
+      const speakerEl = el.querySelector('.speaker-name');
+      if (speakerEl && entityId) {
+        speakerEl.onclick = (e) => {
+          e.stopPropagation();
+          openVoicePanel(entityId, characterName, colorCss);
+        };
+      }
+      
       chatLog.appendChild(el);
       chatLog.scrollTop = chatLog.scrollHeight;
     }
@@ -1811,10 +1837,22 @@
       utterance.lang = 'en-US';
       utterance.pitch = 1.0;
       
+      // Assign unique voice if entity specified
+      if (entityId) {
+        const voice = getVoiceForEntity(entityId);
+        if (voice) {
+          utterance.voice = voice;
+          console.log(`🎤 TTS [${entityId}]:`, cleanText.substring(0, 40) + '...');
+        } else {
+          console.log('🎤 TTS [default]:', cleanText.substring(0, 40) + '...');
+        }
+      } else {
+        console.log('🎤 TTS [system]:', cleanText.substring(0, 40) + '...');
+      }
+      
       // Speak with delay for browser compatibility
       setTimeout(() => {
         speechSynth.speak(utterance);
-        console.log('TTS:', cleanText.substring(0, 40) + '...');
       }, 150); // Delay allows cancel to complete
     }
 
@@ -1823,11 +1861,136 @@
       availableVoices = speechSynth.getVoices().filter(v => v.lang.startsWith('en'));
       if (!availableVoices.length) {
         setTimeout(loadVoices, 100); // Retry if not loaded yet
+      } else {
+        console.log(`🎤 TTS: ${availableVoices.length} voices available:`);
+        availableVoices.forEach((v, i) => {
+          console.log(`  ${i}: ${v.name} (${v.lang})`);
+        });
       }
     }
     if (speechSynth) {
       loadVoices();
       speechSynth.onvoiceschanged = loadVoices;
+    }
+    
+    // Assign unique voice to entity
+    function getVoiceForEntity(entityId) {
+      if (!entityId) return null;
+      
+      // Check if already assigned
+      if (entityVoices.has(entityId)) {
+        return entityVoices.get(entityId);
+      }
+      
+      // No voices available yet
+      if (availableVoices.length === 0) return null;
+      
+      // Assign new voice (cycle through available voices)
+      const voiceIndex = entityVoices.size % availableVoices.length;
+      const voice = availableVoices[voiceIndex];
+      entityVoices.set(entityId, voice);
+      
+      console.log(`🎤 Assigned voice "${voice.name}" to entity "${entityId}"`);
+      return voice;
+    }
+    
+    // Voice Panel UI
+    let currentPanelEntity = null;
+    let currentPanelName = null;
+    
+    window.openVoicePanel = function(entityId, entityName, color) {
+      currentPanelEntity = entityId;
+      currentPanelName = entityName;
+      
+      const panel = document.getElementById('voicePanel');
+      const title = document.getElementById('voicePanelTitle');
+      const currentVoiceEl = document.getElementById('currentVoice');
+      const voiceCountEl = document.getElementById('voiceCount');
+      const voiceListEl = document.getElementById('voiceList');
+      
+      // Update title with color
+      title.textContent = entityName;
+      title.style.color = color;
+      
+      // Show current voice
+      const voice = entityVoices.get(entityId);
+      if (voice) {
+        currentVoiceEl.textContent = `${voice.name} (${voice.lang})`;
+      } else {
+        currentVoiceEl.textContent = 'Not assigned yet (will auto-assign on first speech)';
+      }
+      
+      // Show voice count
+      voiceCountEl.textContent = `${availableVoices.length} English voices available`;
+      
+      // Populate voice list
+      voiceListEl.innerHTML = '';
+      availableVoices.forEach((v, i) => {
+        const item = document.createElement('div');
+        item.className = 'voice-item';
+        if (voice && v.name === voice.name) {
+          item.classList.add('selected');
+        }
+        item.innerHTML = `<strong>${v.name}</strong><br><span style="opacity:0.6;">${v.lang}</span>`;
+        item.onclick = () => {
+          // Assign this voice to entity
+          entityVoices.set(entityId, v);
+          console.log(`🎤 Manually assigned voice "${v.name}" to entity "${entityId}"`);
+          // Update display
+          currentVoiceEl.textContent = `${v.name} (${v.lang})`;
+          // Update selected state
+          voiceListEl.querySelectorAll('.voice-item').forEach(el => el.classList.remove('selected'));
+          item.classList.add('selected');
+          // Test the voice
+          testVoice(v, entityName);
+        };
+        voiceListEl.appendChild(item);
+      });
+      
+      // Show panel
+      panel.classList.add('active');
+    };
+    
+    window.closeVoicePanel = function() {
+      document.getElementById('voicePanel').classList.remove('active');
+    };
+    
+    window.testCurrentVoice = function() {
+      if (!currentPanelEntity) return;
+      const voice = entityVoices.get(currentPanelEntity);
+      if (voice) {
+        testVoice(voice, currentPanelName);
+      } else {
+        // Auto-assign and test
+        const newVoice = getVoiceForEntity(currentPanelEntity);
+        if (newVoice) {
+          document.getElementById('currentVoice').textContent = `${newVoice.name} (${newVoice.lang})`;
+          testVoice(newVoice, currentPanelName);
+        }
+      }
+    };
+    
+    function testVoice(voice, entityName) {
+      const testPhrases = [
+        "Hello, I'm testing my voice.",
+        "How do I sound?",
+        "This is what I'll sound like in the film.",
+        "Can you hear me clearly?"
+      ];
+      const randomPhrase = testPhrases[Math.floor(Math.random() * testPhrases.length)];
+      const testText = `${entityName}: ${randomPhrase}`;
+      
+      speechSynth.cancel();
+      const utterance = new SpeechSynthesisUtterance(testText);
+      utterance.voice = voice;
+      utterance.rate = 0.9;
+      utterance.volume = 0.7;
+      utterance.pitch = 1.0;
+      
+      setTimeout(() => {
+        speechSynth.speak(utterance);
+        console.log(`🎤 Testing voice "${voice.name}": ${testText}`);
+      }, 100);
     }
 
     function loadScene(idx) {
